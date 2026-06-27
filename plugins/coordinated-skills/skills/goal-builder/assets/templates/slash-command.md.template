@@ -1,0 +1,5 @@
+---
+description: {{DESCRIPTION}}
+argument-hint: {{ARGUMENT_HINT}}
+---
+/goal {{CONDITION_WITH_SLOTS}}

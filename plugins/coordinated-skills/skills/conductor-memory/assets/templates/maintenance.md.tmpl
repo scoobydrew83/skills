@@ -1,0 +1,34 @@
+# {PROJECT_TITLE} - Memory Maintenance
+
+A light routine that keeps memory accurate without becoming a chore. The point
+is continuity, not bookkeeping, so default to the smallest action that keeps the
+next session oriented.
+
+## After each working session
+
+1. Run the conductor-memory skill on the session ("build conductor memory").
+2. Run `integration.py` to copy the new pack into the vault and refresh the
+   Claude Code resume pointer.
+3. Skim the new MEMORY_INDEX - if the "resume here" note is wrong, fix that one
+   line. That single line does most of the work next session.
+
+## Weekly
+
+1. Open MEMORY_LOG.md and confirm the latest few sessions are listed.
+2. Fold any durable new preference or decision into the project-context file so
+   it survives even if individual session packs get archived.
+3. Delete packs from throwaway/exploratory sessions you will not resume.
+
+## Keeping it lean over time
+
+- Archive packs older than ~30 days into an `archive/` subfolder; keep their
+  one-line entries in MEMORY_LOG.md so the trail stays intact.
+- When several packs cover the same milestone, write one consolidated summary
+  and archive the rest. Fewer, denser memories beat many shallow ones.
+- If you wire up a vector/MCP store, let it hold the long tail and keep the
+  vault index as the human-readable spine.
+
+## Backups
+
+- The vault is the source of truth; whatever backs up the vault backs up memory.
+- Before a big restructure, copy the memory subdir somewhere safe first.

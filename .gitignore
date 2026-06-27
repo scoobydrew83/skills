@@ -1,0 +1,40 @@
+# --- Local working state (not history) ---
+tools/.unpacked/
+.claude/commands/_probe.md
+
+# Built skill archives — source of truth is plugins/coordinated-skills/skills/<name>/.
+# Build on demand with tools/pack-skill.sh; CI attaches them to Releases.
+*.skill
+dist/
+
+# Scratch: loose working copies (source of truth is plugins/coordinated-skills/skills/)
+work/
+# Scratch: loose one-off artifacts not part of the library
+random-artifacts/
+
+# Local safety backups
+backups-*/
+tests/*
+
+# Skills kept locally but outside the coordinated library (not conventions-compliant)
+parked/
+
+# Test scratch space
+tests/.cache/
+tests/.results/
+
+# --- macOS noise ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# --- Editor noise ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS / misc ---
+Thumbs.db

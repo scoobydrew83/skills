@@ -1,0 +1,14 @@
+{
+  "name": "scoobydrew-skills",
+  "description": "scoobydrew83's coordinated Claude skill library.",
+  "owner": { "name": "scoobydrew83", "url": "https://github.com/scoobydrew83" },
+  "plugins": [
+    {
+      "name": "coordinated-skills",
+      "source": "./plugins/coordinated-skills",
+      "description": "Coordinated skill library: intake, execute, verify, communicate, bookend.",
+      "version": "1.0.0",
+      "author": { "name": "scoobydrew83", "url": "https://github.com/scoobydrew83" }
+    }
+  ]
+}

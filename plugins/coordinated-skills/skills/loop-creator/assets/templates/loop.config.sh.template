@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# loop.config.sh — configuration for run_loop.sh. Sourced by the harness.
+# Every value here is overridable; the defaults are the Conductor conventions.
+
+# --- what to run -----------------------------------------------------------------------------
+# Single-task mode (Shape 1/2): set TASK. Queue mode (Shape 3): leave TASK empty, set QUEUE_FILE.
+TASK="{{TASK}}"
+QUEUE_FILE="{{QUEUE_FILE}}"            # e.g. LOOP_QUEUE.md
+
+# --- prompts ---------------------------------------------------------------------------------
+BUILDER_PROMPT_FILE="builder-prompt.md"
+VERIFIER_PROMPT_FILE="verifier-prompt.md"
+
+# --- ground-truth gate (optional) ------------------------------------------------------------
+# A real command that must exit 0 before the verifier is even consulted. Strongly recommended
+# for codebase loops — it pins PASS to ground truth, not just model judgment.
+ACCEPTANCE_COMMAND="{{ACCEPTANCE_COMMAND}}"   # e.g. "npm test && npm run lint"
+
+# --- limits and safety (Conductor defaults) --------------------------------------------------
+MAX_ITERATIONS={{MAX_ITERATIONS}}      # default 25
+FAIL_THRESHOLD={{FAIL_THRESHOLD}}      # default 3 — escalate after this many consecutive FAILs
+WORK_BRANCH="{{WORK_BRANCH}}"          # default loop/work — never the default branch
+COMMIT_ON_PASS=true
+ESCALATION_LOG="LOOP_ESCALATION.md"
+
+# --- execution -------------------------------------------------------------------------------
+# Override CLAUDE_BIN with a mock script to dry-run the harness without spending tokens.
+CLAUDE_BIN="claude"

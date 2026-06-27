@@ -1,0 +1,41 @@
+# {PROJECT_TITLE} - Memory Verification ({SESSION_DATE})
+
+Two ways to verify this pack: the automated check (fast, objective) and the
+recall test (confirms the memory is actually useful next session).
+
+## Automated check
+
+Run the validator from the skill (or any copy of it):
+
+```bash
+python validate_memory.py --dir "{PACK_DIRNAME}"
+```
+
+It confirms every expected file exists, the JSON and YAML parse, and the
+required keys are present. Fix anything it flags before integrating.
+
+## Files expected in this pack
+
+- [ ] MEMORY_INDEX.md
+- [ ] {PROJECT_NAME}_memory_conversation_summary.md
+- [ ] {PROJECT_NAME}_memory_artifacts_index.md
+- [ ] {PROJECT_NAME}_memory_communication_style.md
+- [ ] {PROJECT_NAME}_memory_project_context.md
+- [ ] {PROJECT_NAME}_memory_seed_data.json
+- [ ] {PROJECT_NAME}_memory_personality.yaml
+- [ ] {PROJECT_NAME}_memory_verification.md
+- [ ] {PROJECT_NAME}_memory_maintenance.md
+- [ ] integration.py
+
+## Recall test (the real test)
+
+Open a fresh session, load this pack, and ask:
+
+- [ ] "What were we working on?" -> recalls project + current phase
+- [ ] "What did we decide and why?" -> recalls key decisions with reasoning
+- [ ] "How do I like information presented?" -> recalls your working preferences
+- [ ] "What's left to do?" -> recalls next tasks / open threads
+- [ ] "Continue where we left off." -> picks up without re-explaining
+
+If any of these miss, the gap is almost always in the summary or project-context
+file. Add the missing detail there and re-run the automated check.

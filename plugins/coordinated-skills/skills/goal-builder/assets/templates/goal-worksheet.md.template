@@ -1,0 +1,29 @@
+# Goal worksheet: {{GOAL_NAME}}
+
+The reasoning behind the condition, so it's editable later and the next person understands why
+it's shaped this way.
+
+## Intent (the human meaning)
+{{INTENT}}
+
+## 1. Measurable end state
+{{END_STATE}}   <!-- observable, not an adjective -->
+
+## 2. Stated check (printed to the transcript)
+`{{CHECK}}`     <!-- the command/observation whose output the evaluator reads -->
+
+## 3. Constraints (close the cheat door)
+{{CONSTRAINTS}} <!-- what must not change; what would count as gaming the check -->
+
+## Bound
+{{CAP}}         <!-- e.g. "or stop after 20 turns" -->
+
+## Final condition (paste after /goal)
+```
+/goal {{FINAL_CONDITION}}
+```
+
+Run it: `/goal {{FINAL_CONDITION}}`  — or headless: `claude -p "/goal {{FINAL_CONDITION}}"`
+
+## If compound, run these in order (one goal per session)
+{{SEQUENCE}}

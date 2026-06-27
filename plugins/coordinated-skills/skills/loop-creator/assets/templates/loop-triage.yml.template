@@ -1,0 +1,47 @@
+# Nightly triage for {{LOOP_NAME}} — SCANS and QUEUES work. It does NOT run the fixer loop.
+# Autonomy on a timer compounds early mistakes silently, so the unattended part is limited to
+# scanning and appending candidates to LOOP_QUEUE.md. A human reviews the queue and authorizes
+# the actual builder/verifier loop.
+name: loop-triage
+
+on:
+  schedule:
+    - cron: "{{CRON}}"        # e.g. "0 7 * * *" (nightly)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write             # to append to LOOP_QUEUE.md on a branch
+  pull-requests: write        # to open the triage PR for human review
+  issues: read
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Scan and append candidates to the queue
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Read the signal ({{TRIAGE_SIGNAL}}) and append candidate work to LOOP_QUEUE.md as
+          # unchecked '- [ ]' items WITH context. Do not modify code. Do not run the loop.
+          claude -p "$(cat .github/triage-prompt.md)" --output-format stream-json \
+            --max-turns {{TRIAGE_MAX_TURNS}} > triage.out || true
+
+      - name: Open triage PR for human review
+        run: |
+          git config user.name  "loop-triage"
+          git config user.email "loop-triage@users.noreply.github.com"
+          BRANCH="triage/$(date -u +%Y%m%d)"
+          git checkout -B "$BRANCH"
+          git add LOOP_QUEUE.md
+          git commit -m "triage: queue candidates for review" || { echo "no changes"; exit 0; }
+          git push -u origin "$BRANCH"
+          gh pr create --fill --title "Nightly triage: queued candidates" \
+            --body "Triage queued work for review. No code was changed and no loop was run."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

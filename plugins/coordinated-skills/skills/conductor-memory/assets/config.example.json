@@ -1,0 +1,14 @@
+{
+  "project_name": "conductor",
+  "project_title": "Conductor",
+  "session_label": "",
+  "vault_path": "~/your-vault",
+  "memory_subdir": "Conductor/memory",
+  "claude_code_memory": "~/your-vault/Conductor/CLAUDE.md",
+  "session_date": "auto",
+  "store": {
+    "backend": "obsidian",
+    "mcp_endpoint": "",
+    "notes": "Optional. Vault is the default source of truth. If you run a vector DB or MCP memory server, wire push_to_store() in the generated integration.py."
+  }
+}

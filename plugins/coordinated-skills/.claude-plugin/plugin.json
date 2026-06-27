@@ -1,0 +1,10 @@
+{
+  "name": "coordinated-skills",
+  "description": "A coordinated library of Claude skills with explicit phase/handoff routing, shared-state conventions, and a maker/checker loop. Covers intake, execution, verification, communication, and session bookending.",
+  "version": "1.0.0",
+  "author": { "name": "scoobydrew83", "url": "https://github.com/scoobydrew83" },
+  "homepage": "https://github.com/scoobydrew83/skills",
+  "repository": "https://github.com/scoobydrew83/skills",
+  "license": "MIT",
+  "keywords": ["skills", "workflow", "conductor", "maker-checker", "agents"]
+}

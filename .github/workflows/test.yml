@@ -1,0 +1,37 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Validate every skill against CONVENTIONS.md
+        run: bash tools/validate-skill.sh --all
+
+      - name: Run the test suite
+        run: bash tests/run-all.sh
+
+      - name: Run triggering evals (optional)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "ANTHROPIC_API_KEY secret not set — skipping triggering evals."
+            exit 0
+          fi
+          if [ ! -f tests/triggering-evals/run.sh ]; then
+            echo "tests/triggering-evals/run.sh not present yet — skipping."
+            exit 0
+          fi
+          # --mode llm = the real router (haiku). Static keyword overlap is a
+          # crude proxy that false-fails on shared words; don't gate on it.
+          bash tests/triggering-evals/run.sh --mode llm
