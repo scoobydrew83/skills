@@ -1,5 +1,7 @@
 # Skills
 
+[![CI](https://github.com/scoobydrew83/skills/actions/workflows/test.yml/badge.svg)](https://github.com/scoobydrew83/skills/actions/workflows/test.yml)
+
 A coordinated library of Claude skills with explicit handoffs, shared state, and a maker/checker loop.
 
 Most skill collections are a flat folder of independent prompts. This one is wired together: every skill declares which phase of work it belongs to (`intake`, `plan`, `execute`, `verify`, `communicate`, `bookend`, `meta`), which siblings it hands off to when it finishes, and which shared-state files it reads and writes. That turns a pile of skills into a workflow.
