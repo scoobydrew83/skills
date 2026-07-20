@@ -6,6 +6,8 @@ description: >
   Use proactively after any builder agent reports done. This agent NEVER
   writes or fixes code — it only verifies and reports.
 tools: Read, Grep, Glob, Bash
+phase: verify
+hands_off_to: [conductor-builder]
 model: sonnet
 permissionMode: default
 ---

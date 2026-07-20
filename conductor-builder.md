@@ -5,6 +5,9 @@ description: >
   item) in an isolated git worktree. It drafts the implementation, runs tests
   locally, commits to its branch, and hands off to conductor-verifier. It
   never merges to main and never grades its own work as final.
+tools: Read, Edit, Write, Bash, Grep, Glob
+phase: execute
+hands_off_to: [conductor-verifier]
 model: inherit
 permissionMode: default
 ---
