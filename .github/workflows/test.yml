@@ -17,6 +17,9 @@ jobs:
       - name: Validate every skill against CONVENTIONS.md
         run: bash tools/validate-skill.sh --all
 
+      - name: Validate the Conductor agent definitions
+        run: bash tools/validate-agents.sh
+
       - name: Run the test suite (optional)
         run: |
           if [ ! -f tests/run-all.sh ]; then
