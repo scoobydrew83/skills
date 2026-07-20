@@ -15,7 +15,6 @@ random-artifacts/
 
 # Local safety backups
 backups-*/
-tests/*
 
 # Skills kept locally but outside the coordinated library (not conventions-compliant)
 parked/

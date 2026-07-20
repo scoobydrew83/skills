@@ -12,6 +12,7 @@ Most skill collections are a flat folder of independent prompts. This one is wir
 - **[`CONVENTIONS.md`](CONVENTIONS.md)** — the contract every skill follows. Coordination header, Next-steps line, phase vocabulary, shared-state files, verdict schema.
 - **[`CONTRIBUTING.md`](CONTRIBUTING.md)** — how to add or modify skills, with the `/skill-new` → `/skill-validate` → `/skill-graph` workflow.
 - **[`tools/`](tools/)** — bash scripts to validate, graph, pack, and build the plugin from the skill set. `tools/validate-skill.sh --all` is the enforcement pass CI runs.
+- **[`tests/`](tests/)** — the structural test suite (`bash tests/run-all.sh`) CI runs on top of the validators.
 - **[`.claude/commands/`](.claude/commands/)** — slash commands (`/skill-new`, `/skill-validate`, `/skill-pack`, `/skill-graph`, `/skill-status`, `/conductor-loop`) that drive the tools.
 - **[`skill-graph.md`](skill-graph.md)** — auto-generated phase × handoffs map of the current library.
 
@@ -50,10 +51,11 @@ Run the slash commands (inside Claude Code, from this repo):
 Validate the library from the shell:
 
 ```sh
-bash tools/validate-skill.sh --all
+bash tools/validate-skill.sh --all   # per-skill CONVENTIONS.md checks
+bash tests/run-all.sh                 # full structural suite (validators + repo-shape invariants)
 ```
 
-A green run validates every skill against CONVENTIONS.md with 0 failures.
+A green run reports 0 failures (tombstone WARNs are non-blocking).
 
 ## Usage
 
