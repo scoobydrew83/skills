@@ -1,6 +1,7 @@
 # --- Local working state (not history) ---
 tools/.unpacked/
 .claude/commands/_probe.md
+.claude/scheduled_tasks.lock
 
 # Built skill archives — source of truth is plugins/coordinated-skills/skills/<name>/.
 # Build on demand with tools/pack-skill.sh; CI attaches them to Releases.
