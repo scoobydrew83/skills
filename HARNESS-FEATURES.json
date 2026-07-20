@@ -11,8 +11,8 @@
       "steps": [
         "git -C <skills> ls-files tests/ | grep -q run-all.sh"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-20: tests/run-all.sh tracked by git"
     },
     {
       "id": "H-002",
@@ -31,8 +31,8 @@
       "steps": [
         "git -C <skills> ls-files .claude/scheduled_tasks.lock returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-20: lockfile untracked"
     },
     {
       "id": "H-004",
@@ -41,8 +41,8 @@
       "steps": [
         "test -f <skills>/tools/validate-agents.sh"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-20: ../skills/tools/validate-agents.sh"
     },
     {
       "id": "H-005",
