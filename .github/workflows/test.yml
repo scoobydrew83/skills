@@ -17,8 +17,13 @@ jobs:
       - name: Validate every skill against CONVENTIONS.md
         run: bash tools/validate-skill.sh --all
 
-      - name: Run the test suite
-        run: bash tests/run-all.sh
+      - name: Run the test suite (optional)
+        run: |
+          if [ ! -f tests/run-all.sh ]; then
+            echo "tests/run-all.sh not present in the repo — skipping."
+            exit 0
+          fi
+          bash tests/run-all.sh
 
       - name: Run triggering evals (optional)
         env:

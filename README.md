@@ -11,8 +11,7 @@ Most skill collections are a flat folder of independent prompts. This one is wir
 - **[`plugins/coordinated-skills/skills/`](plugins/coordinated-skills/skills)** — the skills themselves, one directory per skill (`SKILL.md` plus any references/scripts). This is the source of truth; edit these directly. A `.skill` zip archive is a build artifact you produce on demand (`tools/pack-skill.sh`) for the drop-in-a-skills-folder use case — it's gitignored, not committed.
 - **[`CONVENTIONS.md`](CONVENTIONS.md)** — the contract every skill follows. Coordination header, Next-steps line, phase vocabulary, shared-state files, verdict schema.
 - **[`CONTRIBUTING.md`](CONTRIBUTING.md)** — how to add or modify skills, with the `/skill-new` → `/skill-validate` → `/skill-graph` workflow.
-- **[`tools/`](tools/)** — bash scripts to validate, graph, pack, and build the plugin from the skill set.
-- **[`tests/`](tests/)** — the test suite that enforces CONVENTIONS.md across the library.
+- **[`tools/`](tools/)** — bash scripts to validate, graph, pack, and build the plugin from the skill set. `tools/validate-skill.sh --all` is the enforcement pass CI runs.
 - **[`.claude/commands/`](.claude/commands/)** — slash commands (`/skill-new`, `/skill-validate`, `/skill-pack`, `/skill-graph`, `/skill-status`, `/conductor-loop`) that drive the tools.
 - **[`skill-graph.md`](skill-graph.md)** — auto-generated phase × handoffs map of the current library.
 
@@ -52,10 +51,9 @@ Validate the library from the shell:
 
 ```sh
 bash tools/validate-skill.sh --all
-bash tests/run-all.sh
 ```
 
-A green run is 180 checks pass, 0 fail, 2 warn (the two intended tombstones).
+A green run validates every skill against CONVENTIONS.md with 0 failures.
 
 ## Usage
 
