@@ -5,8 +5,7 @@ real workflow instead of fourteen silos. If you add a skill to this set, or
 fork one of these for your own project, hold to the contract below.
 
 Status: phase 1 conventions, applied 2026-06-16. Phase 2 (top-level router,
-non-code conductor-loop ingestion, session-close auto-fire) is deferred — see
-`COORDINATION-STATUS.md` for what's still open.
+non-code conductor-loop ingestion, session-close auto-fire) is deferred.
 
 ## 1. Coordination header (required in every SKILL.md)
 

@@ -13,8 +13,6 @@ Start here:
   graph, pack, and build the plugin from the skill directories. Plain bash, no install.
 - **[`tests/README.md`](tests/README.md)** — the test suite that enforces
   CONVENTIONS.md across the library. `tests/run-all.sh` is the entry point.
-- **[`COORDINATION-STATUS.md`](COORDINATION-STATUS.md)** — current state of
-  the library and what's deferred to later phases.
 - **[`skill-graph.md`](skill-graph.md)** — auto-generated map of the
   current phases and handoffs. Regenerate with `tools/skill-graph.sh`.
 

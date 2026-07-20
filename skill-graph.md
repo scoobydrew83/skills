@@ -1,6 +1,6 @@
 wrote: /Users/dkennedy/dev/projects/skills/skill-graph.md
 rom the skill source directories._
-_If this drifts from `COORDINATION-STATUS.md`, the source wins — update the doc._
+_If this drifts from the skill directories, the source wins — regenerate with `tools/skill-graph.sh`._
 
 ## Phase × handoffs
 

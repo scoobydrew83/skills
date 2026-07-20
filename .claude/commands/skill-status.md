@@ -18,9 +18,6 @@ When invoked, do the following:
    - Total skills (rows in the phase × handoffs table)
    - Active vs tombstone (look for "DEPRECATED tombstone" in the notes column)
    - Distribution across the seven phases
-4. Open `COORDINATION-STATUS.md` and surface the "Open questions" / "What's
-   deferred" sections — those are the live unknowns.
-
 Output a short status block:
 
 ```
@@ -29,7 +26,6 @@ Skill library status
   Phase distribution:
     intake: …  plan: …  execute: …  verify: …  communicate: …  bookend: …  meta: …
   Validation: <PASS|FAIL>  (<n> checks, <m> warnings)
-  Open items: …list from COORDINATION-STATUS.md…
 ```
 
 Keep it terse. If validation FAILED, name the failing skills and point at

@@ -33,8 +33,8 @@ tools/validate-skill.sh overwhelm-breakdown
 
 Regenerates `skill-graph.md` at the repo root from the skill source
 directories. Output: phase × handoffs table + a Mermaid diagram. Source of
-truth is the directories — if this drifts from `COORDINATION-STATUS.md`, the
-source wins and the doc needs updating.
+truth is the directories — if `skill-graph.md` drifts from them, regenerate
+it; the directories win.
 
 ```bash
 tools/skill-graph.sh

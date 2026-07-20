@@ -131,11 +131,11 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md). The short version: `/skill-new <name>`
 
 ## Architecture
 
-Each skill is a directory (`plugins/coordinated-skills/skills/<name>/`) containing a `SKILL.md` with frontmatter, body, and optional references/scripts; a `.skill` zip archive of that directory is an optional build artifact for à-la-carte distribution. Beyond the standard `name` / `description`, every SKILL.md in this library carries four coordination keys (`phase`, `hands_off_to`, `reads`, `writes`) and ends with a tailored `**Next steps:**` sentence that names the actual successor skill. Claude's auto-router picks up that closing sentence, so the routing is data-driven rather than orchestrated by a top-level controller. Shared state lives in a small set of files (`CONTEXT.md`, `MEMORY_BANK.md`, `LOOP_QUEUE.md`, `CLAUDE.md`) defined in CONVENTIONS.md §4. Verification skills (`drift-check`, `reality-check`) emit a `Conductor verdict: PASS | FAIL | BLOCKED` block that the maker/checker conductor loop consumes. The full design rationale is in [`COORDINATION-STATUS.md`](COORDINATION-STATUS.md) and the contract is in [`CONVENTIONS.md`](CONVENTIONS.md).
+Each skill is a directory (`plugins/coordinated-skills/skills/<name>/`) containing a `SKILL.md` with frontmatter, body, and optional references/scripts; a `.skill` zip archive of that directory is an optional build artifact for à-la-carte distribution. Beyond the standard `name` / `description`, every SKILL.md in this library carries four coordination keys (`phase`, `hands_off_to`, `reads`, `writes`) and ends with a tailored `**Next steps:**` sentence that names the actual successor skill. Claude's auto-router picks up that closing sentence, so the routing is data-driven rather than orchestrated by a top-level controller. Shared state lives in a small set of files (`CONTEXT.md`, `MEMORY_BANK.md`, `LOOP_QUEUE.md`, `CLAUDE.md`) defined in CONVENTIONS.md §4. Verification skills (`drift-check`, `reality-check`) emit a `Conductor verdict: PASS | FAIL | BLOCKED` block that the maker/checker conductor loop consumes. The contract is in [`CONVENTIONS.md`](CONVENTIONS.md).
 
 ## Status
 
-Phase 1 (headers, merges, conventions) and Phase 1.5 (tooling, slash commands, tests, CONTRIBUTING) are shipped. Phase 2a (repository + CI) is this commit. See [`COORDINATION-STATUS.md`](COORDINATION-STATUS.md) for the full phase log, what's deferred, and the answers to the original design questions.
+Phase 1 (headers, merges, conventions) and Phase 1.5 (tooling, slash commands, tests, CONTRIBUTING) are shipped. Phase 2a (repository + CI) is this commit.
 
 ## License
 
