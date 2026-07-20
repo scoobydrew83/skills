@@ -1,0 +1,302 @@
+{
+  "$comment": "The harness graded by its own pattern (Anthropic FEATURES.json, applied reflexively). Contract: check-harness.mjs may flip passes/evidence only; entries are added/removed only by planner/human commits. It is unacceptable to remove or edit descriptions or steps. A passes:true that the checker can no longer reproduce is DRIFT and fails the run.",
+  "project": "conductor-harness",
+  "phase": "V5 adoption",
+  "verified_against": "fresh clones of scoobydrew83/{sfdt,skills,sfdt-skills} + local clones of {agents,conductor-platform,studio-by-sfdt} on 2026-07-18",
+  "features": [
+    {
+      "id": "H-001",
+      "category": "phase-0-drift",
+      "description": "skills repo: tests/ suite is committed (CI no longer invokes a gitignored file)",
+      "steps": [
+        "git -C <skills> ls-files tests/ | grep -q run-all.sh"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-002",
+      "category": "phase-0-drift",
+      "description": "skills repo: zero references to deleted COORDINATION-STATUS.md (8 files referenced it on 2026-07-18)",
+      "steps": [
+        "grep -rl COORDINATION-STATUS <skills> --exclude-dir=.git returns nothing"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-003",
+      "category": "phase-0-drift",
+      "description": "skills repo: .claude/scheduled_tasks.lock removed from git and ignored",
+      "steps": [
+        "git -C <skills> ls-files .claude/scheduled_tasks.lock returns nothing"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-004",
+      "category": "phase-0-drift",
+      "description": "skills repo: validate-agents check exists (agent frontmatter + verdict-format string equality vs CONVENTIONS.md §5)",
+      "steps": [
+        "test -f <skills>/tools/validate-agents.sh"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-005",
+      "category": "phase-1-telemetry",
+      "description": "sfdt: runFixLoop outcomes persisted — agent-loop.js calls recordRun with type 'agent-fix'",
+      "steps": [
+        "grep -q recordRun <sfdt>/src/lib/agent-loop.js",
+        "grep -q agent-fix <sfdt>/src/lib/agent-loop.js"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-006",
+      "category": "phase-1-telemetry",
+      "description": "sfdt: tools/record-verdict.mjs exists so VERDICT blocks persist as run-history rows (type 'verdict')",
+      "steps": [
+        "test -f <sfdt>/tools/record-verdict.mjs"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-007",
+      "category": "phase-1-ground-truth",
+      "description": "sfdt: FEATURES.json adopted for the active phase (verifier grades JSON, not CONTEXT.md prose)",
+      "steps": [
+        "test -f <sfdt>/FEATURES.json"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-008",
+      "category": "phase-2-knowledge",
+      "description": "sfdt: CLAUDE.md is a map, not a manual — at most 100 lines (238 on 2026-07-18)",
+      "steps": [
+        "wc -l < <sfdt>/CLAUDE.md is <= 100"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-009",
+      "category": "phase-2-knowledge",
+      "description": "sfdt: docs/golden-principles.md exists (the short mechanical list slop-gc enforces)",
+      "steps": [
+        "test -f <sfdt>/docs/golden-principles.md"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-010",
+      "category": "phase-3-enforcement",
+      "description": "sfdt: at least one new harness lint (tools/check-features-edits.mjs or peer) wired into check:all-contracts",
+      "steps": [
+        "ls <sfdt>/tools/check-*.mjs includes a lint absent on 2026-07-18 baseline (baseline: catalogs, licenses, node, auth-docs)",
+        "grep check:all-contracts <sfdt>/package.json includes it"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-011",
+      "category": "phase-4-flywheel",
+      "description": "flywheel agent definitions distributed in skills repo (harness-improver, doc-gardener, slop-gc)",
+      "steps": [
+        "each of harness-improver.md, doc-gardener.md, slop-gc.md exists in <skills> (root or agents/)"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-012",
+      "category": "phase-4-flywheel",
+      "description": "sfdt: harness-improver workflow scheduled in .github/workflows (claude-code-review.yml least-privilege pattern)",
+      "steps": [
+        "test -f <sfdt>/.github/workflows/harness-improver.yml"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-013",
+      "category": "phase-4-flywheel",
+      "description": "One full self-improvement cycle observed: harness-improver opened a PR from telemetry and the verifier passed it",
+      "steps": [
+        "MANUAL/TELEMETRY: sfdt history --type gc --json returns >=1 row",
+        "MANUAL: the cited PR exists and merged with a passing verifier verdict"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-014",
+      "category": "phase-0-distribution",
+      "description": "sfdt-skills mirror version footer matches sfdt package.json version (sync is a release-pipeline step)",
+      "steps": [
+        "grep 'Synced from' <sfdt-skills>/README.md version == <sfdt>/package.json version"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-015",
+      "category": "phase-0-intake",
+      "description": "conductor-init skill exists in skills repo (initializer agent: init.sh, FEATURES.json seed, baseline commit)",
+      "steps": [
+        "a conductor-init SKILL.md or agent .md exists in <skills>"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-016",
+      "category": "agents-drift",
+      "description": "agents repo: CI push trigger matches the live branch (ci.yml targets main/work; repo branch is master, so push CI never fires)",
+      "steps": [
+        "current branch (git rev-parse --abbrev-ref HEAD) appears in ci.yml push branches"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-017",
+      "category": "agents-drift",
+      "description": "agents repo: stale '222 tests' claim removed (CLAUDE.md:32,69 and roadmap.md:148; actual ~1100 test functions)",
+      "steps": [
+        "grep -r '222 tests' <agents> returns nothing"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-018",
+      "category": "agents-drift",
+      "description": "agents repo: README Salesforce API version matches versions.yml (README says 66.0; versions.yml says 63.0)",
+      "steps": [
+        "README 'Salesforce API:' version == agent-os/product/versions.yml api_version"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-019",
+      "category": "agents-drift",
+      "description": "agents repo: dead pinned model claude-opus-4-5-20251101 removed from legacy salesforce-automation agents (or the legacy dir is retired)",
+      "steps": [
+        "grep -r 'claude-opus-4-5-20251101' <agents> returns nothing"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-020",
+      "category": "agents-enforcement",
+      "description": "agents repo: validate-agents check exists and CI runs it (64 agent .md files, two incompatible frontmatter styles, zero mechanical validation today)",
+      "steps": [
+        "a validate-agents script exists in <agents>/scripts or tools",
+        "ci.yml references it"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-021",
+      "category": "platform-knowledge",
+      "description": "conductor-platform: CLAUDE.md is a map, not a monolith duplicating CONTEXT.md/MASTER_PROMPT_V2 (133 lines of triplicated prose today)",
+      "steps": [
+        "wc -l < <conductor-platform>/CLAUDE.md is <= 100"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-022",
+      "category": "platform-drift",
+      "description": "conductor-platform: no doc tells agents Celery is live (arq replaced it; CLAUDE.md:73, README.md:37, MEMORY_BANK.md:8 still say Celery/celery_app.py)",
+      "steps": [
+        "grep -il celery in CLAUDE.md, README.md, MEMORY_BANK.md returns nothing"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-023",
+      "category": "platform-drift",
+      "description": "conductor-platform: DATABASE_SCHEMA.sql regenerated from models or deleted (omits 6 tables the migrations added, e.g. workflow_runs, approval_gates)",
+      "steps": [
+        "DATABASE_SCHEMA.sql absent, OR it mentions workflow_runs"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-024",
+      "category": "platform-drift",
+      "description": "conductor-platform: no hardcoded /home/drew paths in backend source or tests (AGENTS_REPO_PATH must be config-only; 2 integration tests + env examples hardcode it today)",
+      "steps": [
+        "grep -r '/home/drew' <conductor-platform>/apps/api/{src,tests} returns nothing"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-025",
+      "category": "platform-conductor-adoption",
+      "description": "conductor-platform: MEMORY_BANK.md adopts the CONVENTIONS §4 dated line format (today it is a prose doc with no dated entries, frozen at 2026-03-19)",
+      "steps": [
+        "MEMORY_BANK.md contains at least one line matching '^- 20YY-MM-DD'"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-026",
+      "category": "studio-verification",
+      "description": "studio-by-sfdt: browser-driven E2E exists (Playwright or Puppeteer) so the verifier can drive the UI like a human — zero today, jsdom only",
+      "steps": [
+        "package-lock.json contains playwright or puppeteer"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-027",
+      "category": "studio-drift",
+      "description": "studio-by-sfdt: README free of machine-specific paths and personal IPs (/home/drew/workspace at lines 67/87/118/141; LAN + Tailscale IPs at 122-127)",
+      "steps": [
+        "grep '/home/drew' <studio>/README.md returns nothing"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-028",
+      "category": "studio-harness",
+      "description": "studio-by-sfdt: dev ports overridable via env so parallel worktrees can boot (dev.mjs hardcodes 5174/4175 today)",
+      "steps": [
+        "scripts/dev.mjs reads process.env for port configuration"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-029",
+      "category": "studio-ground-truth",
+      "description": "studio-by-sfdt: FEATURES.json exists for the UI surface (UI products are where agents declare victory early)",
+      "steps": [
+        "test -f <studio>/FEATURES.json"
+      ],
+      "passes": false,
+      "evidence": null
+    }
+  ]
+}
