@@ -12,7 +12,7 @@
         "git -C <skills> ls-files tests/ | grep -q run-all.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-20: tests/run-all.sh tracked by git"
+      "evidence": "2026-07-23: tests/run-all.sh tracked by git"
     },
     {
       "id": "H-002",
@@ -32,7 +32,7 @@
         "git -C <skills> ls-files .claude/scheduled_tasks.lock returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-20: lockfile untracked"
+      "evidence": "2026-07-23: lockfile untracked"
     },
     {
       "id": "H-004",
@@ -42,7 +42,7 @@
         "test -f <skills>/tools/validate-agents.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-20: ../skills/tools/validate-agents.sh"
+      "evidence": "2026-07-23: ../skills/tools/validate-agents.sh"
     },
     {
       "id": "H-005",
@@ -144,8 +144,8 @@
       "steps": [
         "grep 'Synced from' <sfdt-skills>/README.md version == <sfdt>/package.json version"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: mirror says v0.18.2 vs cli v0.18.2"
     },
     {
       "id": "H-015",
@@ -164,8 +164,8 @@
       "steps": [
         "current branch (git rev-parse --abbrev-ref HEAD) appears in ci.yml push branches"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: push CI covers branch 'master'"
     },
     {
       "id": "H-017",
@@ -174,8 +174,8 @@
       "steps": [
         "grep -r '222 tests' <agents> returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: stale count gone"
     },
     {
       "id": "H-018",
@@ -184,8 +184,8 @@
       "steps": [
         "README 'Salesforce API:' version == agent-os/product/versions.yml api_version"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: README says 63.0, versions.yml says 63.0"
     },
     {
       "id": "H-019",
@@ -194,8 +194,8 @@
       "steps": [
         "grep -r 'claude-opus-4-5-20251101' <agents> returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: no dead model pins"
     },
     {
       "id": "H-020",
