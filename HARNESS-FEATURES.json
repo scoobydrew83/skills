@@ -42,7 +42,7 @@
         "test -f <skills>/tools/validate-agents.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-23: /Users/dkennedy/dev/projects/co-work/harness-project/repos/skills/tools/validate-agents.sh"
+      "evidence": "2026-07-23: ../skills/tools/validate-agents.sh"
     },
     {
       "id": "H-005",
@@ -275,8 +275,8 @@
       "steps": [
         "grep '/home/drew' <studio>/README.md returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: README path-clean"
     },
     {
       "id": "H-028",
