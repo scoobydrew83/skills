@@ -42,7 +42,7 @@
         "test -f <skills>/tools/validate-agents.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-23: ../skills/tools/validate-agents.sh"
+      "evidence": "2026-07-23: /Users/dkennedy/dev/projects/co-work/harness-project/repos/skills/tools/validate-agents.sh"
     },
     {
       "id": "H-005",
@@ -225,8 +225,8 @@
       "steps": [
         "grep -il celery in CLAUDE.md, README.md, MEMORY_BANK.md returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: no stale Celery references"
     },
     {
       "id": "H-023",
@@ -235,8 +235,8 @@
       "steps": [
         "DATABASE_SCHEMA.sql absent, OR it mentions workflow_runs"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: schema doc removed (models/migrations are source of truth)"
     },
     {
       "id": "H-024",
@@ -245,8 +245,8 @@
       "steps": [
         "grep -r '/home/drew' <conductor-platform>/apps/api/{src,tests} returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-23: backend src+tests path-clean"
     },
     {
       "id": "H-025",
