@@ -215,8 +215,8 @@
       "steps": [
         "wc -l < <conductor-platform>/CLAUDE.md is <= 100"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-24: CLAUDE.md is 84 lines (target <=100)"
     },
     {
       "id": "H-022",
@@ -255,8 +255,8 @@
       "steps": [
         "MEMORY_BANK.md contains at least one line matching '^- 20YY-MM-DD'"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-24: MEMORY_BANK has dated line entries"
     },
     {
       "id": "H-026",
