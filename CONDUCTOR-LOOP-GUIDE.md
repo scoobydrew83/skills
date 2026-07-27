@@ -213,6 +213,59 @@ written in CLAUDE.md where the loop reads them.
 
 ---
 
+## Phase 6 — Flywheel (1 hr, after the loop has run a week)
+
+Phases 0–5 make the loop run. Phase 6 makes it *improve*: every FAIL verdict,
+escalation, and doc drift is exhaust today. Three scheduled agents mine that
+exhaust and PR against the harness itself. Don't start this until Phase 5 —
+an unbounded improver on an ungated repo is a slop generator.
+
+**Do:**
+
+1. Copy `harness-improver.md`, `doc-gardener.md`, and `slop-gc.md` into
+   `.claude/agents/` alongside the builder/verifier pair. Commit them.
+2. Schedule each on its own cron, using the Phase 4 triage workflow as the
+   template. Stagger them so three agents never open PRs into the same
+   review window:
+
+   | Agent | Cadence | Mines | Emits |
+   |---|---|---|---|
+   | `harness-improver` | weekly, Mon | `verdict` / `escalation` / `agent-fix` history | one lint, doc edit, or escalation per ≥3-occurrence failure category |
+   | `doc-gardener` | weekly, Wed | doc claims vs code reality | mechanical doc fixes; flags contested claims |
+   | `slop-gc` | weekly, Fri (daily once boring) | merged diffs vs `golden-principles.md` | QUALITY_SCORE.md grades + sub-minute refactor PRs |
+
+3. Enforce the bounds in the workflow itself, not just the agent prompt:
+   **≤3 PRs per agent per run**, PRs open against a branch and never merge,
+   and each PR body cites the rows or files that motivated it.
+4. Wire escalations to the notify channel you already use (`sfdt notify` →
+   generic webhook → n8n). An agent that needs human judgment must be able
+   to reach a human without opening a PR about it.
+
+**Review rhythm.** Flywheel PRs are pre-graded diffs, not raw output — the
+standard verifier and `claude-code-review.yml` grade them like any other work
+before they reach you. Read them in one weekly sitting. Merge what you
+understand; the agents are bounded, so a backlog is bounded too.
+
+**Quiet weeks are PASSes.** An agent that finds nothing and exits with a
+one-line "no signal" note has done its job. Do not tune the thresholds down
+to manufacture findings — the ≥3-occurrence rule and the golden-principles
+"if it isn't written there, it isn't a rule yet" clause exist precisely to
+keep the flywheel from inventing work. A run that produces zero PRs is
+evidence the harness is healthy, not evidence the agent is broken.
+
+**Self-improving ≠ self-approving.** These agents open PRs. Gates and humans
+merge them. That line does not move.
+
+**Acceptance criteria:** each of the three agents has run at least once on
+its schedule; at least one produced a PR traceable to a real telemetry row or
+doc mismatch (no hallucinated findings); no agent exceeded 3 PRs in a run;
+nothing merged without passing the Phase 5 gates.
+
+**Checkpoint:** commit `loop(6): flywheel scheduled` — the loop now improves
+the harness it runs in.
+
+---
+
 ## Operating rhythm once live
 
 - **Morning (5 min):** review triage PR → merge or edit queue → loop runs.

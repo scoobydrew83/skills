@@ -6,8 +6,9 @@
 #   tools/validate-agents.sh --help
 #
 # Checks:
-#   1. conductor-builder.md and conductor-verifier.md each carry the required
-#      frontmatter keys: name, description, tools, phase, hands_off_to.
+#   1. Every Conductor agent definition at the repo root — the builder/verifier
+#      pair plus the three flywheel agents — carries the required frontmatter
+#      keys: name, description, tools, phase, hands_off_to.
 #   2. The VERDICT block in conductor-verifier.md uses exactly the verdict
 #      vocabulary defined in CONVENTIONS.md §5 — extracted from both and diffed,
 #      fails on any mismatch (so the verifier's output schema can't drift from
@@ -37,7 +38,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-AGENTS="conductor-builder.md conductor-verifier.md"
+AGENTS="conductor-builder.md conductor-verifier.md harness-improver.md doc-gardener.md slop-gc.md"
 REQUIRED_KEYS="name description tools phase hands_off_to"
 VERIFIER="$REPO_ROOT/conductor-verifier.md"
 CONVENTIONS="$REPO_ROOT/CONVENTIONS.md"

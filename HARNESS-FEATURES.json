@@ -12,7 +12,7 @@
         "git -C <skills> ls-files tests/ | grep -q run-all.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-24: tests/run-all.sh tracked by git"
+      "evidence": "2026-07-27: tests/run-all.sh tracked by git"
     },
     {
       "id": "H-002",
@@ -32,7 +32,7 @@
         "git -C <skills> ls-files .claude/scheduled_tasks.lock returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-24: lockfile untracked"
+      "evidence": "2026-07-27: lockfile untracked"
     },
     {
       "id": "H-004",
@@ -42,7 +42,7 @@
         "test -f <skills>/tools/validate-agents.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-24: ../skills/tools/validate-agents.sh"
+      "evidence": "2026-07-27: ../skills/tools/validate-agents.sh"
     },
     {
       "id": "H-005",
@@ -53,7 +53,7 @@
         "grep -q agent-fix <sfdt>/src/lib/agent-loop.js"
       ],
       "passes": true,
-      "evidence": "2026-07-24: agent-loop.js records agent-fix runs"
+      "evidence": "2026-07-27: agent-loop.js records agent-fix runs"
     },
     {
       "id": "H-006",
@@ -63,7 +63,7 @@
         "test -f <sfdt>/tools/record-verdict.mjs"
       ],
       "passes": true,
-      "evidence": "2026-07-24: ../sfdt/tools/record-verdict.mjs"
+      "evidence": "2026-07-27: ../sfdt/tools/record-verdict.mjs"
     },
     {
       "id": "H-007",
@@ -73,7 +73,7 @@
         "test -f <sfdt>/FEATURES.json"
       ],
       "passes": true,
-      "evidence": "2026-07-24: ../sfdt/FEATURES.json"
+      "evidence": "2026-07-27: ../sfdt/FEATURES.json"
     },
     {
       "id": "H-008",
@@ -92,8 +92,8 @@
       "steps": [
         "test -f <sfdt>/docs/golden-principles.md"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-27: ../sfdt/docs/golden-principles.md"
     },
     {
       "id": "H-010",
@@ -103,8 +103,8 @@
         "ls <sfdt>/tools/check-*.mjs includes a lint absent on 2026-07-18 baseline (baseline: catalogs, licenses, node, auth-docs)",
         "grep check:all-contracts <sfdt>/package.json includes it"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-27: new lint(s): check-features-edits.mjs"
     },
     {
       "id": "H-011",
@@ -113,8 +113,8 @@
       "steps": [
         "each of harness-improver.md, doc-gardener.md, slop-gc.md exists in <skills> (root or agents/)"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-27: found 3/3: harness-improver.md, doc-gardener.md, slop-gc.md"
     },
     {
       "id": "H-012",
@@ -144,8 +144,8 @@
       "steps": [
         "grep 'Synced from' <sfdt-skills>/README.md version == <sfdt>/package.json version"
       ],
-      "passes": true,
-      "evidence": "2026-07-24: mirror says v0.18.2 vs cli v0.18.2"
+      "passes": false,
+      "evidence": null
     },
     {
       "id": "H-015",
@@ -165,7 +165,7 @@
         "current branch (git rev-parse --abbrev-ref HEAD) appears in ci.yml push branches"
       ],
       "passes": true,
-      "evidence": "2026-07-24: push CI covers branch 'master'"
+      "evidence": "2026-07-27: push CI covers branch 'master'"
     },
     {
       "id": "H-017",
@@ -175,7 +175,7 @@
         "grep -r '222 tests' <agents> returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-24: stale count gone"
+      "evidence": "2026-07-27: stale count gone"
     },
     {
       "id": "H-018",
@@ -185,7 +185,7 @@
         "README 'Salesforce API:' version == agent-os/product/versions.yml api_version"
       ],
       "passes": true,
-      "evidence": "2026-07-24: README says 63.0, versions.yml says 63.0"
+      "evidence": "2026-07-27: README says 63.0, versions.yml says 63.0"
     },
     {
       "id": "H-019",
@@ -194,8 +194,8 @@
       "steps": [
         "grep -r 'claude-opus-4-5-20251101' <agents> returns nothing"
       ],
-      "passes": true,
-      "evidence": "2026-07-24: no dead model pins"
+      "passes": false,
+      "evidence": null
     },
     {
       "id": "H-020",
@@ -205,8 +205,8 @@
         "a validate-agents script exists in <agents>/scripts or tools",
         "ci.yml references it"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-27: ../agents/scripts/validate-agents.py wired into CI"
     },
     {
       "id": "H-021",
@@ -216,7 +216,7 @@
         "wc -l < <conductor-platform>/CLAUDE.md is <= 100"
       ],
       "passes": true,
-      "evidence": "2026-07-24: CLAUDE.md is 84 lines (target <=100)"
+      "evidence": "2026-07-27: CLAUDE.md is 84 lines (target <=100)"
     },
     {
       "id": "H-022",
@@ -226,7 +226,7 @@
         "grep -il celery in CLAUDE.md, README.md, MEMORY_BANK.md returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-24: no stale Celery references"
+      "evidence": "2026-07-27: no stale Celery references"
     },
     {
       "id": "H-023",
@@ -236,7 +236,7 @@
         "DATABASE_SCHEMA.sql absent, OR it mentions workflow_runs"
       ],
       "passes": true,
-      "evidence": "2026-07-24: schema doc removed (models/migrations are source of truth)"
+      "evidence": "2026-07-27: schema doc removed (models/migrations are source of truth)"
     },
     {
       "id": "H-024",
@@ -246,7 +246,7 @@
         "grep -r '/home/drew' <conductor-platform>/apps/api/{src,tests} returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-24: backend src+tests path-clean"
+      "evidence": "2026-07-27: backend src+tests path-clean"
     },
     {
       "id": "H-025",
@@ -256,7 +256,7 @@
         "MEMORY_BANK.md contains at least one line matching '^- 20YY-MM-DD'"
       ],
       "passes": true,
-      "evidence": "2026-07-24: MEMORY_BANK has dated line entries"
+      "evidence": "2026-07-27: MEMORY_BANK has dated line entries"
     },
     {
       "id": "H-026",
@@ -276,7 +276,7 @@
         "grep '/home/drew' <studio>/README.md returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-24: README path-clean"
+      "evidence": "2026-07-27: README path-clean"
     },
     {
       "id": "H-028",
