@@ -71,9 +71,10 @@ phase that owns its primary output and document the sub-phases inside.
 
 ## 4. Shared state contract
 
-Four files coordinate state across skills. Three originate in the Conductor
-Method and predate this convention set; the fourth is project-standard. Use
-the same filenames every time so skills can find them.
+Five files coordinate state across skills. Three originate in the Conductor
+Method and predate this convention set; `CLAUDE.md` is project-standard; and
+`FEATURES.json` is the ground-truth artifact added with the harness. Use the
+same filenames every time so skills can find them.
 
 - **`CONTEXT.md`** — the project's mission, current phase, and acceptance
   criteria. Set up once per project; updated when scope or acceptance
@@ -94,6 +95,32 @@ the same filenames every time so skills can find them.
 - **`CLAUDE.md`** — the per-project Claude Code instruction file. Holds
   loop protocol, gating rules, and the managed "Session Memory" block that
   `conductor-memory` refreshes. Read by Claude Code at session start.
+- **`FEATURES.json`** — the phase's acceptance criteria as machine-checkable
+  entries, and the thing verification grades against. JSON on purpose: models
+  mangle JSON less than Markdown. Seeded from the spec by `conductor-init`;
+  read by every skill that needs to know "what does done look like here?" in
+  a form it can actually run. Where `CONTEXT.md` holds the prose mission and
+  the constraints that aren't feature-shaped, `FEATURES.json` holds the
+  criteria — when the two disagree, the JSON wins.
+
+### FEATURES.json edit rules
+
+The file is only useful if its entries can't be quietly reshaped to match
+whatever got built. One entry per behavior, each with `id`, `category`,
+`description`, `steps` (a runnable command plus its expected outcome),
+`passes`, and `evidence`:
+
+- **Builders may edit `passes` and `evidence` only.** Everything else —
+  descriptions, steps, adding or removing entries — is a planner or human
+  change, made in its own commit.
+- **Editing or deleting a description or step is unacceptable**, because it
+  hides missing or buggy functionality rather than reporting it.
+- **`passes: true` requires `evidence`** a verifier can re-run: a test name,
+  command output, or `file:line`. No evidence means the criterion failed.
+- **A `passes: true` that can no longer be reproduced is drift, and fails the
+  run** — the same rule the harness applies to itself.
+- **A phase with zero entries is `BLOCKED`,** not passing. Missing criteria
+  is a finding, never a free pass.
 
 Skills that don't operate inside a Conductor-style project use `reads: []`
 and `writes: []`. The convention is opt-in: a skill MAY read/write these

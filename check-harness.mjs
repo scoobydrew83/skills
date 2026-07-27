@@ -74,7 +74,9 @@ const grepRepo = (repo, needle) => {
 const findFile = (repo, name) => {
   const hits = [];
   const walk = (dir, depth) => {
-    if (depth > 3) return;
+    // Depth 5, not 3: skills live at plugins/<plugin>/skills/<name>/SKILL.md,
+    // which is depth 4 — at depth 3 the H-015 SKILL.md clause was unreachable.
+    if (depth > 5) return;
     for (const e of readdirSync(dir, { withFileTypes: true })) {
       if (e.name === '.git' || e.name === 'node_modules') continue;
       const p = join(dir, e.name);

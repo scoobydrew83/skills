@@ -154,8 +154,8 @@
       "steps": [
         "a conductor-init SKILL.md or agent .md exists in <skills>"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-27: ../skills/plugins/coordinated-skills/skills/conductor-init/SKILL.md"
     },
     {
       "id": "H-016",

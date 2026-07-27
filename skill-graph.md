@@ -7,6 +7,7 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 
 | Skill | phase | hands_off_to | notes |
 |---|---|---|---|
+| `conductor-init` | intake | loop-creator, agent-orchestration |  |
 | `overwhelm-breakdown` | intake | agent-orchestration, neurodivergent-comms, session-bookend |  |
 | `derisk-sequencer` | plan | experiment-designer, agent-orchestration |  |
 | `experiment-designer` | plan | idea-validator, derisk-sequencer |  |
@@ -32,6 +33,7 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 ```mermaid
 graph LR
   subgraph intake
+    conductor-init
     overwhelm-breakdown
   end
   subgraph plan
@@ -69,6 +71,8 @@ graph LR
   agent-orchestration --> drift-check
   agent-orchestration --> conductor-memory
   agent-orchestration --> session-bookend
+  conductor-init --> loop-creator
+  conductor-init --> agent-orchestration
   conductor-memory --> session-continuity
   derisk-sequencer --> experiment-designer
   derisk-sequencer --> agent-orchestration
@@ -103,4 +107,4 @@ graph LR
 
 ## Source
 
-Generated 2026-07-20 16:45 CDT from 19 skill(s).
+Generated 2026-07-27 14:36 CDT from 20 skill(s).
