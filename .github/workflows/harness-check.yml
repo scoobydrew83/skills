@@ -1,0 +1,74 @@
+name: Harness self-check
+
+# H-030: the adoption ground truth (HARNESS-FEATURES.json) is re-verified on a
+# schedule, and a regression escalates as an issue instead of dying in a log —
+# the lesson from H-014, where a silent skip let the mirror drift a release.
+#
+# Clones all six estate repos and runs check-harness.mjs against them. The
+# checker SKIPs any repo it can't reach, so a missing/expired HARNESS_REPOS_TOKEN
+# degrades coverage (public repos only) rather than failing the run — but a
+# degraded run says so in the issue it opens.
+
+on:
+  schedule:
+    - cron: '17 6 * * 1' # Mondays 06:17 UTC, before the sfdt harness-improver
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: skills
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Clone estate repos
+        env:
+          HARNESS_REPOS_TOKEN: ${{ secrets.HARNESS_REPOS_TOKEN }}
+        run: |
+          for r in sfdt sfdt-skills agents conductor-platform studio-by-sfdt; do
+            if [ -n "${HARNESS_REPOS_TOKEN}" ]; then
+              url="https://x-access-token:${HARNESS_REPOS_TOKEN}@github.com/scoobydrew83/${r}.git"
+            else
+              url="https://github.com/scoobydrew83/${r}.git"
+            fi
+            git clone --depth 1 "$url" "$r" 2>/dev/null \
+              && echo "cloned $r" \
+              || echo "could not clone $r (private without token?) — checker will SKIP it"
+          done
+      - name: Run check-harness
+        id: harness
+        run: |
+          set +e
+          node skills/check-harness.mjs --repos . --json > harness-result.json
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+          set -e
+          cat harness-result.json
+      - name: Escalate drift
+        if: steps.harness.outputs.exit != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          WEEK=$(date -u +%G-W%V)
+          TITLE="harness drift detected (${WEEK})"
+          if gh issue list --state open --search "\"${TITLE}\" in:title" --json number --jq length | grep -qv '^0$'; then
+            echo "Escalation issue already open for ${WEEK}."
+            exit 0
+          fi
+          BODY=$(node -e '
+            const r = require("./harness-result.json");
+            const bad = r.results.filter((x) => x.status === "DRIFT");
+            const skipped = r.results.filter((x) => x.status === "SKIP").map((x) => x.id);
+            let out = "check-harness found regressions — features recorded as passing that no longer reproduce:\n\n";
+            for (const b of bad) out += `- **${b.id}** ${b.description}\n  evidence: ${b.evidence}\n`;
+            if (skipped.length) out += `\nSKIPped (repo unreachable — check HARNESS_REPOS_TOKEN): ${skipped.join(", ")}\n`;
+            out += "\nFix the regression or, if the world legitimately changed, land a planner/human commit updating the feature. Do not flip passes back by hand. Harness: H-030.";
+            console.log(out);
+          ')
+          gh issue create --title "${TITLE}" --body "${BODY}"

@@ -51,7 +51,7 @@ if (Object.values(REPO).every((p) => !p)) {
 /** Which repo each feature needs; features whose repo is missing are SKIPped. */
 const NEEDS = (id) => {
   const n = Number(id.slice(2));
-  if ([1, 2, 3, 4, 11, 15].includes(n)) return SKILLS;
+  if ([1, 2, 3, 4, 11, 15, 30].includes(n)) return SKILLS;
   if ([5, 6, 7, 8, 9, 10, 12, 13].includes(n)) return SFDT;
   if (n === 14) return MIRROR && SFDT;
   if (n >= 16 && n <= 20) return AGENTS;
@@ -100,8 +100,11 @@ const checks = {
     return { pass, evidence: pass ? 'tests/run-all.sh tracked by git' : 'tests/ not tracked (gitignored)' };
   },
   'H-002': () => {
-    const hits = grepRepo(SKILLS, 'COORDINATION-STATUS');
-    return { pass: hits.length === 0, evidence: hits.length ? `${hits.length} files still reference it` : 'no references remain' };
+    // Reflexivity guard: the harness's own artifacts DESCRIBE this fix, so they
+    // legitimately contain the string. Only guidance docs count as rot.
+    const SELF = /(check-harness\.mjs|HARNESS-FEATURES\.json|CONDUCTOR-HARNESS-V\d\.md|DRIFT-FIXLIST\.md)$/;
+    const hits = grepRepo(SKILLS, 'COORDINATION-STATUS').filter((p) => !SELF.test(p));
+    return { pass: hits.length === 0, evidence: hits.length ? `${hits.length} non-harness files still reference it: ${hits.join(', ')}` : 'no references remain (harness self-references excluded)' };
   },
   'H-003': () => {
     const tracked = gitLs(SKILLS, '.claude/scheduled_tasks.lock');
@@ -187,8 +190,10 @@ const checks = {
     return { pass, evidence: `README says ${rm ? rm[1] : '?'}, versions.yml says ${vm ? vm[1] : '?'}` };
   },
   'H-019': () => {
-    const hits = grepRepo(AGENTS, 'claude-opus-4-5-20251101');
-    return { pass: hits.length === 0, evidence: hits.length ? `dead pinned model in ${hits.length} file(s)` : 'no dead model pins' };
+    // Reflexivity guard: validate-agents.py uses the dead string as a negative
+    // test fixture — the enforcement tool naming the banned value is not a pin.
+    const hits = grepRepo(AGENTS, 'claude-opus-4-5-20251101').filter((p) => !/validate-agents\.(py|sh|mjs)$/.test(p));
+    return { pass: hits.length === 0, evidence: hits.length ? `dead pinned model in ${hits.length} file(s): ${hits.join(', ')}` : 'no dead model pins (validator fixture excluded)' };
   },
   'H-020': () => {
     const script = findFile(AGENTS, 'validate-agents.py').concat(findFile(AGENTS, 'validate-agents.sh'), findFile(AGENTS, 'validate-agents.mjs'));
@@ -239,6 +244,17 @@ const checks = {
   'H-029': () => {
     const p = join(STUDIO, 'FEATURES.json');
     return { pass: existsSync(p), evidence: existsSync(p) ? p : 'FEATURES.json absent' };
+  },
+  'H-030': () => {
+    const wfDir = join(SKILLS, '.github', 'workflows');
+    if (!existsSync(wfDir)) return { pass: false, evidence: 'no workflows dir in skills' };
+    for (const f of readdirSync(wfDir)) {
+      const src = read(join(wfDir, f)) || '';
+      if (src.includes('check-harness.mjs') && src.includes('schedule:') && /gh issue create|sfdt notify/.test(src)) {
+        return { pass: true, evidence: `.github/workflows/${f}: scheduled run + escalation edge` };
+      }
+    }
+    return { pass: false, evidence: 'no scheduled workflow runs check-harness with an escalation step' };
   },
 };
 

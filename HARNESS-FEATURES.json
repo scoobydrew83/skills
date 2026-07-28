@@ -21,8 +21,8 @@
       "steps": [
         "grep -rl COORDINATION-STATUS <skills> --exclude-dir=.git returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-28: no references remain (harness self-references excluded)"
     },
     {
       "id": "H-003",
@@ -82,8 +82,8 @@
       "steps": [
         "wc -l < <sfdt>/CLAUDE.md is <= 100"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-28: CLAUDE.md is 73 lines (target <=100)"
     },
     {
       "id": "H-009",
@@ -144,8 +144,8 @@
       "steps": [
         "grep 'Synced from' <sfdt-skills>/README.md version == <sfdt>/package.json version"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-28: mirror says v0.19.0 vs cli v0.19.0"
     },
     {
       "id": "H-015",
@@ -194,8 +194,8 @@
       "steps": [
         "grep -r 'claude-opus-4-5-20251101' <agents> returns nothing"
       ],
-      "passes": false,
-      "evidence": null
+      "passes": true,
+      "evidence": "2026-07-28: no dead model pins (validator fixture excluded)"
     },
     {
       "id": "H-020",
@@ -297,6 +297,17 @@
       ],
       "passes": true,
       "evidence": "2026-07-28: ../studio-by-sfdt/FEATURES.json"
+    },
+    {
+      "id": "H-030",
+      "category": "meta-monitoring",
+      "description": "skills repo: check-harness runs on a weekly schedule with an escalation edge — DRIFT/regression opens an idempotent issue instead of dying in a log",
+      "steps": [
+        "a scheduled workflow exists in <skills>/.github/workflows that runs check-harness.mjs",
+        "the workflow escalates on nonzero exit (issue or notify), not log-only"
+      ],
+      "passes": true,
+      "evidence": "2026-07-28: .github/workflows/harness-check.yml: scheduled run + escalation edge"
     }
   ]
 }
