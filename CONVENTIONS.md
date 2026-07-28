@@ -162,6 +162,32 @@ The verdict is in addition to whatever rich output the skill normally
 produces — don't drop the tables and detail. `conductor-builder` reads
 the verdict; humans read the detail.
 
+### Skill telemetry
+
+The skill graph in `skill-graph.md` describes which handoffs are *declared*.
+Nothing today records which are *taken*, so no one can say which skills
+produce FAILs or which `hands_off_to` edges are decoration. Two rules fix
+that, and neither needs new infrastructure:
+
+- **A skill records its own firing** using the §4 MEMORY_BANK line format —
+  the same line it already writes, treated as the telemetry event rather
+  than just a note. `- YYYY-MM-DD · <skill-name> · <verdict-or-decision> ·
+  <one-line summary>`. The `<skill-name>` field is what makes the log
+  groupable; use the exact frontmatter `name`, never a prose description.
+- **A loop harness records which skill drove a phase** in the verdict row it
+  persists, as `summary.skill`. Where a run-history DB exists (`sfdt
+  history --type verdict --json`), that field is what joins a verdict back
+  to the skill that produced the work.
+
+Together these make the graph measurable: skills whose firings cluster with
+FAILs are the ones to fix, and a declared handoff that never appears in a
+following line is an edge to delete. This is the substrate `harness-improver`
+mines — its ≥3-occurrence threshold needs a `<skill-name>` field it can
+cluster on, so a skipped or free-text line is a silently lost signal.
+
+Telemetry never blocks work: a skill that can't write its line proceeds
+anyway. A missing line is a missing measurement, never a failed run.
+
 ## 6. Skill description hygiene
 
 The library coordinates by description matching, so descriptions carry
@@ -176,19 +202,37 @@ weight:
   `name`. Renaming a skill means updating every `hands_off_to:` and every
   Next steps line that references it.
 
-## 7. Open question (phase 2)
+## 7. Session close (resolved)
 
-One convention isn't decided yet:
+Phase 1 left one question open: **what signal closes a session and fires
+`conductor-memory`?** The candidates were a `session-bookend` end-block, an
+explicit user phrase, an `agent-orchestration` deploy-phase completion, or a
+`conductor-verifier` PASS on the last queue item.
 
-- **What signal closes a session and auto-fires `conductor-memory`?**
-  Candidates: a `session-bookend` end-block, an explicit user phrase
-  ("good place to stop"), an `agent-orchestration` deploy-phase
-  completion, or a `conductor-verifier` PASS that completes the last
-  queue item. We need a week or two of real-session data before picking
-  one. Until then, `conductor-memory` only fires when the user asks.
+**Resolved: session close is itself the signal, and the clean-state exit
+contract is where it's encoded.** None of the candidates generalized —
+`session-bookend` only fires when invoked, a user phrase can't be relied on,
+a deploy phase is one workflow among many, and a verifier PASS marks work
+complete rather than a session ending. What every session has is an end, and
+something already has to happen at that end: the tree must be left clean.
 
-When phase 2 picks a signal, add it to §4 (or §5) and update the
-`bookend`-phase skills accordingly.
+The contract, which lives in `conductor-builder.md` and applies to any agent
+ending a working session:
+
+1. **The branch passes the same smoke test the next session runs on entry.**
+   A session that ends red hands its breakage to a cold agent that can't tell
+   it from its own.
+2. **Commit, or revert/stash — never hand off a broken tree.** Half-finished
+   work left in place reads as intentional to whoever picks it up.
+3. **Append the MEMORY_BANK.md line** (§4 format, §5 skill telemetry). This
+   is the durable trace of the session.
+4. **Then fire the memory write** — `conductor-memory` for a session with
+   decisions or context worth carrying forward, `session-bookend` for a
+   routine stop. Step 3 is mandatory; step 4 is the fuller snapshot.
+
+So `conductor-memory` no longer waits to be asked: reaching the end of a
+session *is* the trigger, and the exit checklist is what makes it fire.
+Sessions that produced nothing worth carrying still complete steps 1–3.
 
 ## 8. Tooling
 
