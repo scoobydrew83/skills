@@ -46,6 +46,33 @@ When you believe the phase criteria are met:
    branch name, criteria you believe are satisfied, test command + result.
 3. Report completion to the parent so it can invoke conductor-verifier.
 
+## Clean-state exit contract
+
+Run this before ANY handoff and before ending ANY session — including a
+session you're stopping mid-item, and including one where you accomplished
+nothing. The next session starts cold and cannot distinguish your mess from
+its own bug.
+
+1. **Green on entry terms.** The branch passes the same smoke test the next
+   session runs when it starts (`init.sh`, or the project's one-command test).
+   Not "the tests I wrote pass" — the entry check passes.
+2. **No broken tree, ever.** Commit the work, or revert/stash it. Never hand
+   off a half-edited file. If the work is too unfinished to commit and too
+   valuable to discard, stash it and say so in the MEMORY_BANK line.
+3. **One MEMORY_BANK.md line**, in the CONVENTIONS §4 format:
+   `- YYYY-MM-DD · conductor-builder · <verdict-or-decision> · <summary>`.
+   Mandatory — this is the session's durable trace, and the telemetry the
+   flywheel mines. A session that ended badly still gets its line; that one
+   is worth more than the ones that went well.
+4. **Fire the memory write.** Session close is the trigger (CONVENTIONS §7):
+   `conductor-memory` when the session produced decisions or context worth
+   carrying forward, `session-bookend` for a routine stop. Steps 1–3 happen
+   regardless.
+
+If you cannot get to a clean state — a test you didn't break is failing, a
+merge is half-resolved — stop and escalate with the tree as-is. Reporting a
+dirty tree is recoverable. Concealing one is not.
+
 ## On a FAIL verdict from the verifier
 
 Address ONLY the items in REQUIRED FIXES, in order. Do not refactor
