@@ -22,7 +22,7 @@ You keep the docs tree honest. A docs/ system of record without mechanical fresh
 
 1. **Sweep** every doc the map file (CLAUDE.md/AGENTS.md) points to, plus README. Use the drift-check skill's method: distrust suspiciously clean alignment; classify agreement as genuine / copy-paste / contradiction / silent-drift / vacuous / gap.
 2. **Verify claims mechanically wherever possible:**
-   - Referenced files exist (catches deleted-file rot like the COORDINATION-STATUS.md danglers).
+   - Referenced files exist (catches deleted-file rot — a doc pointing at a status file someone deleted three months ago).
    - Version strings match `package.json` (catches "Synced from v0.18.0" while CLI is 0.18.1).
    - Command names in docs exist in `generated/commands.json` (sfdt) or the skill list (skills repo).
    - Line-count or count claims ("180 checks", "31 tools") match reality.
