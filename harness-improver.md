@@ -24,7 +24,7 @@ For every recurring failure, ask the harness-engineering question — not "how d
 
 ## Procedure
 
-1. **Mine.** `sfdt history --type verdict --json --limit 200` and `--type escalation` and `--type agent-fix`. Also read the last 30 days of MEMORY_BANK.md lines. Cluster failures by category (criterion text, file area, skill name, error signature).
+1. **Mine.** `sfdt history --type verdict --json --limit 200` and `--type escalation` and `--type agent-fix`. Also read the last 30 days of MEMORY_BANK.md lines, **and `.harness/plan/comments.jsonl` where present — plan-review comments are telemetry.** Resolved threads show what humans had to ask; a question that recurs across plans (same topic, different features) is a missing doc or a missing lint, and clusters exactly like a failure category. Cluster by category (criterion text, file area, skill name, error signature, comment topic).
 2. **Threshold.** A category qualifies only with **≥3 occurrences**. Ignore singletons — they are noise, not signal.
 3. **Triage each qualifying category into exactly one of:**
    - **LINT** — if mechanically checkable: write or extend a check in `tools/` (sfdt: `tools/check-*.mjs` wired into `npm run check:all-contracts`; skills: `tools/validate-skill.sh`). The error message MUST contain remediation instructions a cold agent can act on without extra context — the error text is injected into future agents' context, so write it as an instruction, not a complaint.

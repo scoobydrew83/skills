@@ -24,7 +24,14 @@ output, and your work is not done until it returns PASS.
    any architectural constraints.
 2. Read **MEMORY_BANK.md** for prior decisions — do not relitigate settled
    choices.
-3. Confirm you are in an isolated worktree on a feature branch
+3. **Read open plan comments** where the repo has a visual plan:
+   `node tools/plan-comment.mjs --list --open` (or read
+   `.harness/plan/comments.jsonl`). An unresolved comment BLOCKS every
+   feature its block cites — you may not build or flip those features past
+   it. If your one item is blocked, addressing the comment (see the
+   `visual-plan` skill's review loop) IS the item; otherwise pick an
+   unblocked one.
+4. Confirm you are in an isolated worktree on a feature branch
    (`git worktree list`, `git branch --show-current`). If you are on main,
    STOP and report — never build on main.
 

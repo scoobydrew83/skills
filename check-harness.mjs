@@ -51,8 +51,8 @@ if (Object.values(REPO).every((p) => !p)) {
 /** Which repo each feature needs; features whose repo is missing are SKIPped. */
 const NEEDS = (id) => {
   const n = Number(id.slice(2));
-  if ([1, 2, 3, 4, 11, 15, 30].includes(n)) return SKILLS;
-  if ([5, 6, 7, 8, 9, 10, 12, 13].includes(n)) return SFDT;
+  if ([1, 2, 3, 4, 11, 15, 30, 32, 34].includes(n)) return SKILLS;
+  if ([5, 6, 7, 8, 9, 10, 12, 13, 31, 33].includes(n)) return SFDT;
   if (n === 14) return MIRROR && SFDT;
   if (n >= 16 && n <= 20) return AGENTS;
   if (n >= 21 && n <= 25) return PLATFORM;
@@ -255,6 +255,29 @@ const checks = {
       }
     }
     return { pass: false, evidence: 'no scheduled workflow runs check-harness with an escalation step' };
+  },
+  // --- visual plans ---
+  'H-031': () => {
+    const tools = ['render-plan.mjs', 'plan-serve.mjs', 'plan-comment.mjs'].filter((t) => existsSync(join(SFDT, 'tools', t)));
+    const wired = (read(join(SFDT, 'package.json')) || '').includes('check:plan');
+    const pass = tools.length === 3 && wired;
+    return { pass, evidence: pass ? 'plan tools + check:plan wired' : `${tools.length}/3 tools in sfdt/tools, check:plan wired: ${wired}` };
+  },
+  'H-032': () => {
+    const S = join(SKILLS, 'plugins/coordinated-skills/skills/visual-plan');
+    const parts = ['SKILL.md', 'tools/render-plan.mjs', 'tools/plan-serve.mjs', 'tools/plan-comment.mjs', 'tools/capture-plan.mjs', 'commands/vplan.md', 'commands/address-comments.md']
+      .filter((f) => existsSync(join(S, f)));
+    const builder = (read(join(SKILLS, 'conductor-builder.md')) || '').includes('plan-comment');
+    const pass = parts.length === 7 && builder;
+    return { pass, evidence: pass ? 'skill packaged (7/7 parts) + builder entry ritual reads comments' : `${parts.length}/7 parts, builder wired: ${builder}` };
+  },
+  'H-033': () => {
+    const p = join(SFDT, '.harness', 'plan', 'blocks.json');
+    return { pass: existsSync(p), evidence: existsSync(p) ? p : 'no blocks.json for the active sfdt phase' };
+  },
+  'H-034': () => {
+    const pass = (read(join(SKILLS, 'harness-improver.md')) || '').includes('comments.jsonl');
+    return { pass, evidence: pass ? 'improver mines plan comments' : 'harness-improver.md does not name comments.jsonl' };
   },
 };
 

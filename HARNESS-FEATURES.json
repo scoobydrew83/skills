@@ -12,7 +12,7 @@
         "git -C <skills> ls-files tests/ | grep -q run-all.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-28: tests/run-all.sh tracked by git"
+      "evidence": "2026-07-29: tests/run-all.sh tracked by git"
     },
     {
       "id": "H-002",
@@ -22,7 +22,7 @@
         "grep -rl COORDINATION-STATUS <skills> --exclude-dir=.git returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-28: no references remain (harness self-references excluded)"
+      "evidence": "2026-07-29: no references remain (harness self-references excluded)"
     },
     {
       "id": "H-003",
@@ -32,7 +32,7 @@
         "git -C <skills> ls-files .claude/scheduled_tasks.lock returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-28: lockfile untracked"
+      "evidence": "2026-07-29: lockfile untracked"
     },
     {
       "id": "H-004",
@@ -42,7 +42,7 @@
         "test -f <skills>/tools/validate-agents.sh"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../skills/tools/validate-agents.sh"
+      "evidence": "2026-07-29: ../skills/tools/validate-agents.sh"
     },
     {
       "id": "H-005",
@@ -53,7 +53,7 @@
         "grep -q agent-fix <sfdt>/src/lib/agent-loop.js"
       ],
       "passes": true,
-      "evidence": "2026-07-28: agent-loop.js records agent-fix runs"
+      "evidence": "2026-07-29: agent-loop.js records agent-fix runs"
     },
     {
       "id": "H-006",
@@ -63,7 +63,7 @@
         "test -f <sfdt>/tools/record-verdict.mjs"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../sfdt/tools/record-verdict.mjs"
+      "evidence": "2026-07-29: ../sfdt/tools/record-verdict.mjs"
     },
     {
       "id": "H-007",
@@ -73,7 +73,7 @@
         "test -f <sfdt>/FEATURES.json"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../sfdt/FEATURES.json"
+      "evidence": "2026-07-29: ../sfdt/FEATURES.json"
     },
     {
       "id": "H-008",
@@ -83,7 +83,7 @@
         "wc -l < <sfdt>/CLAUDE.md is <= 100"
       ],
       "passes": true,
-      "evidence": "2026-07-28: CLAUDE.md is 73 lines (target <=100)"
+      "evidence": "2026-07-29: CLAUDE.md is 73 lines (target <=100)"
     },
     {
       "id": "H-009",
@@ -93,7 +93,7 @@
         "test -f <sfdt>/docs/golden-principles.md"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../sfdt/docs/golden-principles.md"
+      "evidence": "2026-07-29: ../sfdt/docs/golden-principles.md"
     },
     {
       "id": "H-010",
@@ -104,7 +104,7 @@
         "grep check:all-contracts <sfdt>/package.json includes it"
       ],
       "passes": true,
-      "evidence": "2026-07-28: new lint(s): check-features-edits.mjs, check-package-internal-paths.mjs"
+      "evidence": "2026-07-29: new lint(s): check-features-edits.mjs, check-package-internal-paths.mjs"
     },
     {
       "id": "H-011",
@@ -114,7 +114,7 @@
         "each of harness-improver.md, doc-gardener.md, slop-gc.md exists in <skills> (root or agents/)"
       ],
       "passes": true,
-      "evidence": "2026-07-28: found 3/3: harness-improver.md, doc-gardener.md, slop-gc.md"
+      "evidence": "2026-07-29: found 3/3: harness-improver.md, doc-gardener.md, slop-gc.md"
     },
     {
       "id": "H-012",
@@ -124,7 +124,7 @@
         "test -f <sfdt>/.github/workflows/harness-improver.yml"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../sfdt/.github/workflows/harness-improver.yml"
+      "evidence": "2026-07-29: ../sfdt/.github/workflows/harness-improver.yml"
     },
     {
       "id": "H-013",
@@ -145,7 +145,7 @@
         "grep 'Synced from' <sfdt-skills>/README.md version == <sfdt>/package.json version"
       ],
       "passes": true,
-      "evidence": "2026-07-28: mirror says v0.19.0 vs cli v0.19.0"
+      "evidence": "2026-07-29: mirror says v0.19.0 vs cli v0.19.0"
     },
     {
       "id": "H-015",
@@ -155,7 +155,7 @@
         "a conductor-init SKILL.md or agent .md exists in <skills>"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../skills/plugins/coordinated-skills/skills/conductor-init/SKILL.md"
+      "evidence": "2026-07-29: ../skills/plugins/coordinated-skills/skills/conductor-init/SKILL.md"
     },
     {
       "id": "H-016",
@@ -165,7 +165,7 @@
         "current branch (git rev-parse --abbrev-ref HEAD) appears in ci.yml push branches"
       ],
       "passes": true,
-      "evidence": "2026-07-28: push CI covers branch 'master'"
+      "evidence": "2026-07-29: push CI covers branch 'master'"
     },
     {
       "id": "H-017",
@@ -175,7 +175,7 @@
         "grep -r '222 tests' <agents> returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-28: stale count gone"
+      "evidence": "2026-07-29: stale count gone"
     },
     {
       "id": "H-018",
@@ -185,7 +185,7 @@
         "README 'Salesforce API:' version == agent-os/product/versions.yml api_version"
       ],
       "passes": true,
-      "evidence": "2026-07-28: README says 63.0, versions.yml says 63.0"
+      "evidence": "2026-07-29: README says 63.0, versions.yml says 63.0"
     },
     {
       "id": "H-019",
@@ -195,7 +195,7 @@
         "grep -r 'claude-opus-4-5-20251101' <agents> returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-28: no dead model pins (validator fixture excluded)"
+      "evidence": "2026-07-29: no dead model pins (validator fixture excluded)"
     },
     {
       "id": "H-020",
@@ -206,7 +206,7 @@
         "ci.yml references it"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../agents/scripts/validate-agents.py wired into CI"
+      "evidence": "2026-07-29: ../agents/scripts/validate-agents.py wired into CI"
     },
     {
       "id": "H-021",
@@ -216,7 +216,7 @@
         "wc -l < <conductor-platform>/CLAUDE.md is <= 100"
       ],
       "passes": true,
-      "evidence": "2026-07-28: CLAUDE.md is 84 lines (target <=100)"
+      "evidence": "2026-07-29: CLAUDE.md is 84 lines (target <=100)"
     },
     {
       "id": "H-022",
@@ -226,7 +226,7 @@
         "grep -il celery in CLAUDE.md, README.md, MEMORY_BANK.md returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-28: no stale Celery references"
+      "evidence": "2026-07-29: no stale Celery references"
     },
     {
       "id": "H-023",
@@ -236,7 +236,7 @@
         "DATABASE_SCHEMA.sql absent, OR it mentions workflow_runs"
       ],
       "passes": true,
-      "evidence": "2026-07-28: schema doc removed (models/migrations are source of truth)"
+      "evidence": "2026-07-29: schema doc removed (models/migrations are source of truth)"
     },
     {
       "id": "H-024",
@@ -246,7 +246,7 @@
         "grep -r '/home/drew' <conductor-platform>/apps/api/{src,tests} returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-28: backend src+tests path-clean"
+      "evidence": "2026-07-29: backend src+tests path-clean"
     },
     {
       "id": "H-025",
@@ -256,7 +256,7 @@
         "MEMORY_BANK.md contains at least one line matching '^- 20YY-MM-DD'"
       ],
       "passes": true,
-      "evidence": "2026-07-28: MEMORY_BANK has dated line entries"
+      "evidence": "2026-07-29: MEMORY_BANK has dated line entries"
     },
     {
       "id": "H-026",
@@ -266,7 +266,7 @@
         "package-lock.json contains playwright or puppeteer"
       ],
       "passes": true,
-      "evidence": "2026-07-28: browser automation dependency installed"
+      "evidence": "2026-07-29: browser automation dependency installed"
     },
     {
       "id": "H-027",
@@ -276,7 +276,7 @@
         "grep '/home/drew' <studio>/README.md returns nothing"
       ],
       "passes": true,
-      "evidence": "2026-07-28: README path-clean"
+      "evidence": "2026-07-29: README path-clean"
     },
     {
       "id": "H-028",
@@ -286,7 +286,7 @@
         "scripts/dev.mjs reads process.env for port configuration"
       ],
       "passes": true,
-      "evidence": "2026-07-28: dev.mjs reads env for config"
+      "evidence": "2026-07-29: dev.mjs reads env for config"
     },
     {
       "id": "H-029",
@@ -296,7 +296,7 @@
         "test -f <studio>/FEATURES.json"
       ],
       "passes": true,
-      "evidence": "2026-07-28: ../studio-by-sfdt/FEATURES.json"
+      "evidence": "2026-07-29: ../studio-by-sfdt/FEATURES.json"
     },
     {
       "id": "H-030",
@@ -307,7 +307,49 @@
         "the workflow escalates on nonzero exit (issue or notify), not log-only"
       ],
       "passes": true,
-      "evidence": "2026-07-28: .github/workflows/harness-check.yml: scheduled run + escalation edge"
+      "evidence": "2026-07-29: .github/workflows/harness-check.yml: scheduled run + escalation edge"
+    },
+    {
+      "id": "H-031",
+      "category": "visual-plan",
+      "description": "sfdt: visual-plan tools adopted — render-plan.mjs, plan-serve.mjs, plan-comment.mjs in tools/ and a check:plan lint wired into check:all-contracts",
+      "steps": [
+        "test -f <sfdt>/tools/render-plan.mjs && plan-serve.mjs && plan-comment.mjs",
+        "grep check:plan <sfdt>/package.json"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-032",
+      "category": "visual-plan",
+      "description": "skills: visual-plan skill packaged (SKILL.md + tools + commands) and conductor-builder's entry ritual reads open plan comments",
+      "steps": [
+        "plugins/coordinated-skills/skills/visual-plan/{SKILL.md,tools/render-plan.mjs,commands/vplan.md} exist",
+        "conductor-builder.md mentions plan comments"
+      ],
+      "passes": true,
+      "evidence": "2026-07-29: skill packaged (7/7 parts) + builder entry ritual reads comments"
+    },
+    {
+      "id": "H-033",
+      "category": "visual-plan",
+      "description": "sfdt: active phase has a visual plan — .harness/plan/blocks.json exists and check:plan passes on it",
+      "steps": [
+        "test -f <sfdt>/.harness/plan/blocks.json"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-034",
+      "category": "visual-plan",
+      "description": "skills: harness-improver names plan comments.jsonl as a mining source (review friction becomes flywheel fuel)",
+      "steps": [
+        "grep comments.jsonl <skills>/harness-improver.md"
+      ],
+      "passes": true,
+      "evidence": "2026-07-29: improver mines plan comments"
     }
   ]
 }

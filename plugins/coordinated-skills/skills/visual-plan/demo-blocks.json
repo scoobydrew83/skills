@@ -1,0 +1,19 @@
+{
+  "$comment": "Starter blocks for trying the live plan review. Copy to <repo>/.harness/plan/blocks.json — see chat instructions.",
+  "blocks": [
+    { "id": "b-intent", "type": "note", "section": "Overview", "title": "Phase intent", "features": ["F-001"],
+      "text": "1.0 stabilization: remove the legacy Code Analyzer v4 path so v5 is the only engine. Blocks are authored; everything else on this page is derived ground truth." },
+    { "id": "b-flow", "type": "diagram", "section": "Architecture", "title": "How a verdict becomes an improvement", "features": ["F-001"],
+      "source": "flowchart LR\n  B[conductor-builder] -->|VERDICT| RV[record-verdict.mjs]\n  RV --> DB[(history.db)]\n  RV --> J[telemetry.jsonl]\n  J -->|mined weekly| HI[harness-improver]\n  HI -->|PR| R[repo]\n  R -->|graded by| V[conductor-verifier]\n  V -->|VERDICT| RV" },
+    { "id": "b-jsonl", "type": "decision", "section": "Decisions", "title": "Telemetry travels as tracked JSONL", "features": [],
+      "choice": "record-verdict.mjs mirrors every row into tracked .harness/telemetry.jsonl",
+      "rationale": "The SQLite db is machine-local and gitignored; CI can only see what's in the checkout.",
+      "rejected": ["upload db as artifact", "hosted store"] },
+    { "id": "b-persist", "type": "annotated-code", "section": "Decisions", "title": "Where verdicts persist", "features": ["F-001"],
+      "file": "tools/record-verdict.mjs",
+      "annotations": [
+        { "line": 11, "note": "db row: local trend queries via `sfdt history`" },
+        { "line": 12, "note": "JSONL mirror: the row CI actually mines" }
+      ] }
+  ]
+}
