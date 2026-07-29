@@ -23,7 +23,15 @@ if ! command -v node >/dev/null 2>&1; then
   exit 0
 fi
 
-SB=$(mktemp -d -t vplan)
+# Explicit XXXXXX template: portable across BSD and GNU mktemp. `mktemp -d -t
+# vplan` works on macOS but GNU reads -t's argument as a template needing at
+# least six X's, so it fails on CI runners — leaving $SB empty and every path
+# below rooted at /.
+SB=$(mktemp -d "${TMPDIR:-/tmp}/vplan.XXXXXX")
+if [[ -z "${SB:-}" || ! -d "$SB" ]]; then
+  echo "  FAIL  could not create a temp dir — refusing to run with paths rooted at /"
+  exit 1
+fi
 trap 'rm -rf "$SB"' EXIT
 mkdir -p "$SB/.harness/plan" "$SB/tools"
 cp "$VP"/tools/*.mjs "$SB/tools/"
