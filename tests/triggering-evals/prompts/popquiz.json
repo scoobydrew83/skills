@@ -1,0 +1,17 @@
+{
+  "skill": "popquiz",
+  "should_trigger": [
+    "LGTM, merge it.",
+    "Approve this PR for me.",
+    "The loop finished and the diff is big — ship it.",
+    "Accept this agent-generated change, I didn't read it line by line.",
+    "The autonomous build session is done — can we merge the work?"
+  ],
+  "should_not_trigger": [
+    "Is this SQL query safe against injection?",
+    "We're deleting a public CLI flag — what's the deprecation path?",
+    "Should we add this package or vendor the eleven lines?",
+    "Should I build this idea at all?",
+    "Do my docs contradict each other?"
+  ]
+}

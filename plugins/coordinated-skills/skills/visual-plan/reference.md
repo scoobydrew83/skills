@@ -14,7 +14,7 @@
 | Recap | Narrative from a diff | Rendered from persisted verdicts + git — the telemetry the improver already mines |
 | Dependencies | Their app, their infra, network | Zero-dep node script; works offline; mermaid CDN optional with `<pre>` fallback |
 | Versioning | App database | Git — every plan state is a commit, diffable, revertable |
-| Comments | Hosted comment threads | `question` blocks in-repo: reviewer adds, builder must answer before the phase passes (lintable); PR review stays the human channel |
+| Comments | Hosted comment threads | Tracked `comments.jsonl`, pinned to stable block ids, written from the served page or the CLI. An open comment blocks the features its block cites, and resolving one without an answer is refused. PR review stays the merge-time channel |
 | Sharing | Their URLs | Static plan.html — commit it, attach to a PR, or serve via `sfdt ui` |
 
 What we adopt from them without shame: the block-library idea (typed blocks with schemas, not free HTML), wireframes-grounded-in-your-product, and plan-before-build as a ritual.
@@ -41,7 +41,7 @@ What we adopt from them without shame: the block-library idea (typed blocks with
 
 **Schema v2 (what changed and why):** every block gains a required stable `id` (nothing can pin to an anonymous block — this is the load-bearing addition) and an optional `section` (nav groups by it, authoring order preserved). Comments: `{id, block?, features?, author, text, created, resolved, answer?, resolvedAt?}`. Render structure: status header first (progress, blocked count, open comments, **next action** — the page answers "what do I do?" before "what is this?"), sticky section nav, feature↔block cross-links both directions, threads inline, recap and git last because they're reference, not decision.
 
-## Architecture (v1 — repo-local, shipped as prototype)
+## Architecture (repo-local)
 
 ```
 .harness/plan/blocks.json     Authored plan blocks (the ONLY hand-written part)
@@ -60,24 +60,37 @@ tools/render-plan.mjs         Zero-dep renderer -> .harness/plan/plan.html (deri
 - The verifier may treat unanswered `question` blocks as BLOCKED for the features they reference.
 
 **The two rituals, ours:**
-- `/visual-plan` (skill: `conductor-plan`, phase: intake/planning) — planner writes/updates blocks.json + FEATURES entries, runs the renderer, hands the human a plan.html. Plan approval = the human's planner commit.
+- `/vplan` (skill: `visual-plan`, phase: `plan`, hands_off_to: `[agent-orchestration, loop-creator]`) — planner writes/updates blocks.json + FEATURES entries, runs the renderer, hands the human a plan.html. Plan approval = the human's planner commit.
 - `/visual-recap` — no new artifact needed: the renderer's recap section IS the telemetry timeline + git log since the last planner commit, each row linking verdict → feature → commit. Evidence-backed by construction.
 
 ## Roadmap (each layer optional, in order)
 
-1. **v1 — now:** `render-plan.mjs` + blocks.json + lint (`check:plan` in check:all-contracts) + `conductor-plan` skill in the skills repo. Prototype in this folder, tested against real sfdt data.
-2. **v2 — sfdt ui page:** the GUI already reads local JSON snapshots (audit/monitor pattern); a "Plan" page reads FEATURES.json/blocks.json/telemetry.jsonl live. Same data, zero new state.
-3. **v3 — hosted with comments:** conductor-platform is the natural home (it already models workflow runs + approval gates); studio-by-sfdt's block-rendering machinery is the natural editor. Only build when PR-review comments prove insufficient — the platform gets a real feature with a proven local pattern behind it, not a speculative app.
+1. **v1 — shipped:** `render-plan.mjs` + blocks.json + `--check` lint + the `visual-plan` skill.
+2. **v2 — shipped:** the review loop — `comments.jsonl`, `plan-comment.mjs`, `plan-serve.mjs` (the page itself is the review surface), and `capture-plan.mjs` feeding Claude Code's plan mode in.
+3. **v3 — sfdt ui page:** the GUI already reads local JSON snapshots (audit/monitor pattern); a "Plan" page reads FEATURES.json/blocks.json/telemetry.jsonl live. Same data, zero new state.
+4. **v4 — hosted with comments:** conductor-platform is the natural home (it already models workflow runs + approval gates); studio-by-sfdt's block-rendering machinery is the natural editor. Only build when PR-review comments prove insufficient — the platform gets a real feature with a proven local pattern behind it, not a speculative app.
 
-## H-entries to add when adopting (planner commit to skills/HARNESS-FEATURES.json)
+## Adoption, graded (H-031..H-034 in HARNESS-FEATURES.json)
 
-- **H-031** sfdt: `tools/render-plan.mjs` + `tools/plan-comment.mjs` exist and `check:plan` (block/comment lint) is wired into check:all-contracts.
-- **H-032** skills: `conductor-plan` skill exists (phase: planning, hands_off_to: [conductor-builder]) documenting block schema v2 + the comment protocol; conductor-builder.md's get-bearings step gains "read open plan comments".
-- **H-033** sfdt: `.harness/plan/blocks.json` exists for the active phase and passes lint (stable ids, live feature refs, no unresolved comments at phase close).
-- **H-034** skills: harness-improver.md names comments.jsonl as a mining source (recurring questions → doc/lint conversions).
+- **H-031** the plan tools exist in the repo's `tools/` and `check:plan` is wired into check:all-contracts. The lint ships as `render-plan.mjs --check` — no separate lint binary to write.
+- **H-032** the `visual-plan` skill is packaged (SKILL.md + tools + commands) and conductor-builder's entry ritual reads open plan comments.
+- **H-033** `.harness/plan/blocks.json` exists for the active phase and passes `--check`.
+- **H-034** harness-improver names comments.jsonl as a mining source (recurring questions → doc/lint conversions).
 
-## Build prompts (after reviewing the prototype)
+`check-harness.mjs` grades all four.
 
-**Run from `$REPOS/sfdt`:** "Adopt the visual-plan prototype: copy render-plan.mjs from <folder> into tools/, write tools/check-plan-blocks.mjs (lint: schema per block type, feature ids exist in FEATURES.json, annotated-code files/lines exist, questions answered or phase != closing), wire `check:plan` into check:all-contracts, seed .harness/plan/blocks.json for the 1.0-stabilization phase from ROADMAP.md + FEATURES.json (one diagram of the release pipeline, one decision block per MEMORY_BANK decision, questions empty). One commit per H-feature, verify with check-harness."
+## What `--check` enforces
 
-**Run from `$REPOS/skills`:** "Add conductor-plan skill (phase: planning): documents block schema v1, the two rituals, the derived-never-authoritative contract; hands_off_to conductor-builder. Add H-031..H-033 to HARNESS-FEATURES.json with checks in check-harness.mjs (planner commit). Validate with tools/validate-skill.sh."
+Structural defects only, each of which makes the rendered plan lie:
+
+| Failure | Why it's fatal |
+|---|---|
+| block with no `id`, or a duplicate `id` | comments can't pin to it; a duplicate silently swallows a thread |
+| block cites a feature not in FEATURES.json | the plan promises something the verifier will never grade |
+| comment pins to a nonexistent block | a blocker nothing can clear |
+| unanswered `question` block | it blocks its features by design; shipping it unanswered is drift |
+| `annotated-code` with a missing file, no annotations, or out-of-range lines | the block type exists to keep annotations grounded in real code |
+
+**Not** a failure: open comments. A plan under review is supposed to have them —
+they block their features via the board, which is the intended state, not a
+broken one.

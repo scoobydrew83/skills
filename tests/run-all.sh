@@ -44,6 +44,19 @@ for h in '## 1.' '## 4.' '## 5.'; do
   grep -qF "$h" CONVENTIONS.md && ok "CONVENTIONS.md has $h" || no "CONVENTIONS.md missing $h"
 done
 
+# 6. Every tests/test_*.sh runs. This is the only path CI takes, so a test file
+# that isn't dispatched here never executes anywhere — decoration, not a test.
+# Each file owns its own PASS/FAIL lines; we surface the exit code and, on
+# failure, the output that explains it.
+for t in tests/test_*.sh; do
+  [[ -f "$t" ]] || continue
+  if out="$(bash "$t" 2>&1)"; then
+    ok "$(basename "$t") ($(grep -cE '^\s+PASS' <<<"$out") pass)"
+  else
+    no "$(basename "$t")"; echo "$out"
+  fi
+done
+
 echo
 echo "run-all: $checks checks · $([[ $fail -eq 0 ]] && echo PASS || echo FAIL)"
 exit $fail

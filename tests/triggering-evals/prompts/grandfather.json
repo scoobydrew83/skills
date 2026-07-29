@@ -1,0 +1,17 @@
+{
+  "skill": "grandfather",
+  "should_trigger": [
+    "I want to rename this public function and delete the old name.",
+    "Let's clean up the API and remove the legacy config keys.",
+    "Change the default value of this CLI flag.",
+    "Remove this deprecated endpoint from the router.",
+    "Refactor the output format — scripts probably parse it but whatever."
+  ],
+  "should_not_trigger": [
+    "Is this upload handler safe against path traversal?",
+    "Should we add this npm package or write the twenty lines ourselves?",
+    "Approve this PR — I didn't write it and want to be sure I understand it.",
+    "Should I build this product at all?",
+    "Design an experiment that settles whether this optimization helps."
+  ]
+}

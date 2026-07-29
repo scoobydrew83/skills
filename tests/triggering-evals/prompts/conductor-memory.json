@@ -1,0 +1,17 @@
+{
+  "skill": "conductor-memory",
+  "should_trigger": [
+    "Build conductor memory from this conversation.",
+    "Extract memory from this session and snapshot our progress.",
+    "Capture this session into a memory pack for the vault.",
+    "Update conductor memory — I want the next session to resume with full context.",
+    "Save this to memory so my Obsidian vault has the project context."
+  ],
+  "should_not_trigger": [
+    "Where were we on the auth refactor?",
+    "Let's wrap up this session and stop here.",
+    "I'm overwhelmed — break this project down to one step.",
+    "Audit these docs for drift from the spec.",
+    "Write a system prompt for a research agent."
+  ]
+}

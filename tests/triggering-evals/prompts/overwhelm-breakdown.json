@@ -1,0 +1,18 @@
+{
+  "skill": "overwhelm-breakdown",
+  "notes": "Worked example. Real confusables: neurodivergent-comms (format/pace), agent-orchestration (full plan), session-bookend (resume).",
+  "should_trigger": [
+    "I need to build a whole reporting system but I don't know where to start. It feels like too much.",
+    "I'm drowning in this migration project. Where do I even begin?",
+    "Can you break this down for me? I'm paralyzed by the size of this thing.",
+    "I have to rewrite the entire onboarding flow by Friday and I'm completely stuck.",
+    "chunk it for me — I just need one thing I can actually do today"
+  ],
+  "should_not_trigger": [
+    "Please format your replies in short bullet points, I'm ADHD and walls of text overwhelm me.",
+    "Design this feature, plan the implementation, and scaffold the code end to end.",
+    "Validate this implementation plan — did the other model hallucinate any of these packages?",
+    "Where were we on the billing refactor? Pick up where we left off.",
+    "Write me a system prompt for a customer support agent."
+  ]
+}

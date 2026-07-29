@@ -1,0 +1,17 @@
+{
+  "skill": "reality-check",
+  "should_trigger": [
+    "Validate this implementation plan — did the other model hallucinate?",
+    "Fact-check these npm packages and install commands before I run them.",
+    "Sanity-check this MCP server list and tell me which ones are real.",
+    "Pressure-test this plan — is any of it overkill or made up?",
+    "Is this 'best-practice' pattern real or did the model invent it?"
+  ],
+  "should_not_trigger": [
+    "Help me decide between Postgres and DynamoDB.",
+    "Audit my docs for internal contradictions.",
+    "Build conductor memory from this conversation.",
+    "I'm overwhelmed — give me one step to start.",
+    "Make prompt templates for my project."
+  ]
+}

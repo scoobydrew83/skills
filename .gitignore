@@ -16,6 +16,11 @@ random-artifacts/
 # Local safety backups
 backups-*/
 
+# Triggering-eval run output (regenerate with tests/triggering-evals/run.sh)
+tests/triggering-evals/.results/*
+!tests/triggering-evals/.results/.gitkeep
+__pycache__/
+
 # Skills kept locally but outside the coordinated library (not conventions-compliant)
 parked/
 

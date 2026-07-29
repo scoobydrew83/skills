@@ -7,7 +7,7 @@
       "name": "coordinated-skills",
       "source": "./plugins/coordinated-skills",
       "description": "Coordinated skill library: intake, execute, verify, communicate, bookend.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": { "name": "scoobydrew83", "url": "https://github.com/scoobydrew83" }
     }
   ]

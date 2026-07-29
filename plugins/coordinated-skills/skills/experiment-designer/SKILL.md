@@ -1,8 +1,8 @@
 ---
 name: experiment-designer
-description: Design a single falsifiable experiment with its pass/fail threshold fixed BEFORE the run, so a result can't be rationalized after the fact. Use whenever someone has a hypothesis or risky assumption and is about to just try it and see — "how do I test whether X", "design an experiment for this", "is this optimization worth it", "how would I prove or disprove this", "what would falsify this", or any "let me just run it and look at the numbers" with no threshold named. The method isolates the one decisive question, states the hypothesis and its negation, fixes a numeric metric and a PASS/FAIL/KILL rule up front, picks the cheapest decisive design, controls the confound that would make the result lie (optimization-before-correctness especially), and emits a dated pre-registration plus a falsifiability check. Distinct from reality-check (verifies an existing plan's claims), goal-builder (writes Claude Code /goal conditions), and idea-validator (whole-idea GO/NO-GO); this designs one test and locks its bar.
+description: Design a single falsifiable experiment with its pass/fail threshold fixed BEFORE the run, so a result can't be rationalized after the fact. Use whenever someone has a hypothesis or risky assumption and is about to just try it and see — "how do I test whether X", "design an experiment for this", "is this optimization worth it", "how would I prove or disprove this", "what would falsify this", or any "let me just run it and look at the numbers" with no threshold named. The method isolates the one decisive question, states the hypothesis and its negation, fixes a numeric metric and a PASS/FAIL/KILL rule up front, picks the cheapest decisive design, controls the confound that would make the result lie (optimization-before-correctness especially), and emits a dated pre-registration plus a falsifiability check. Distinct from reality-check (verifies an existing plan's claims), goal-builder (writes Claude Code /goal conditions), and hemlock (whole-idea GO/NO-GO); this designs one test and locks its bar.
 phase: plan
-hands_off_to: [idea-validator, derisk-sequencer]
+hands_off_to: [hemlock, derisk-sequencer]
 reads: []
 writes: []
 ---
@@ -29,7 +29,7 @@ Two failure modes it specifically targets:
 
 ## When to reach for this vs neighbors
 
-- **idea-validator** decides a whole idea's GO/NO-GO and may *spawn* several experiments. This skill designs *one* of them rigorously.
+- **hemlock** decides a whole idea's GO/NO-GO and may *spawn* several experiments. This skill designs *one* of them rigorously.
 - **goal-builder** writes a Claude Code `/goal` completion condition (when an agent loop should stop). This designs a *measurement that settles a question*, which is different.
 - **reality-check** verifies claims in an *already-written* plan. This builds the test *before* there's a result.
 
@@ -105,4 +105,4 @@ The one decisive thing this settles:
 
 ---
 
-**Next steps:** Once the experiment is designed and run, suggest `idea-validator` if this test was one leg of a whole-idea GO/NO-GO decision, or `derisk-sequencer` if it's one of several experiments that still need ordering into a build-after-test sequence. Skip if the user only needed this one test designed.
+**Next steps:** Once the experiment is designed and run, suggest `hemlock` if this test was one leg of a whole-idea GO/NO-GO decision, or `derisk-sequencer` if it's one of several experiments that still need ordering into a build-after-test sequence. Skip if the user only needed this one test designed.

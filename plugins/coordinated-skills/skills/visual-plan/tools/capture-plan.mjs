@@ -15,7 +15,9 @@
  *
  * Hook contract: JSON on stdin; { tool_name, tool_input: { plan } , cwd }.
  * Exit 0 always — a capture failure must never break planning (golden
- * principle #5: measurement never breaks the measured).
+ * principle #5: measurement never breaks the measured). "Never break planning"
+ * is not "never say anything", though: failures print to stderr, because a hook
+ * that silently no-ops makes the plan LOOK captured when it wasn't.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -36,6 +38,13 @@ try {
 
   const blocksFile = join(dir, 'blocks.json');
   const doc = existsSync(blocksFile) ? JSON.parse(readFileSync(blocksFile, 'utf8')) : { blocks: [] };
+  // Tolerate a blocks.json that predates this system (or has any other shape):
+  // adding the key is non-destructive, and throwing here would strand a plan we
+  // already wrote to disk.
+  if (!Array.isArray(doc.blocks)) {
+    console.error(`visual-plan: ${blocksFile} had no "blocks" array — adding one.`);
+    doc.blocks = [];
+  }
   const n = doc.blocks.filter((b) => b.id?.startsWith('b-captured-')).length + 1;
   doc.blocks.push({
     id: `b-captured-${String(n).padStart(2, '0')}`,
@@ -49,5 +58,9 @@ try {
   });
   writeFileSync(blocksFile, JSON.stringify(doc, null, 2) + '\n');
   console.log(`visual-plan: captured approved plan → ${mdFile} (+ placeholder block b-captured-${String(n).padStart(2, '0')})`);
-} catch { /* never break planning */ }
+} catch (e) {
+  // Never break planning — but never fail silently either.
+  console.error(`visual-plan: plan capture FAILED — ${e?.message ?? e}`);
+  console.error('  The approved plan was not recorded. Re-run /vplan to author it as blocks.');
+}
 process.exit(0);

@@ -1,0 +1,17 @@
+{
+  "skill": "visual-plan",
+  "should_trigger": [
+    "Give me a visual plan for this feature.",
+    "Plan this feature and make the plan reviewable.",
+    "Show me the plan rendered so I can comment on it.",
+    "Address my comments on the plan.",
+    "Structure the plan I just captured into blocks I can review."
+  ],
+  "should_not_trigger": [
+    "Seed a fresh repo with the harness scaffolding.",
+    "Design a builder/verifier loop package for this task.",
+    "I'm overwhelmed by this project — what's my one next step?",
+    "Write a /goal condition that stops the loop when tests pass.",
+    "Order these de-risking experiments into a sequence."
+  ]
+}

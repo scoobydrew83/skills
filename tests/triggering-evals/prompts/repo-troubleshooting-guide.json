@@ -1,0 +1,17 @@
+{
+  "skill": "repo-troubleshooting-guide",
+  "should_trigger": [
+    "Generate a troubleshooting guide for this repo.",
+    "Make a TROUBLESHOOTING.md documenting common errors and fixes.",
+    "Build a debugging runbook for this project.",
+    "Document the common setup problems and failure modes in this codebase.",
+    "Write an ops doc for this project covering how to fix common errors."
+  ],
+  "should_not_trigger": [
+    "Make prompt templates for this repo.",
+    "Audit my docs for drift from the spec.",
+    "Validate that these install commands are real.",
+    "Design and build this feature end to end.",
+    "Where were we on the deployment work?"
+  ]
+}

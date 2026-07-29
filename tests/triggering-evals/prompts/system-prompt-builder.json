@@ -1,0 +1,17 @@
+{
+  "skill": "system-prompt-builder",
+  "should_trigger": [
+    "Build me a system prompt for a customer support agent.",
+    "Design an AI agent that handles invoice processing.",
+    "Write project instructions / custom GPT instructions for a research assistant.",
+    "Turn this into an agent — I want reusable LLM instructions.",
+    "Rebuild and harden this existing system prompt."
+  ],
+  "should_not_trigger": [
+    "Make prompt templates for my project codebase.",
+    "Design, plan, and scaffold this feature end to end.",
+    "Validate this plan for hallucinations.",
+    "I'm overwhelmed — where do I start?",
+    "Audit my docs for drift."
+  ]
+}

@@ -18,8 +18,8 @@ description: >-
   designing loops (loop-creator).
 phase: plan
 hands_off_to: [agent-orchestration, loop-creator]
-reads: [CONTEXT.md, FEATURES.json, MEMORY_BANK.md]
-writes: [FEATURES.json, MEMORY_BANK.md]
+reads: [CONTEXT.md, FEATURES.json]
+writes: [FEATURES.json]
 ---
 
 # Visual Plan
@@ -71,9 +71,27 @@ Structure those blocks on your next planning pass.
 Copy `tools/*.mjs` into the repo's `tools/`, `commands/*.md` into
 `.claude/commands/`, and add the ExitPlanMode hook to `.claude/settings.json`
 (snippet in reference.md). Seed a first `blocks.json` from `demo-blocks.json`
-if useful. Wire a `check:plan` lint into the repo's contract checks (see
-reference.md H-031) so block/feature refs and unresolved comments are enforced
-mechanically, not by convention.
+if useful.
+
+**Wire the lint** so structure is enforced mechanically, not by convention —
+`render-plan.mjs --check` exits 1 on any structural defect (missing/duplicate
+block id, a block citing a feature that isn't in FEATURES.json, a comment
+pinned to a nonexistent block, an unanswered `question`, or an
+`annotated-code` block whose file or line numbers don't exist):
+
+```json
+"scripts": { "check:plan": "node tools/render-plan.mjs --check" }
+```
+
+Add `check:plan` to the repo's `check:all-contracts`. Note what `--check` does
+*not* fail on: open comments are a normal state of a plan under review, and
+they already block their features via the board — a plan mid-review is not a
+broken plan.
+
+Gitignore the derived output: `.harness/plan/plan.html` and
+`.harness/plan/.plan-live.html` (the server's scratch render). Track
+`blocks.json` and `comments.jsonl` — committing the comments is how the builder
+sees the review.
 
 ## Rules
 

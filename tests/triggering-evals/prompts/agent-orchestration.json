@@ -1,0 +1,17 @@
+{
+  "skill": "agent-orchestration",
+  "should_trigger": [
+    "Design this feature, plan the implementation, and scaffold the code.",
+    "Take this idea to a working skeleton — design, plan, build, and test it.",
+    "Help me build this end to end across design, implementation, and deployment.",
+    "Coordinate the full build lifecycle for a new notifications service.",
+    "I want a phased, multi-stage workflow that goes from spec to deployed code."
+  ],
+  "should_not_trigger": [
+    "Fix this off-by-one bug in the parser.",
+    "Write this single utility function for me.",
+    "I'm overwhelmed and don't know where to start on this big project.",
+    "Audit my docs for internal contradictions.",
+    "Validate that the packages in this plan actually exist."
+  ]
+}

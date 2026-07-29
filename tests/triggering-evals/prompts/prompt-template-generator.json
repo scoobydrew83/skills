@@ -1,0 +1,17 @@
+{
+  "skill": "prompt-template-generator",
+  "should_trigger": [
+    "Make prompt templates for my project.",
+    "Build a prompt cookbook for this repo with copy-paste-ready prompts.",
+    "Turn my codebase into a set of reusable Claude prompts.",
+    "Generate a PROMPT-TEMPLATES.md tailored to my stack and conventions.",
+    "Build a prompt library / prompt scaffolding for this Next.js codebase."
+  ],
+  "should_not_trigger": [
+    "Write me a single system prompt for a support agent.",
+    "Generate a troubleshooting guide for this repo.",
+    "Audit my docs for drift from the spec.",
+    "Pick up where we left off on the auth work.",
+    "I'm overwhelmed by this project — give me one step."
+  ]
+}

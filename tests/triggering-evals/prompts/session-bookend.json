@@ -1,0 +1,17 @@
+{
+  "skill": "session-bookend",
+  "should_trigger": [
+    "Where were we on the auth refactor?",
+    "Pick up where we left off on the billing project.",
+    "Let's wrap up this session — save where we are.",
+    "What's the status of the migration work?",
+    "Good place to stop — give me a clean handoff for next time."
+  ],
+  "should_not_trigger": [
+    "Build conductor memory from this conversation.",
+    "I'm overwhelmed — break this project into one step.",
+    "Audit my docs for drift.",
+    "Validate that these packages are real.",
+    "Design and build this whole feature."
+  ]
+}

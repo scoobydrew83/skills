@@ -1,6 +1,6 @@
 ---
 name: session-continuity
-description: Pick up where a past conversation left off by retrieving real history instead of guessing. Use this whenever someone writes as if you already share context — "where were we," "that schema we designed last month," "continue the project," "what did we decide about X," "remember the thing I'm working on" — or resumes after a gap and expects you to know the prior state. Reach for it on possessives and definite articles that assume shared memory ("my project," "the bug we discussed," "our approach") even when they don't explicitly say "do you remember."
+description: Pick up where a past conversation left off by retrieving real history instead of guessing. Use this whenever someone writes as if you already share context — "where were we," "that schema we designed last month," "continue the project," "what did we decide about X," "remember the thing I'm working on" — or resumes after a gap and expects you to know the prior state. Trigger on any reference to earlier sessions in the user's own words: "our previous chats," "the conversation we had last time," "that earlier session," "we talked about this before." Reach for it on possessives and definite articles that assume shared memory ("my project," "the bug we discussed," "our approach") even when they don't explicitly say "do you remember."
 phase: bookend
 hands_off_to: [session-bookend]
 reads: [CONTEXT.md, MEMORY_BANK.md]

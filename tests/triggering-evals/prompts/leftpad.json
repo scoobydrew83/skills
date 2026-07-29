@@ -1,0 +1,17 @@
+{
+  "skill": "leftpad",
+  "should_trigger": [
+    "Let's npm install a date library for this.",
+    "There's a package that already does this — should we add it?",
+    "Add this dependency to the project.",
+    "Here are the packages the plan says to pip install — go ahead.",
+    "Is this cargo crate worth adding, or can the stdlib do it?"
+  ],
+  "should_not_trigger": [
+    "We're removing a public config key — how do we not break callers?",
+    "Review this webhook receiver for injection risks.",
+    "I can't explain this generated diff but I want to merge it.",
+    "Should this product exist at all given the incumbents?",
+    "Snapshot session state so the next session resumes cold."
+  ]
+}

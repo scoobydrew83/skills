@@ -1,0 +1,17 @@
+{
+  "skill": "session-continuity",
+  "should_trigger": [
+    "Remember that schema we designed last month? Continue from there.",
+    "What did we decide about the caching layer in our previous chats?",
+    "Continue the project we were working on.",
+    "That bug we discussed — what was our approach again?",
+    "Remember the thing I'm working on — let's keep going."
+  ],
+  "should_not_trigger": [
+    "Build conductor memory from this conversation.",
+    "Let's wrap up and save where we are for next time.",
+    "I'm overwhelmed — give me one step.",
+    "Audit my docs for inconsistencies.",
+    "Generate a troubleshooting guide."
+  ]
+}

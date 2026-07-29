@@ -1,0 +1,17 @@
+{
+  "skill": "goal-builder",
+  "should_trigger": [
+    "My /goal just keeps looping and never stops — help me write one that terminates.",
+    "Write a /goal condition that keeps Claude working until npm test passes.",
+    "My goal stops too early before the work is actually done.",
+    "Set a completion condition for an unattended until-it-passes Claude Code run.",
+    "Turn 'clean up my code' into a checkable goal an evaluator can verify."
+  ],
+  "should_not_trigger": [
+    "Build me a full maker/checker loop package with a spec, prompts, and a harness.",
+    "Scaffold a LOOP_QUEUE and a nightly triage workflow.",
+    "Design a system prompt for a customer-support agent.",
+    "Audit my README and spec for contradictions.",
+    "I'm overwhelmed by this project — where do I start?"
+  ]
+}

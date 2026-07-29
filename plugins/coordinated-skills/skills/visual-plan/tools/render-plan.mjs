@@ -19,7 +19,11 @@
  * Output is DERIVED — editing plan.html by hand is the same sin as editing
  * generated/*. Zero deps; mermaid via CDN with <pre> fallback offline.
  *
- * Usage: node render-plan.mjs [--repo <path>] [--out <file>]
+ * Usage: node render-plan.mjs [--repo <path>] [--out <file>] [--check]
+ *
+ * --check makes the lint MECHANICAL: warnings go to stderr and the process
+ * exits 1. That is what a repo wires into check:all-contracts — without it the
+ * lint is a banner someone has to notice, which is convention, not enforcement.
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -29,6 +33,7 @@ const args = process.argv.slice(2);
 const opt = (f, d) => (args.includes(f) ? args[args.indexOf(f) + 1] : d);
 const REPO = opt('--repo', process.cwd());
 const OUT = opt('--out', join(REPO, '.harness', 'plan', 'plan.html'));
+const CHECK = args.includes('--check');
 
 const read = (p) => { try { return readFileSync(p, 'utf8'); } catch { return null; } };
 const readJson = (p) => { try { return JSON.parse(readFileSync(p, 'utf8')); } catch { return null; } };
@@ -66,6 +71,23 @@ for (const b of blocks) {
     else (blocksByFeature[fid] ??= []).push(b.id);
   }
   if (b.type === 'question' && !b.answer) warnings.push(`unanswered question in block ${b.id ?? '?'}`);
+  // annotated-code must be GROUNDED: real file, real lines. An annotation that
+  // cites code that doesn't exist is the drift this block type exists to prevent.
+  if (b.type === 'annotated-code') {
+    const src = b.file ? read(join(REPO, b.file)) : null;
+    if (!b.file) warnings.push(`annotated-code block ${b.id ?? '?'} has no file`);
+    else if (src === null) warnings.push(`annotated-code block ${b.id ?? '?'} cites missing file ${b.file}`);
+    else {
+      const total = src.split('\n').length;
+      if (!(b.annotations ?? []).length) warnings.push(`annotated-code block ${b.id ?? '?'} has no annotations — it would render an empty code box`);
+      for (const a of b.annotations ?? []) {
+        const n = Number(a.line);
+        if (!Number.isInteger(n) || n < 1 || n > total) {
+          warnings.push(`annotated-code block ${b.id ?? '?'} annotates line ${JSON.stringify(a.line)} of ${b.file}, which has ${total} lines`);
+        }
+      }
+    }
+  }
 }
 for (const c of comments) {
   if (c.block && !blockIds.has(c.block)) warnings.push(`comment ${c.id ?? '?'} pins to unknown block ${c.block}`);
@@ -83,7 +105,7 @@ for (const b of blocks) if (b.type === 'question' && !b.answer) for (const fid o
 // ---- render helpers ----------------------------------------------------------
 const chip = (cls, txt) => `<span class="chip ${cls}">${txt}</span>`;
 const featChip = (f) => blockedFeatures.has(f.id) ? chip('blk', 'BLOCKED') : f.passes ? chip('pass', 'PASS') : chip('fail', 'OPEN');
-const featLinks = (ids) => (ids ?? []).map((f) => `<a class="flink" href="#${f}">${f}</a>`).join(' ');
+const featLinks = (ids) => (ids ?? []).map((f) => `<a class="flink" href="#${esc(f)}">${esc(f)}</a>`).join(' ');
 
 const renderThread = (bid) => {
   const cs = commentsByBlock[bid] ?? [];
@@ -119,7 +141,10 @@ const renderBlock = (b) => {
       if (!src) { body = `<p class="warn">⚠ file not found: ${esc(b.file)}</p>`; break; }
       const lines = src.split('\n');
       const notes = Object.fromEntries((b.annotations ?? []).map((a) => [a.line, a.note]));
-      const nums = Object.keys(notes).map(Number);
+      const nums = Object.keys(notes).map(Number).filter((n) => Number.isInteger(n) && n >= 1 && n <= lines.length);
+      // No usable annotations => Math.min(...[]) is Infinity and the slice below
+      // would silently render an empty box. Say so instead.
+      if (!nums.length) { body = `<p class="warn">⚠ no annotations in range for ${esc(b.file)} (${lines.length} lines)</p>`; break; }
       const lo = Math.max(1, Math.min(...nums) - 2), hi = Math.min(lines.length, Math.max(...nums) + 2);
       body = `<p class="cap">${esc(b.file)}</p><pre class="code">` + lines.slice(lo - 1, hi).map((ln, i) => {
         const n = lo + i;
@@ -150,7 +175,7 @@ const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 const featureRows = feats.map((f) => `
   <div class="feat" id="${esc(f.id)}">
     <div>${featChip(f)} <strong>${esc(f.id)}</strong> <span class="cat">${esc(f.category ?? '')}</span>
-      ${(blocksByFeature[f.id] ?? []).map((bid) => `<a class="flink" href="#${bid}">${bid}</a>`).join(' ')}</div>
+      ${(blocksByFeature[f.id] ?? []).map((bid) => `<a class="flink" href="#${esc(bid)}">${esc(bid)}</a>`).join(' ')}</div>
     <div class="fdesc">${esc(f.description)}</div>
     ${f.evidence ? `<div class="fev">evidence: ${esc(f.evidence)}</div>` : ''}
     ${blockedFeatures.has(f.id) ? `<div class="fev warn">blocked by open review — see linked blocks</div>` : ''}
@@ -258,3 +283,12 @@ mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, html);
 console.log(`plan rendered: ${OUT}
   features: ${passCount}/${feats.length} passing (${blockedFeatures.size} review-blocked) · blocks: ${blocks.length} · comments: ${comments.length} (${openComments.length} open) · verdicts: ${telemetry.length} · lint warnings: ${warnings.length}`);
+
+// --check turns the banner into a gate. Open comments are NOT a lint failure —
+// they are a normal state of an under-review plan; the verifier blocks on them
+// via blockedFeatures. Only structural defects fail here.
+if (CHECK && warnings.length) {
+  console.error(`\ncheck:plan FAILED — ${warnings.length} structural problem(s):`);
+  for (const w of warnings) console.error(`  - ${w}`);
+  process.exit(1);
+}

@@ -17,7 +17,7 @@ You are planning $ARGUMENTS. Do NOT write product code in this session. Produce 
 
 3. **Seed/extend FEATURES.json** with the plan's acceptance criteria (planner commit — you are the planner right now; entries you add must cite a source doc or this plan's block ids in `source`). Every block should cite the features it serves.
 
-4. **Render and serve:** run `node tools/render-plan.mjs`, then start the server in the background (`node tools/plan-serve.mjs` via run_in_background) and tell the human: the URL, how many blocks/questions/features, and that comments they pin will block features until answered.
+4. **Lint, render, and serve:** run `node tools/render-plan.mjs --check` — it exits 1 on structural defects (dangling feature refs, duplicate block ids, `annotated-code` citing lines that don't exist). Fix them; do not hand over a plan that fails its own lint. Then start the server in the background (`node tools/plan-serve.mjs` via run_in_background) and tell the human: the URL, how many blocks/questions/features, and that comments they pin will block features until answered.
 
 5. **Stop.** Planning ends here. The human reviews in the browser (or ignores it and replies in chat — both land in the same loop). When they come back, /address-comments is the next move, not building.
 

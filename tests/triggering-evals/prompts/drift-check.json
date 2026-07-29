@@ -1,0 +1,17 @@
+{
+  "skill": "drift-check",
+  "should_trigger": [
+    "Audit my project docs for internal contradictions.",
+    "Do my README and CLAUDE.md actually agree with the spec?",
+    "Has my spec drifted from the original mission?",
+    "Check alignment between my PLANNING.md, ADRs, and .cursorrules.",
+    "Is my README in sync with the actual feature list in the codebase?"
+  ],
+  "should_not_trigger": [
+    "Validate that these npm packages in the install instructions are real.",
+    "Help me decide between Postgres and DynamoDB.",
+    "Build a memory pack from this conversation.",
+    "I'm overwhelmed by this project — where do I start?",
+    "Generate a troubleshooting guide for this repo."
+  ]
+}

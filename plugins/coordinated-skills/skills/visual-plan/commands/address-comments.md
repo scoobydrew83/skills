@@ -13,7 +13,7 @@ The human has reviewed the visual plan. Work the queue:
    - **Answer by changing the artifact, not by replying.** Wrong assumption → fix the block. Missing alternative → extend the decision block's rationale/rejected list. Scope challenge → adjust FEATURES.json (planner edit, cite the comment id in `source`). Genuine question back to the human → answer what you can and leave the rest as a NEW `question` block; never resolve a comment you haven't actually addressed.
    - Resolve with the answer: `node tools/plan-comment.mjs --resolve <id> --answer "<what changed and where>"`. The tool refuses empty answers by design. The answer should point at the block/feature you changed.
 
-3. Re-render (`node tools/render-plan.mjs`). If plan-serve is running the human just reloads.
+3. Re-render and re-lint (`node tools/render-plan.mjs --check`). If plan-serve is running the human just reloads. A nonzero exit means your edits broke the plan's structure — fix before reporting.
 
 4. Report: one line per comment — id, what it asked, what changed, resolved/bounced-back. Then the plan's new state: blocks, open questions, blocked features.
 

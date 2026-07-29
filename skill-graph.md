@@ -10,7 +10,8 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | `conductor-init` | intake | loop-creator, agent-orchestration |  |
 | `overwhelm-breakdown` | intake | agent-orchestration, neurodivergent-comms, session-bookend |  |
 | `derisk-sequencer` | plan | experiment-designer, agent-orchestration |  |
-| `experiment-designer` | plan | idea-validator, derisk-sequencer |  |
+| `experiment-designer` | plan | hemlock, derisk-sequencer |  |
+| `visual-plan` | plan | agent-orchestration, loop-creator |  |
 | `agent-orchestration` | execute | reality-check, drift-check, conductor-memory, session-bookend |  |
 | `goal-builder` | execute | loop-creator |  |
 | `loop-creator` | execute | reality-check, drift-check, goal-builder |  |
@@ -18,14 +19,19 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | `repo-troubleshooting-guide` | execute | drift-check |  |
 | `system-prompt-builder` | execute | reality-check, drift-check, conductor-memory |  |
 | `drift-check` | verify | reality-check, conductor-memory |  |
-| `idea-validator` | verify | derisk-sequencer, experiment-designer |  |
+| `grandfather` | verify | conductor-memory |  |
+| `hemlock` | verify | derisk-sequencer, experiment-designer |  |
+| `leftpad` | verify | reality-check |  |
+| `popquiz` | verify | conductor-memory |  |
 | `reality-check` | verify | drift-check, conductor-memory |  |
+| `tinfoil` | verify | conductor-memory |  |
 | `neurodivergent-comms` | communicate | — |  |
 | `conductor-memory` | bookend | session-continuity |  |
 | `project-postmortem` | bookend | conductor-memory |  |
 | `session-bookend` | bookend | overwhelm-breakdown, agent-orchestration, conductor-memory |  |
 | `session-continuity` | bookend | session-bookend |  |
 | `adaptive-communication` | meta | neurodivergent-comms | DEPRECATED tombstone |
+| `idea-validator` | meta | hemlock | DEPRECATED tombstone |
 | `task-decomposition` | meta | overwhelm-breakdown | DEPRECATED tombstone |
 
 ## Handoff graph
@@ -39,6 +45,7 @@ graph LR
   subgraph plan
     derisk-sequencer
     experiment-designer
+    visual-plan
   end
   subgraph execute
     agent-orchestration
@@ -50,8 +57,12 @@ graph LR
   end
   subgraph verify
     drift-check
-    idea-validator
+    grandfather
+    hemlock
+    leftpad
+    popquiz
     reality-check
+    tinfoil
   end
   subgraph communicate
     neurodivergent-comms
@@ -64,6 +75,7 @@ graph LR
   end
   subgraph meta
     adaptive-communication["adaptive-communication<br/><i>DEPRECATED</i>"]
+    idea-validator["idea-validator<br/><i>DEPRECATED</i>"]
     task-decomposition["task-decomposition<br/><i>DEPRECATED</i>"]
   end
   adaptive-communication --> neurodivergent-comms
@@ -78,17 +90,21 @@ graph LR
   derisk-sequencer --> agent-orchestration
   drift-check --> reality-check
   drift-check --> conductor-memory
-  experiment-designer --> idea-validator
+  experiment-designer --> hemlock
   experiment-designer --> derisk-sequencer
   goal-builder --> loop-creator
-  idea-validator --> derisk-sequencer
-  idea-validator --> experiment-designer
+  grandfather --> conductor-memory
+  hemlock --> derisk-sequencer
+  hemlock --> experiment-designer
+  idea-validator --> hemlock
+  leftpad --> reality-check
   loop-creator --> reality-check
   loop-creator --> drift-check
   loop-creator --> goal-builder
   overwhelm-breakdown --> agent-orchestration
   overwhelm-breakdown --> neurodivergent-comms
   overwhelm-breakdown --> session-bookend
+  popquiz --> conductor-memory
   project-postmortem --> conductor-memory
   prompt-template-generator --> drift-check
   prompt-template-generator --> reality-check
@@ -103,8 +119,11 @@ graph LR
   system-prompt-builder --> drift-check
   system-prompt-builder --> conductor-memory
   task-decomposition --> overwhelm-breakdown
+  tinfoil --> conductor-memory
+  visual-plan --> agent-orchestration
+  visual-plan --> loop-creator
 ```
 
 ## Source
 
-Generated 2026-07-27 14:36 CDT from 20 skill(s).
+Generated 2026-07-28 22:38 CDT from 26 skill(s).

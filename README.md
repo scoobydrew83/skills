@@ -80,14 +80,21 @@ Installed together, the skills route to each other. Each one ends by naming its
 likely successor, and Claude's router picks that up — so a session flows through
 phases without a top-level controller:
 
-`intake → execute → verify → bookend`, with `communicate` as an overlay.
+`intake → plan → execute → verify → bookend`, with `communicate` as an overlay.
 
-- **intake** — `overwhelm-breakdown` turns a too-big ask into one doable step.
+- **intake** — `overwhelm-breakdown` turns a too-big ask into one doable step;
+  `conductor-init` seeds a fresh repo's harness.
+- **plan** — `visual-plan` renders the plan as reviewable, comment-blockable
+  blocks over the repo's ground truth; `experiment-designer` locks one test's
+  threshold before the run; `derisk-sequencer` orders many tests.
 - **execute** — the builders (`agent-orchestration`, `system-prompt-builder`,
   `prompt-template-generator`, `loop-creator`, `goal-builder`,
   `repo-troubleshooting-guide`) produce the deliverable.
-- **verify** — `reality-check` (fabricated claims/tools) and `drift-check`
-  (cross-doc contradictions) grade it, emitting `PASS | FAIL | BLOCKED`.
+- **verify** — `reality-check` (fabricated claims/tools), `drift-check`
+  (cross-doc contradictions), `hemlock` (should this exist at all),
+  `tinfoil` (hostile input), `leftpad` (dependency intake), `grandfather`
+  (breaking changes) and `popquiz` (merge comprehension) grade it, emitting
+  `PASS | FAIL | BLOCKED`.
 - **bookend** — `session-bookend`, `conductor-memory`, `session-continuity`
   snapshot state so the next session resumes cold.
 - **communicate** — `neurodivergent-comms` changes how an answer is packaged,

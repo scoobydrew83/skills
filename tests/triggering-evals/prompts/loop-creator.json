@@ -1,0 +1,17 @@
+{
+  "skill": "loop-creator",
+  "should_trigger": [
+    "Build me a maker/checker loop that fixes lint until the suite passes.",
+    "Set up a self-correcting builder/verifier loop with commit checkpoints and a stop condition.",
+    "Scaffold a LOOP_QUEUE and a harness to work through it one task at a time.",
+    "Design an evaluator-optimizer loop and write the prompts that drive it.",
+    "Wire a nightly triage workflow that queues work but never fixes autonomously."
+  ],
+  "should_not_trigger": [
+    "My /goal keeps looping and never stops — fix the single condition line.",
+    "Write one /goal that keeps Claude working until the tests pass.",
+    "Design a system prompt for a research assistant.",
+    "Audit my project docs for internal contradictions.",
+    "Generate a troubleshooting guide for this repo."
+  ]
+}
