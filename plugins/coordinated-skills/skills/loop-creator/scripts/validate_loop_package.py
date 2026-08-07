@@ -12,12 +12,43 @@ Usage:
 
 Exit code 0 if all REQUIRED checks pass, 1 otherwise. ADVISORY checks never fail the run.
 """
+import subprocess
 import sys
 import re
 from pathlib import Path
 
 REQUIRED = "required"
 ADVISORY = "advisory"
+
+
+def smoke_harness(pkg: Path):
+    """Run the package's harness against a stubbed model over a 3-item queue.
+
+    Every other check here is governance and reads the package as text. None of
+    them notice a harness that can only ever process one unit. Returns
+    (severity, ok, hint) so a missing/unrunnable harness degrades to advisory
+    instead of failing a package that legitimately has no bundled harness.
+    """
+    harness = next((p for p in (pkg / "run_loop.sh", pkg / "scripts" / "run_loop.sh")
+                    if p.is_file()), None)
+    if harness is None:
+        return ADVISORY, False, "No run_loop.sh in the package — execution was never tested."
+
+    smoke = Path(__file__).resolve().parent / "smoke_harness.sh"
+    if not smoke.is_file():
+        return ADVISORY, False, f"smoke_harness.sh not found next to {Path(__file__).name}."
+
+    try:
+        proc = subprocess.run(["bash", str(smoke), str(harness.resolve())],
+                              capture_output=True, text=True, timeout=180)
+    except (OSError, subprocess.SubprocessError) as exc:
+        return ADVISORY, False, f"could not run the smoke test: {exc}"
+
+    if proc.returncode == 0:
+        return REQUIRED, True, ""
+    detail = (proc.stdout + proc.stderr).strip().splitlines()
+    failed = [ln.strip() for ln in detail if ln.strip().startswith("FAIL")]
+    return REQUIRED, False, "harness smoke test failed: " + ("; ".join(failed) or "see output")
 
 
 def read(p: Path) -> str:
@@ -102,6 +133,10 @@ def validate(pkg: Path):
     check("builder must show evidence", REQUIRED,
           has_any(builder, "evidence", "show the command", "output of", "test output", "paste the"),
           "Builder must show the command it ran and what it returned, not just claim success.")
+    # --- the harness actually runs (the only check that isn't governance) ---
+    sev, ok, hint = smoke_harness(pkg)
+    check("harness executes the whole queue (runtime smoke test)", sev, ok, hint)
+
     check("comprehension-debt summary required", REQUIRED,
           has_any(builder, "plain-language", "plain language", "summary of what changed",
                   "what changed and why") or

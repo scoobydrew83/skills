@@ -120,6 +120,17 @@ separate from the builder; "close is FAIL" enforced; checkpoint/commit defined; 
 ceiling and escalation threshold present; stopping + safety conditions present; evidence
 requirement present; comprehension-debt summary required. Show the user the report.
 
+Everything in that list is **governance** — it reads the package as text. When the package
+ships a harness, the validator also runs `scripts/smoke_harness.sh` against it: a stubbed
+`CLAUDE_BIN` over a 3-item queue, asserting the model was invoked once per turn per unit and
+that the queue file ends fully checked off. Governance checks cannot tell a working harness
+from one that silently stops after unit one; this is the check that can. Run it directly on
+any harness you hand-edit:
+
+```bash
+bash scripts/smoke_harness.sh <path-to-run_loop.sh>
+```
+
 ### 6. Present
 
 Hand over the package (the generated loop files). Point the user at `LOOP_SPEC.md` first, then

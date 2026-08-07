@@ -59,7 +59,26 @@ run_claude() {
   local prompt_file="$1" ctx="${2:-}"
   local prompt; prompt="$(cat "$prompt_file")"
   if [[ -n "$ctx" ]]; then prompt="$prompt"$'\n\n'"$ctx"; fi
-  "$CLAUDE_BIN" -p "$prompt" --output-format stream-json
+  # </dev/null is load-bearing: `claude -p` inherits and DRAINS stdin. Without it,
+  # any shell loop that feeds this harness on stdin loses the rest of its input
+  # after the first turn — and the run ends early looking like success.
+  "$CLAUDE_BIN" -p "$prompt" --output-format stream-json </dev/null
+}
+
+# Flip '- [ ] <unit>' to '- [x] <unit>' in the queue. Pure bash on purpose:
+# `sed -i` needs an argument on BSD/macOS and none on GNU, and a unit line is
+# arbitrary text that would need regex escaping on any sed path.
+mark_done() {
+  local unit="$1" line tmp
+  tmp="$(mktemp)"
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ "$line" == "- [ ] $unit" ]]; then
+      printf '%s\n' "- [x] $unit"
+    else
+      printf '%s\n' "$line"
+    fi
+  done < "$QUEUE_FILE" > "$tmp"
+  mv "$tmp" "$QUEUE_FILE"
 }
 
 # Verifier contract: it MUST print a line matching exactly 'VERDICT: PASS' or 'VERDICT: FAIL'.
@@ -75,7 +94,7 @@ process_unit() {
   : > "$FEEDBACK_FILE"
 
   while (( fails < FAIL_THRESHOLD )); do
-    (( TOTAL_ITERS++ )) || true
+    TOTAL_ITERS=$((TOTAL_ITERS + 1))
     if (( TOTAL_ITERS > MAX_ITERATIONS )); then
       log "Max iterations ($MAX_ITERATIONS) reached. Stopping run."
       escalate "$unit" "max-iterations ceiling reached"
@@ -87,14 +106,17 @@ process_unit() {
     if [[ -s "$FEEDBACK_FILE" ]]; then
       build_ctx+=$'\n\nPREVIOUS VERIFIER FEEDBACK (address all of it):\n'"$(cat "$FEEDBACK_FILE")"
     fi
-    run_claude "$BUILDER_PROMPT_FILE" "$build_ctx" || { log "builder turn failed to execute"; (( fails++ )); continue; }
+    # fails=$((fails+1)) not (( fails++ )): under `set -e`, a post-increment from 0
+    # evaluates to 0, which bash reports as exit status 1 — killing the whole run
+    # on the very first FAIL. An assignment always returns 0.
+    run_claude "$BUILDER_PROMPT_FILE" "$build_ctx" || { log "builder turn failed to execute"; fails=$((fails + 1)); continue; }
 
     # Optional ground-truth gate: a real command that must pass before the verifier even looks.
     if [[ -n "$ACCEPTANCE_COMMAND" ]]; then
       log "Running acceptance command: $ACCEPTANCE_COMMAND"
       if ! eval "$ACCEPTANCE_COMMAND" > "$FEEDBACK_FILE" 2>&1; then
         log "Acceptance command failed -> FAIL"
-        (( fails++ )); continue
+        fails=$((fails + 1)); continue
       fi
     fi
 
@@ -116,7 +138,7 @@ process_unit() {
     log "Unit '$unit' — VERDICT: FAIL"
     cp "$vout" "$FEEDBACK_FILE"
     rm -f "$vout"
-    (( fails++ ))
+    fails=$((fails + 1))
   done
 
   escalate "$unit" "$FAIL_THRESHOLD consecutive FAILs"
@@ -127,31 +149,62 @@ process_unit() {
 TOTAL_ITERS=0
 
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { log "not a git repo; refusing to run"; exit 1; }
-git checkout -B "$WORK_BRANCH"
+# checkout -B force-resets an existing branch to HEAD, orphaning commits earned by
+# an earlier run. Resume onto the branch if it exists; only create it if it doesn't.
+if git rev-parse --verify --quiet "$WORK_BRANCH" >/dev/null; then
+  git checkout "$WORK_BRANCH"
+else
+  git checkout -b "$WORK_BRANCH"
+fi
 log "Working on branch '$WORK_BRANCH'. This loop will NOT merge to the default branch."
 
 if [[ -n "$TASK" ]]; then
-  process_unit "$TASK" || true
-  log "Single-task run complete. Review branch '$WORK_BRANCH' and open a PR if satisfied."
-  exit 0
+  if process_unit "$TASK"; then
+    log "Single-task run complete: '$TASK' PASSED. Review branch '$WORK_BRANCH' and open a PR."
+    exit 0
+  fi
+  log "Single-task run STOPPED: '$TASK' did not pass — see $ESCALATION_LOG."
+  exit 1
 fi
 
 # Queue mode: process unchecked '- [ ]' items from the queue, top to bottom.
 [[ -f "$QUEUE_FILE" ]] || { log "no $QUEUE_FILE and no TASK set; nothing to do"; exit 1; }
-while IFS= read -r line; do
-  case "$line" in
-    "- [ ] "*)
-      unit="${line#- [ ] }"
-      if process_unit "$unit"; then
-        # mark done
-        sed -i "s|- \[ \] ${unit//|/\\|}|- [x] ${unit//|/\\|}|" "$QUEUE_FILE"
-        git add "$QUEUE_FILE" && git commit -m "loop: mark done — $unit" || true
-      else
-        log "Stopping queue: unit '$unit' escalated. Resolve it before resuming."
-        break
-      fi
-      ;;
-  esac
+
+# Read the queue in full BEFORE processing anything. Never drive units from a live
+# `while read ... done < file`: the builder turn inherits that stdin and drains it,
+# so iteration two hits EOF and the run reports "complete" after a single unit.
+units=()
+while IFS= read -r line || [[ -n "$line" ]]; do
+  # The quotes around the prefix are load-bearing: unquoted, `[ ]` is a glob
+  # bracket expression matching one space, so nothing is stripped and the whole
+  # '- [ ] foo' line is handed to the builder as the task.
+  case "$line" in "- [ ] "*) units+=("${line#"- [ ] "}") ;; esac
 done < "$QUEUE_FILE"
 
-log "Queue run complete. Review branch '$WORK_BRANCH' and open a PR for human approval."
+if (( ${#units[@]} == 0 )); then
+  log "No unchecked '- [ ] ' units in $QUEUE_FILE; nothing to do."
+  exit 0
+fi
+log "Queue: ${#units[@]} unit(s) to process."
+
+for unit in "${units[@]}"; do
+  if process_unit "$unit"; then
+    mark_done "$unit"
+    git add "$QUEUE_FILE" && git commit -m "loop: mark done — $unit" || true
+  else
+    log "Stopping queue: unit '$unit' escalated. Resolve it before resuming."
+    break
+  fi
+done
+
+# Ground truth, not the plan: report against what the queue file actually says.
+# A loop that prints "complete" from its own control flow will happily lie.
+remaining="$(grep -c '^- \[ \] ' "$QUEUE_FILE" 2>/dev/null || true)"
+remaining="${remaining//[^0-9]/}"
+: "${remaining:=0}"
+if (( remaining > 0 )); then
+  log "Queue INCOMPLETE: $remaining of ${#units[@]} unit(s) still unchecked in $QUEUE_FILE."
+  exit 1
+fi
+log "Queue run complete: all ${#units[@]} unit(s) checked off in $QUEUE_FILE."
+log "Review branch '$WORK_BRANCH' and open a PR for human approval."

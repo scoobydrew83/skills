@@ -6,8 +6,11 @@ A coordinated library of Claude skills with explicit handoffs, shared state, and
 
 Most skill collections are a flat folder of independent prompts. This one is wired together: every skill declares which phase of work it belongs to (`intake`, `plan`, `execute`, `verify`, `communicate`, `bookend`, `meta`), which siblings it hands off to when it finishes, and which shared-state files it reads and writes. That turns a pile of skills into a workflow.
 
+**New here?** [`HOW-TO-USE.md`](HOW-TO-USE.md) is the fast path — the step-by-step chain to run when you have an idea and a PRD.
+
 ## What's in here
 
+- **[`HOW-TO-USE.md`](HOW-TO-USE.md)** — start here. The seven-step chain from idea to shipped, with what each step produces and when to skip it.
 - **[`plugins/coordinated-skills/skills/`](plugins/coordinated-skills/skills)** — the skills themselves, one directory per skill (`SKILL.md` plus any references/scripts). This is the source of truth; edit these directly. A `.skill` zip archive is a build artifact you produce on demand (`tools/pack-skill.sh`) for the drop-in-a-skills-folder use case — it's gitignored, not committed.
 - **[`CONVENTIONS.md`](CONVENTIONS.md)** — the contract every skill follows. Coordination header, Next-steps line, phase vocabulary, shared-state files, verdict schema.
 - **[`CONTRIBUTING.md`](CONTRIBUTING.md)** — how to add or modify skills, with the `/skill-new` → `/skill-validate` → `/skill-graph` workflow.
