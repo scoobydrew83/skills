@@ -112,10 +112,24 @@ LLM mode for the real number.
 ## LLM mode
 
 For each prompt we POST to `api.anthropic.com/v1/messages` with the prompt,
-the full list of skill names and (truncated) descriptions, and a one-line
-system prompt asking the model to reply with a single skill name or `NONE`.
+the full list of skill names and descriptions, and a one-line system prompt
+asking the model to reply with a single skill name or `NONE`.
 Model defaults to `claude-haiku-4-5` (override with `TRIGGER_LLM_MODEL`).
-This costs roughly one cent per full sweep at current haiku pricing.
+
+**Descriptions are sent whole — never truncated.** Claude Code's real router
+sees the entire `description:` field, so anything shortened here makes the eval
+measure a fiction rather than the deployed behaviour. The harness used to slice
+each one to 400 chars, which cut `popquiz` mid-word and hid every trigger phrase
+its own prompt file tests it on; four skills reported recall failures against
+text the model was never shown. `tests/test_trigger_payload.sh` guards this.
+
+Cost is roughly **$1 per full sweep** at current haiku pricing — ~190 requests
+carrying the whole ~5.5k-token skill menu each, at $1/MTok input. It scales with
+the number of skills, so it grows as the library does. (An earlier note here
+claimed one cent; that was wrong even under truncation.) The menu is byte-identical
+across every request in a sweep, so prompt caching would cut it to roughly $0.15
+— it needs the skill list moved ahead of the per-request prompt in the user
+message, since caching matches on a prefix. Not currently implemented.
 
 ## Adding prompts for a new skill
 

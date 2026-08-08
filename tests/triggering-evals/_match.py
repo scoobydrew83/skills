@@ -255,12 +255,24 @@ LLM_SYSTEM = (
 )
 
 
+def build_skill_list(descriptions: dict[str, str]) -> str:
+    """The routing menu shown to the LLM. Descriptions are never truncated.
+
+    Claude Code's real router sees the whole `description:` field, so slicing it
+    here measured a fiction. At the old [:400] cut, popquiz was severed mid-word
+    ('someone says "me' | 'rge it"') and every trigger phrase the eval then
+    tested it on — "LGTM", "ship it", "approve this PR" — sat past the cut. Four
+    skills scored recall failures on text the model was never shown. Anything
+    that shortens a description here re-creates that bug; test_trigger_payload.sh
+    guards it.
+    """
+    return "\n".join(f"- {name}: {desc}" for name, desc in descriptions.items())
+
+
 def llm_predict(prompt: str, descriptions: dict[str, str],
                 api_key: str, model: str) -> str | None:
     """Ask Claude haiku which skill to invoke. Returns the skill name or None."""
-    skill_list = "\n".join(
-        f"- {name}: {desc[:400]}" for name, desc in descriptions.items()
-    )
+    skill_list = build_skill_list(descriptions)
     user = (
         f"User prompt:\n{prompt}\n\n"
         f"Available skills:\n{skill_list}\n\n"
