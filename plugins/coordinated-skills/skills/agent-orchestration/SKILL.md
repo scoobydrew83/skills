@@ -15,6 +15,9 @@ description: >-
   the person is signalling they are stuck, paralysed, or overwhelmed by the size
   of the work — even on a genuinely multi-stage build, that combination calls for
   overwhelm-breakdown and its one concrete next step rather than a sequenced plan.
+  Do NOT trigger on a brand-new project or product idea nobody has validated yet —
+  sequencing construction before anyone has asked whether the thing should exist
+  at all is precisely what hemlock is for, so it goes there first.
 phase: execute
 hands_off_to: [reality-check, drift-check, conductor-memory, session-bookend]
 reads: [CONTEXT.md, MEMORY_BANK.md]

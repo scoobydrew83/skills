@@ -1,8 +1,6 @@
 {
   "skill": "session-bookend",
   "should_trigger": [
-    "Where were we on the auth refactor?",
-    "Pick up where we left off on the billing project.",
     "Let's wrap up this session — save where we are.",
     "What's the status of the migration work?",
     "Good place to stop — give me a clean handoff for next time.",
@@ -10,7 +8,9 @@
     "Wrap up: what's done, what's left, and what's next?",
     "I'm ending the session. Summarize the decisions made and why.",
     "Back to the project — give me a recap and the next step.",
-    "Before I close this out, capture where things stand."
+    "Before I close this out, capture where things stand.",
+    "Catch me up on the project before I start — what's done and what's next?",
+    "Give me the full picture: status, decisions we made, and where to pick up."
   ],
   "should_not_trigger": [
     "Build conductor memory from this conversation.",

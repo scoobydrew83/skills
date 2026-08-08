@@ -1,0 +1,23 @@
+{
+  "skill": "project-postmortem",
+  "notes": "Confusables: drift-check (audits live docs), conductor-memory and session-bookend (capture session state for continuity).",
+  "should_trigger": [
+    "Write a post-mortem for this project.",
+    "I want a retrospective on the launch.",
+    "What went wrong with the payments rewrite?",
+    "We're sunsetting this service — write it up.",
+    "Why did this go sideways?",
+    "Grade how the project went, with evidence from the git history.",
+    "Pull the timeline from commits and show me when we validated versus when we built.",
+    "What lessons carry to the next project, and what actually survives from this one?",
+    "The project shipped six months late. Do the retro and find the root ordering error.",
+    "Give me an honest scorecard on this project — what went right, what didn't."
+  ],
+  "should_not_trigger": [
+    "Audit my docs for internal contradictions.",
+    "Build conductor memory from this conversation.",
+    "Save where we are so the next session can resume.",
+    "Should we build this next thing?",
+    "Sequence the next project's experiments by risk."
+  ]
+}

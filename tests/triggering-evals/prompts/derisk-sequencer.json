@@ -1,0 +1,23 @@
+{
+  "skill": "derisk-sequencer",
+  "notes": "Confusables: overwhelm-breakdown (one step for momentum), agent-orchestration (build phases), experiment-designer (one test), hemlock (whether to build).",
+  "should_trigger": [
+    "What should I build first?",
+    "What order should I tackle this in?",
+    "Sequence this plan for me.",
+    "De-risk this roadmap.",
+    "The idea checks out — now what's the right order to do things in?",
+    "Rank these assumptions by risk and tell me which to test first.",
+    "My roadmap builds the whole thing before we test anything. Reorder it.",
+    "Put kill-gates between the experiments and order them cheapest-decisive first.",
+    "Which of these need validating before we write any product code?",
+    "Order these steps so nothing gets built ahead of the test that justifies it."
+  ],
+  "should_not_trigger": [
+    "I'm overwhelmed by this project — just give me one step for today.",
+    "Should I build this at all, or does something already do it?",
+    "Design a single experiment with a pass/fail threshold fixed up front.",
+    "Coordinate design, implementation, and deployment as one workflow.",
+    "Write a post-mortem for the project we just sunset."
+  ]
+}

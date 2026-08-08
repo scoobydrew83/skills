@@ -1,0 +1,23 @@
+{
+  "skill": "experiment-designer",
+  "notes": "Confusables: reality-check (verifies existing claims), goal-builder (/goal conditions), hemlock (whole-idea GO/NO-GO), derisk-sequencer (orders many tests).",
+  "should_trigger": [
+    "How do I test whether the cache actually helps?",
+    "Design an experiment for this hypothesis.",
+    "Is this optimization worth it?",
+    "How would I prove or disprove this?",
+    "What would falsify this assumption?",
+    "I'll just run it and look at the numbers.",
+    "Fix the pass/fail threshold before we run this so we can't argue with the result after.",
+    "What's the cheapest decisive test for this one question?",
+    "Pre-register this test — hypothesis, metric, and kill rule up front.",
+    "We think the new ranker is better. How do we actually find out?"
+  ],
+  "should_not_trigger": [
+    "Fact-check this plan — did the model hallucinate these packages?",
+    "Write a /goal condition that stops when the tests pass.",
+    "Should I build this product at all?",
+    "What order should I run these experiments in?",
+    "Break this project into one step I can start today."
+  ]
+}

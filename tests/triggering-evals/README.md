@@ -135,9 +135,9 @@ each one to 400 chars, which cut `popquiz` mid-word and hid every trigger phrase
 its own prompt file tests it on; four skills reported recall failures against
 text the model was never shown. `tests/test_trigger_payload.sh` guards this.
 
-Cost is roughly **$1.70 per full sweep** at current haiku pricing — ~285
-requests (19 skills × 15 prompts) each carrying the whole ~5.5k-token skill
-menu, at $1/MTok input. It grows on both axes as the library does: more skills
+Cost is roughly **$2 per full sweep** at current haiku pricing — ~345 requests
+(23 skills × 15 prompts) each carrying the whole ~5.5k-token skill menu, at
+$1/MTok input. It grows on both axes as the library does: more skills
 means both more requests and a bigger menu on every one. (An earlier note here
 claimed one cent; that was wrong even under truncation.) The menu is
 byte-identical across every request in a sweep, so prompt caching would cut it

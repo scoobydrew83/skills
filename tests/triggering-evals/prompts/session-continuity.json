@@ -10,7 +10,9 @@
     "In that earlier session we picked a library. Which one was it?",
     "How's my project going?",
     "The migration approach we discussed last time — walk me through it again.",
-    "It's been a few weeks since our last conversation — what had we worked out?"
+    "It's been a few weeks since our last conversation — what had we worked out?",
+    "Where were we on the auth refactor?",
+    "Pick up where we left off on the billing project."
   ],
   "should_not_trigger": [
     "Build conductor memory from this conversation.",

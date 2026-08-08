@@ -1,16 +1,21 @@
 ---
 name: session-bookend
 description: >-
-  Open and close work sessions with clean, grounded continuity. Use at the START
-  of a session when someone returns to ongoing work — "where were we", "pick up
-  where we left off", "what's the status of X", "back to the project" — to
-  produce a recap of what's done, where things stand, decisions made and why, and
-  the next step. Use at the END of a session — "let's wrap up", "good place to
-  stop", "save where we are" — to produce a clean handoff for next time. The
-  defining rule: ground every recap in REAL retrieved context (past-chat search,
-  memory, project files, notes), never invented status. Trigger whenever a
-  multi-session project is resuming or wrapping. Do NOT fabricate a "where we left
-  off" from nothing — if you can't retrieve it, say so and ask.
+  Run the ceremony at a work session's boundary: a structured opening recap or a
+  clean closing handoff, grounded in real retrieved context. Use at the START of
+  a session when someone returning to ongoing work wants the whole picture laid
+  out — what's done, where things stand, which decisions were made and why, and
+  the next step — e.g. "what's the status of X", "back to the project, catch me
+  up". Use at the END — "let's wrap up", "good place to stop", "save where we
+  are", "give me a clean handoff for next time" — to leave the next session a
+  usable starting point. The defining rule: ground every recap in REAL retrieved
+  context (past-chat search, memory, project files, notes), never invented
+  status. Trigger whenever a multi-session project is resuming or wrapping.
+  Reach for this when the ask is the ceremony at a session boundary rather than
+  the lookup itself — retrieving what a past conversation actually said is
+  session-continuity's job, and a bare "where were we" or "what did we decide
+  about X" belongs there. Do NOT fabricate a "where we left off" from nothing —
+  if you can't retrieve it, say so and ask.
 phase: bookend
 hands_off_to: [overwhelm-breakdown, agent-orchestration, conductor-memory]
 reads: [CONTEXT.md, MEMORY_BANK.md]

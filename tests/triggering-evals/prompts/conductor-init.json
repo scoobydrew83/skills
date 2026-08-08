@@ -1,0 +1,23 @@
+{
+  "skill": "conductor-init",
+  "notes": "Confusables: loop-creator (designs the loop itself), conductor-memory, visual-plan.",
+  "should_trigger": [
+    "Set up the conductor loop here.",
+    "Initialize this repo for the loop.",
+    "Do Phase 0 on this project.",
+    "Get this repo loop-ready.",
+    "Seed FEATURES.json from the spec.",
+    "The verifier keeps returning BLOCKED on this fresh project — why?",
+    "We're standing up a builder/verifier loop on a repo that has never had one.",
+    "Audit our half-finished Phase 0 and repair whatever's missing.",
+    "Write init.sh and create CONTEXT.md and MEMORY_BANK.md for this repo.",
+    "Check that a one-command test and lint actually pass, then land the baseline commit."
+  ],
+  "should_not_trigger": [
+    "Design a maker/checker loop and write the builder and verifier prompts.",
+    "Build conductor memory from this conversation.",
+    "Render this plan as a page I can comment on.",
+    "Should I build this at all, or does something already do it?",
+    "Sequence this plan so the risky tests come first."
+  ]
+}
