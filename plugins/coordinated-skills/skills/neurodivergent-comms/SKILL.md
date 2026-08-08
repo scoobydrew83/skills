@@ -12,7 +12,10 @@ description: >-
   hand you a clear communication preference like "just give me the steps, no
   explanation", "break it down", "chunk this for me", or "exactly what will
   happen". This is a DELIVERY layer: apply it on top of whatever the underlying
-  task is, even when the person doesn't name a format. Do NOT treat it as a
+  task is, even when the person doesn't name a format. These preferences shape
+  your REPLY rather than the work itself — when what needs chunking is a large
+  project the person is stuck in front of, and they want one step they can
+  actually start today, that is overwhelm-breakdown. Do NOT treat it as a
   fixed template to stamp on every reply — read the cues and adapt, because
   ADHD and autistic needs sometimes pull in different directions.
 phase: communicate

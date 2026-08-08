@@ -11,7 +11,10 @@ description: >-
   "agents" — what matters is that the task clearly has several stages that
   benefit from being sequenced with explicit phase boundaries and checkpoints.
   Do NOT trigger for single-stage asks ("fix this bug", "write this function") —
-  those are handled directly without orchestration overhead.
+  those are handled directly without orchestration overhead. Do NOT trigger when
+  the person is signalling they are stuck, paralysed, or overwhelmed by the size
+  of the work — even on a genuinely multi-stage build, that combination calls for
+  overwhelm-breakdown and its one concrete next step rather than a sequenced plan.
 phase: execute
 hands_off_to: [reality-check, drift-check, conductor-memory, session-bookend]
 reads: [CONTEXT.md, MEMORY_BANK.md]
