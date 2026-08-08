@@ -8,9 +8,9 @@
     "Is this 'best-practice' pattern real or did the model invent it?",
     "Another model wrote this setup guide. Is any of it made up?",
     "Are these CLI flags and env vars real, or invented?",
-    "Is this plan actually feasible, and is it worth doing?",
+    "Here's the implementation plan the assistant gave me — is it feasible and worth doing?",
     "Check these repo URLs and version numbers before I follow this.",
-    "This config came from another assistant — verify it before I apply it."
+    "This config came from another assistant — are these env vars and flags real?"
   ],
   "should_not_trigger": [
     "Help me decide between Postgres and DynamoDB.",

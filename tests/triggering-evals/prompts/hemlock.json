@@ -6,9 +6,9 @@
     "Validate this idea before I start writing code.",
     "Does this actually beat what already exists on the market?",
     "I'm fifty commits in — should I keep going or kill this project?",
-    "Let's kick off a new project — I want to start building next week.",
+    "We're kicking off a new internal tool next quarter — should we?",
     "Here's my plan: build the MVP in sprint one, then find users. Sound good?",
-    "What's the riskiest assumption in this idea, and how cheaply can I test it?",
+    "I want to build a tool that auto-generates changelogs from commits.",
     "New project idea: a CLI that manages dotfiles across machines.",
     "Before I commit real time to this, is the premise sound?"
   ],

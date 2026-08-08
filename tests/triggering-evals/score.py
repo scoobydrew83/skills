@@ -105,6 +105,27 @@ def main() -> int:
             print(f"  {want:28s} → {got:28s}  {prompt[:46]}")
         print("-" * 90)
 
+    # Every miss for a failing skill, prompt in full, including the ones that
+    # routed to NONE. The collision list above only shows prompts some *other*
+    # skill grabbed, so a skill whose misses all went to NONE showed a bare
+    # recall number and nothing else — undiagnosable from CI logs, which is
+    # where this is usually read. A NONE means no description claimed the
+    # prompt at all; that is a different bug from two descriptions fighting
+    # over it, and the fix is different too.
+    if failures:
+        print(f"\nmisses on failing skills ({len(failures)}):")
+        for name in failures:
+            misses = skills[name].get("false_negatives", [])
+            print(f"  {name} — {len(misses)} missed")
+            for fn in misses:
+                if isinstance(fn, dict):
+                    pred, prompt = fn.get("predicted"), fn.get("prompt", "")
+                else:
+                    pred, prompt = None, str(fn)
+                print(f"      → {pred or 'NONE (no skill claimed it)'}")
+                print(f"        {prompt}")
+        print("-" * 90)
+
     # Ties: several descriptions cover a prompt equally well. These do not
     # necessarily fail a threshold, but they are the actionable signal about
     # which descriptions are competing for the same triggers — so they are

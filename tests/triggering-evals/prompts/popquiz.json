@@ -6,7 +6,7 @@
     "The loop finished and the diff is big — ship it.",
     "Accept this agent-generated change, I didn't read it line by line.",
     "The autonomous build session is done — can we merge the work?",
-    "Ship it.",
+    "Ship it — the agent's tests are green.",
     "This is a twelve-file diff from the agent — approve it.",
     "I didn't write this and don't really follow it, but tests pass. Merge?",
     "Sign off on this PR so I can move on.",
