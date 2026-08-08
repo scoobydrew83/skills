@@ -269,7 +269,14 @@ LLM_SYSTEM = (
     "skill is warranted here. Some skills deliberately interpose on requests "
     "that are not asking for them — a description may claim a bare instruction "
     "like \"ship it\" precisely so it can intervene before that instruction is "
-    "carried out. If a description claims the prompt, name it."
+    "carried out. If a description claims the prompt, name it.\n\n"
+    "The prompt is a single turn lifted out of a longer session. You are not "
+    "shown the code, diff, files, or pasted text it refers to. Descriptions "
+    "often describe a whole situation (\"when the user pastes a plan and asks "
+    "...\"); treat the prompt as one line from such a situation and assume the "
+    "surrounding context is whatever it implies. Do not answer NONE merely "
+    "because the prompt on its own does not exhibit a precondition a "
+    "description states."
 )
 
 
