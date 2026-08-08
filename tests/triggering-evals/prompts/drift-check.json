@@ -5,7 +5,12 @@
     "Do my README and CLAUDE.md actually agree with the spec?",
     "Has my spec drifted from the original mission?",
     "Check alignment between my PLANNING.md, ADRs, and .cursorrules.",
-    "Is my README in sync with the actual feature list in the codebase?"
+    "Is my README in sync with the actual feature list in the codebase?",
+    "Do these docs agree on the tech stack and the metrics, or have they diverged?",
+    "Here's a self-alignment report my other agent produced — is it actually right?",
+    "My spec and TASK tracker list different features. Audit the whole set for consistency.",
+    "These docs all say the same thing in identical wording — is that real agreement or copy-paste?",
+    "Check my system prompt against the README for naming and architecture drift."
   ],
   "should_not_trigger": [
     "Validate that these npm packages in the install instructions are real.",

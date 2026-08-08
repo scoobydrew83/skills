@@ -5,7 +5,12 @@
     "There's a package that already does this — should we add it?",
     "Add this dependency to the project.",
     "Here are the packages the plan says to pip install — go ahead.",
-    "Is this cargo crate worth adding, or can the stdlib do it?"
+    "Is this cargo crate worth adding, or can the stdlib do it?",
+    "There's a library for that — let's just pull it in.",
+    "This import isn't in the lockfile yet. Fine to add?",
+    "Should we take the dependency or vendor the twenty lines ourselves?",
+    "Is this package still maintained, or is it abandoned?",
+    "The model recommended these five packages — install them all."
   ],
   "should_not_trigger": [
     "We're removing a public config key — how do we not break callers?",

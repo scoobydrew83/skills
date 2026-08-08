@@ -6,7 +6,12 @@
     "I'm drowning in this migration project. Where do I even begin?",
     "Can you break this down for me? I'm paralyzed by the size of this thing.",
     "I have to rewrite the entire onboarding flow by Friday and I'm completely stuck.",
-    "chunk it for me — I just need one thing I can actually do today"
+    "chunk it for me — I just need one thing I can actually do today",
+    "This feels like too much. What's the one thing I should do first?",
+    "Where do I even begin with rebuilding our whole test suite?",
+    "I've been staring at this refactor for three days and haven't started.",
+    "Give me one step I can finish today, and tell me when I'm done.",
+    "The backlog is enormous and I can't find an entry point into it."
   ],
   "should_not_trigger": [
     "Please format your replies in short bullet points, I'm ADHD and walls of text overwhelm me.",

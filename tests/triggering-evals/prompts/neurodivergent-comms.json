@@ -5,7 +5,12 @@
     "I'm autistic and need literal, step-by-step, no-surprises explanations.",
     "Just give me the steps, no explanation.",
     "I'm low energy today, can you keep it gentle and effort-sized?",
-    "Break this down for me and tell me exactly what will happen."
+    "Break this down for me and tell me exactly what will happen.",
+    "My executive function is shot today — keep the instructions predictable and short.",
+    "No surprises please: tell me exactly what each step will do before I run it.",
+    "I'm autistic and take things literally — skip the idioms and be direct.",
+    "Can you chunk your explanation? Long paragraphs lose me.",
+    "I'm exhausted. Give me options sized by how much energy each takes."
   ],
   "should_not_trigger": [
     "I'm overwhelmed by this huge project — where do I even start?",

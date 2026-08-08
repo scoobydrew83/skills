@@ -120,11 +120,13 @@ only adds noise. **The override must name a model that accepts sampling
 parameters** (Haiku 4.5, Sonnet 4.6 and earlier); Opus 4.7+, Opus 5, Sonnet 5,
 and Fable 5 reject `temperature` with a 400.
 
-**Read a single run as a noisy estimate.** Each skill has 5 prompts, so recall
-moves in steps of 0.20 and one flipped answer crosses the 0.80 gate on its own.
-Before treating a FAIL as a real regression, check whether the skill sits at
-0.80 — most do — and re-run. Doubling the prompts per skill would halve the
-step size; nobody has.
+**Granularity.** Each skill has 10 `should_trigger` prompts, so recall moves in
+steps of 0.10 and clearing the 0.80 gate means at most two misses. It was 5
+prompts (steps of 0.20) until a single resampled answer flipped `session-bookend`
+between 0.80 and 0.60 on two runs of identical code — at that step size, any
+skill sitting on the gate was one coin-toss from failing the build. Precision
+still moves in larger steps: `should_not_trigger` stays at 5, because precision
+has been 1.00 across every skill and the pressure was never there.
 
 **Descriptions are sent whole — never truncated.** Claude Code's real router
 sees the entire `description:` field, so anything shortened here makes the eval
@@ -133,13 +135,15 @@ each one to 400 chars, which cut `popquiz` mid-word and hid every trigger phrase
 its own prompt file tests it on; four skills reported recall failures against
 text the model was never shown. `tests/test_trigger_payload.sh` guards this.
 
-Cost is roughly **$1 per full sweep** at current haiku pricing — ~190 requests
-carrying the whole ~5.5k-token skill menu each, at $1/MTok input. It scales with
-the number of skills, so it grows as the library does. (An earlier note here
-claimed one cent; that was wrong even under truncation.) The menu is byte-identical
-across every request in a sweep, so prompt caching would cut it to roughly $0.15
-— it needs the skill list moved ahead of the per-request prompt in the user
-message, since caching matches on a prefix. Not currently implemented.
+Cost is roughly **$1.70 per full sweep** at current haiku pricing — ~285
+requests (19 skills × 15 prompts) each carrying the whole ~5.5k-token skill
+menu, at $1/MTok input. It grows on both axes as the library does: more skills
+means both more requests and a bigger menu on every one. (An earlier note here
+claimed one cent; that was wrong even under truncation.) The menu is
+byte-identical across every request in a sweep, so prompt caching would cut it
+to roughly $0.25 — it needs the skill list moved ahead of the per-request prompt
+in the user message, since caching matches on a prefix. Not currently
+implemented.
 
 ## Adding prompts for a new skill
 
@@ -153,9 +157,15 @@ Create `prompts/<new-skill>.json`:
 }
 ```
 
-3–5 prompts per array is enough. Source them from the skill's own
-`description:` examples for positives, and from the descriptions of skills
-that share a row in `skill-graph.md` for negatives.
+**10 positives, 5 negatives.** Source positives from the skill's own
+`description:` examples, and negatives from the descriptions of skills that
+share a row in `skill-graph.md`.
+
+Ten positives is a granularity floor, not a target to pad to — write ten that
+each exercise a *different* claim in the description. Ten restatements of the
+same trigger measure one thing ten times and inflate recall while hiding the
+phrasings that actually miss. If the description only supports a handful of
+genuinely distinct triggers, that's a finding about the description.
 
 ## Why this is NOT in `tests/run-all.sh`
 

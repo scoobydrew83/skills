@@ -5,7 +5,12 @@
     "I have a great idea for a new developer tool — is it worth building?",
     "Validate this idea before I start writing code.",
     "Does this actually beat what already exists on the market?",
-    "I'm fifty commits in — should I keep going or kill this project?"
+    "I'm fifty commits in — should I keep going or kill this project?",
+    "Let's kick off a new project — I want to start building next week.",
+    "Here's my plan: build the MVP in sprint one, then find users. Sound good?",
+    "What's the riskiest assumption in this idea, and how cheaply can I test it?",
+    "New project idea: a CLI that manages dotfiles across machines.",
+    "Before I commit real time to this, is the premise sound?"
   ],
   "should_not_trigger": [
     "Design one falsifiable experiment with a pass/fail threshold for this hypothesis.",

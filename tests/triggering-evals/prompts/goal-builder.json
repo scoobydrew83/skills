@@ -5,7 +5,12 @@
     "Write a /goal condition that keeps Claude working until npm test passes.",
     "My goal stops too early before the work is actually done.",
     "Set a completion condition for an unattended until-it-passes Claude Code run.",
-    "Turn 'clean up my code' into a checkable goal an evaluator can verify."
+    "Turn 'clean up my code' into a checkable goal an evaluator can verify.",
+    "Keep Claude working until the build is green — how do I phrase that?",
+    "Turn this recurring goal into a reusable slash command under .claude/commands/.",
+    "I want Claude Code to run on its own until a measurable end state holds.",
+    "Is this finish line something a transcript-reading evaluator could actually check?",
+    "Write me a condition that stops the run only when tests pass without the test file being edited."
   ],
   "should_not_trigger": [
     "Build me a full maker/checker loop package with a spec, prompts, and a harness.",

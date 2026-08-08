@@ -5,7 +5,12 @@
     "Take this idea to a working skeleton — design, plan, build, and test it.",
     "Help me build this end to end across design, implementation, and deployment.",
     "Coordinate the full build lifecycle for a new notifications service.",
-    "I want a phased, multi-stage workflow that goes from spec to deployed code."
+    "I want a phased, multi-stage workflow that goes from spec to deployed code.",
+    "Sequence this migration into phases with explicit checkpoints between each stage.",
+    "I need the design, implementation, testing, and deployment coordinated as one workflow.",
+    "Take the payments rewrite from spec through to tested, deployed code.",
+    "Set up structured coordination across the whole build lifecycle for this service.",
+    "This job has several stages — plan them, build them, and verify each before moving on."
   ],
   "should_not_trigger": [
     "Fix this off-by-one bug in the parser.",

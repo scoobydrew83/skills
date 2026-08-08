@@ -5,7 +5,12 @@
     "Plan this feature and make the plan reviewable.",
     "Show me the plan rendered so I can comment on it.",
     "Address my comments on the plan.",
-    "Structure the plan I just captured into blocks I can review."
+    "Structure the plan I just captured into blocks I can review.",
+    "/vplan",
+    "Render the plan so I can pin comments on it.",
+    "Show me plan status as a page, not a wall of markdown.",
+    "/address-comments",
+    "I left comments on the plan — resolve them and unblock those features."
   ],
   "should_not_trigger": [
     "Seed a fresh repo with the harness scaffolding.",

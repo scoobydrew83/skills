@@ -5,7 +5,12 @@
     "Approve this PR for me.",
     "The loop finished and the diff is big — ship it.",
     "Accept this agent-generated change, I didn't read it line by line.",
-    "The autonomous build session is done — can we merge the work?"
+    "The autonomous build session is done — can we merge the work?",
+    "Ship it.",
+    "This is a twelve-file diff from the agent — approve it.",
+    "I didn't write this and don't really follow it, but tests pass. Merge?",
+    "Sign off on this PR so I can move on.",
+    "The headless run produced this change set — good to merge?"
   ],
   "should_not_trigger": [
     "Is this SQL query safe against injection?",

@@ -5,7 +5,12 @@
     "What did we decide about the caching layer in our previous chats?",
     "Continue the project we were working on.",
     "That bug we discussed — what was our approach again?",
-    "Remember the thing I'm working on — let's keep going."
+    "Remember the thing I'm working on — let's keep going.",
+    "We talked about this before — what did we land on?",
+    "In that earlier session we picked a library. Which one was it?",
+    "How's my project going?",
+    "The migration approach we discussed last time — walk me through it again.",
+    "It's been a few weeks since our last conversation — what had we worked out?"
   ],
   "should_not_trigger": [
     "Build conductor memory from this conversation.",

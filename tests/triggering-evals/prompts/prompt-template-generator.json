@@ -5,7 +5,12 @@
     "Build a prompt cookbook for this repo with copy-paste-ready prompts.",
     "Turn my codebase into a set of reusable Claude prompts.",
     "Generate a PROMPT-TEMPLATES.md tailored to my stack and conventions.",
-    "Build a prompt library / prompt scaffolding for this Next.js codebase."
+    "Build a prompt library / prompt scaffolding for this Next.js codebase.",
+    "Build a prompt guide for this repo.",
+    "I want ready-to-use prompts for this project with our real paths filled in.",
+    "Generate copy-paste prompts for my codebase so I stop retyping context.",
+    "Turn this project into a set of reusable Cursor prompts.",
+    "Create prompt scaffolding covering our main subsystems and conventions."
   ],
   "should_not_trigger": [
     "Write me a single system prompt for a support agent.",

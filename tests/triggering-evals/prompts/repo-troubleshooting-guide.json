@@ -5,7 +5,12 @@
     "Make a TROUBLESHOOTING.md documenting common errors and fixes.",
     "Build a debugging runbook for this project.",
     "Document the common setup problems and failure modes in this codebase.",
-    "Write an ops doc for this project covering how to fix common errors."
+    "Write an ops doc for this project covering how to fix common errors.",
+    "Document the common errors in this repo with step-by-step fixes.",
+    "Build a setup-issues guide for new developers on this project.",
+    "Mine the codebase for failure modes and write them up as an operations reference.",
+    "New hires keep hitting the same Docker and port problems — write that up.",
+    "Turn the error strings and exceptions in this repo into a fix-it reference."
   ],
   "should_not_trigger": [
     "Make prompt templates for this repo.",

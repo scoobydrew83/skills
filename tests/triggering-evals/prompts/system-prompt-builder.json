@@ -5,7 +5,12 @@
     "Design an AI agent that handles invoice processing.",
     "Write project instructions / custom GPT instructions for a research assistant.",
     "Turn this into an agent — I want reusable LLM instructions.",
-    "Rebuild and harden this existing system prompt."
+    "Rebuild and harden this existing system prompt.",
+    "Write system instructions for an assistant that always answers in our house style.",
+    "I want an AI that triages support tickets reliably every time.",
+    "Scaffold a multi-agent system: a researcher, a writer, and a critic.",
+    "Here's my current prompt — extend and harden it.",
+    "Architect how this assistant should behave across all future conversations."
   ],
   "should_not_trigger": [
     "Make prompt templates for my project codebase.",

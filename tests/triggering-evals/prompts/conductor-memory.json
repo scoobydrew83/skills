@@ -5,7 +5,12 @@
     "Extract memory from this session and snapshot our progress.",
     "Capture this session into a memory pack for the vault.",
     "Update conductor memory — I want the next session to resume with full context.",
-    "Save this to memory so my Obsidian vault has the project context."
+    "Save this to memory so my Obsidian vault has the project context.",
+    "Generate the seed JSON and persona YAML so the next Claude Code session resumes cleanly.",
+    "Produce a memory pack with an artifact index and project-context notes from this thread.",
+    "We've done a lot today — persist this for continuity across Claude Code and Obsidian.",
+    "Snapshot our progress into vault-ready artifacts with a resume pointer.",
+    "Build the verification and maintenance checklists for this session's memory pack."
   ],
   "should_not_trigger": [
     "Where were we on the auth refactor?",

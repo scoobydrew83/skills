@@ -5,7 +5,12 @@
     "Set up a self-correcting builder/verifier loop with commit checkpoints and a stop condition.",
     "Scaffold a LOOP_QUEUE and a harness to work through it one task at a time.",
     "Design an evaluator-optimizer loop and write the prompts that drive it.",
-    "Wire a nightly triage workflow that queues work but never fixes autonomously."
+    "Wire a nightly triage workflow that queues work but never fixes autonomously.",
+    "I want an iterate-until-it-passes process that escalates to me after N tries.",
+    "Write the builder and verifier prompts for an autonomous loop.",
+    "Design a phased build loop with acceptance criteria for each phase.",
+    "Give me a headless Claude Code harness that works a queue of tasks unattended.",
+    "The checker keeps passing work that's only close — how do I make it strict?"
   ],
   "should_not_trigger": [
     "My /goal keeps looping and never stops — fix the single condition line.",

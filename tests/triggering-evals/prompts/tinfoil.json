@@ -5,7 +5,12 @@
     "We're adding an API that accepts user data; review it before it ships.",
     "Parse this uploaded file — is the parser safe against malicious input?",
     "Handle the upload, and check it for injection and path traversal.",
-    "Audit this webhook receiver: untrusted input reaches a SQL query."
+    "Audit this webhook receiver: untrusted input reaches a SQL query.",
+    "This CLI passes user arguments to a shell command. Is that a problem?",
+    "We deserialize this payload straight from the request body — review it.",
+    "Check the auth flow before we ship it.",
+    "This diff adds a new place where external data enters the system.",
+    "The agent's tool takes free-text input and runs a query with it. Is this secure?"
   ],
   "should_not_trigger": [
     "We're renaming a public function — how do we not break callers?",

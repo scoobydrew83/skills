@@ -5,7 +5,12 @@
     "Let's clean up the API and remove the legacy config keys.",
     "Change the default value of this CLI flag.",
     "Remove this deprecated endpoint from the router.",
-    "Refactor the output format — scripts probably parse it but whatever."
+    "Refactor the output format — scripts probably parse it but whatever.",
+    "We're renaming this environment variable — just update the docs, right?",
+    "Simplify this exported type by dropping the fields nobody should be using.",
+    "What deprecation window do we need before removing this config key?",
+    "Change the file format this writes — downstream tools read it.",
+    "This refactor removes a public CLI flag. Do we need a migration note and a shim?"
   ],
   "should_not_trigger": [
     "Is this upload handler safe against path traversal?",
