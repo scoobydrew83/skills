@@ -28,7 +28,27 @@ jobs:
           fi
           bash tests/run-all.sh
 
-      - name: Run triggering evals (optional)
+      # Diagnostic, not a gate — `continue-on-error` keeps the step's own
+      # red/green signal while letting the job pass.
+      #
+      # This eval measures how distinguishable the skill descriptions are from
+      # one another, which is a property of the whole set rather than of any
+      # one skill. With ~23 mutually overlapping descriptions about two land
+      # under threshold on any given run, and *which* two moves when an
+      # unrelated description is edited — session-continuity shifted 0.83 ->
+      # 0.75 on a commit that never touched it, because editing three other
+      # descriptions changes the menu every routing decision is made against.
+      # Blocking pushes on a number nobody can hold steady trains people to
+      # ignore the number.
+      #
+      # tests/triggering-evals/README.md has said "run it deliberately, not on
+      # every commit" and "false positives at this layer are not actionable
+      # bugs, they're feedback on how distinguishable a description is" since it
+      # was written. The wiring contradicted its own README; this makes them
+      # agree. Read the scorecard in the run summary and work the overlap down
+      # deliberately.
+      - name: Triggering evals (diagnostic — does not gate)
+        continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
@@ -42,4 +62,17 @@ jobs:
           fi
           # --mode llm = the real router (haiku). Static keyword overlap is a
           # crude proxy that false-fails on shared words; don't gate on it.
-          bash tests/triggering-evals/run.sh --mode llm
+          bash tests/triggering-evals/run.sh --mode llm 2>&1 | tee /tmp/evals.txt
+          rc=${PIPESTATUS[0]}
+          # Surface the scorecard on the run page — the whole point of a
+          # diagnostic is that someone reads it without digging through logs.
+          {
+            echo '## Skill triggering evals'
+            echo
+            echo 'Diagnostic only — this step does not gate the build.'
+            echo
+            echo '```'
+            cat /tmp/evals.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $rc

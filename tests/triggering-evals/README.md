@@ -178,7 +178,7 @@ same trigger measure one thing ten times and inflate recall while hiding the
 phrasings that actually miss. If the description only supports a handful of
 genuinely distinct triggers, that's a finding about the description.
 
-## Why this is NOT in `tests/run-all.sh`
+## Why this is NOT in `tests/run-all.sh`, and does not gate CI
 
 - LLM mode needs an API key and costs money.
 - Static mode is a coarse approximation — false positives at this layer are
@@ -186,4 +186,22 @@ genuinely distinct triggers, that's a finding about the description.
   is.
 - Both modes are an order of magnitude slower than the structural tests.
 
-Run it deliberately, not on every commit.
+Run it deliberately. `test.yml` does run LLM mode on pushes to `main`, but as a
+**diagnostic that cannot fail the build** (`continue-on-error`), with the
+scorecard written to the run summary. For a long time it ran as a blocking gate,
+which contradicted this section and cost real time: a red build on a number that
+moves for reasons unrelated to the commit trains people to ignore it.
+
+**The score is a property of the whole description set, not of one skill.**
+Routing is a comparison — every description competes with the other 22 — so
+editing one perturbs decisions for all of them. `session-continuity` moved 0.83
+→ 0.75 on a commit that never touched it, because three *other* descriptions
+changed the menu. With overlap at current levels roughly two skills land under
+0.80 on any given run, and which two shifts. Read the trend and the individual
+misses, not the pass count.
+
+The misses are the useful output. A miss to another skill means two descriptions
+claim one phrase — six of those were found and fixed in a single afternoon, each
+one a genuine bug where the router had no way to choose. A miss to `NONE` means
+no description claimed the prompt at all, which is usually a description burying
+its triggers under mechanism.
