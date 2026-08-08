@@ -115,6 +115,16 @@ For each prompt we POST to `api.anthropic.com/v1/messages` with the prompt,
 the full list of skill names and descriptions, and a one-line system prompt
 asking the model to reply with a single skill name or `NONE`.
 Model defaults to `claude-haiku-4-5` (override with `TRIGGER_LLM_MODEL`).
+Requests send `temperature: 0` — routing is a classification and resampling it
+only adds noise. **The override must name a model that accepts sampling
+parameters** (Haiku 4.5, Sonnet 4.6 and earlier); Opus 4.7+, Opus 5, Sonnet 5,
+and Fable 5 reject `temperature` with a 400.
+
+**Read a single run as a noisy estimate.** Each skill has 5 prompts, so recall
+moves in steps of 0.20 and one flipped answer crosses the 0.80 gate on its own.
+Before treating a FAIL as a real regression, check whether the skill sits at
+0.80 — most do — and re-run. Doubling the prompts per skill would halve the
+step size; nobody has.
 
 **Descriptions are sent whole — never truncated.** Claude Code's real router
 sees the entire `description:` field, so anything shortened here makes the eval

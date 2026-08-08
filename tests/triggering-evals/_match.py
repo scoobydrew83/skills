@@ -281,6 +281,15 @@ def llm_predict(prompt: str, descriptions: dict[str, str],
     body = json.dumps({
         "model": model,
         "max_tokens": 32,
+        # Routing is a classification, so resampling it is pure noise. Without
+        # this the API default (1.0) applied: two CI runs on identical code
+        # scored session-bookend 0.80 then 0.60 and flipped the build red, and
+        # with 5 prompts per skill one resampled answer moves recall by a whole
+        # 0.20 — straight through the 0.80 gate. Determinism isn't perfect at
+        # temperature 0, but a gate that fails on a coin toss gates nothing.
+        # NOTE: sampling params are rejected on Opus 4.7+/Opus 5/Sonnet 5/Fable
+        # 5. TRIGGER_LLM_MODEL must name a model that accepts them.
+        "temperature": 0,
         "system": LLM_SYSTEM,
         "messages": [{"role": "user", "content": user}],
     }).encode("utf-8")
