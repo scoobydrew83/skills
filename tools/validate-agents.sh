@@ -6,7 +6,7 @@
 #   tools/validate-agents.sh --help
 #
 # Checks:
-#   1. Every Conductor agent definition at the repo root — the builder/verifier
+#   1. Every Conductor agent definition in agents/ — the builder/verifier
 #      pair plus the three flywheel agents — carries the required frontmatter
 #      keys: name, description, tools, phase, hands_off_to.
 #   2. The VERDICT block in conductor-verifier.md uses exactly the verdict
@@ -38,9 +38,10 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+AGENT_DIR="$REPO_ROOT/agents"
 AGENTS="conductor-builder.md conductor-verifier.md harness-improver.md doc-gardener.md slop-gc.md"
 REQUIRED_KEYS="name description tools phase hands_off_to"
-VERIFIER="$REPO_ROOT/conductor-verifier.md"
+VERIFIER="$AGENT_DIR/conductor-verifier.md"
 CONVENTIONS="$REPO_ROOT/CONVENTIONS.md"
 
 fail=0
@@ -52,7 +53,7 @@ bad()  { echo "FAIL  $*"; fail=1; }
 frontmatter() { awk 'NR==1 && $0=="---"{f=1; next} f && $0=="---"{exit} f'; }
 
 for name in $AGENTS; do
-  file="$REPO_ROOT/$name"
+  file="$AGENT_DIR/$name"
   if [[ ! -f "$file" ]]; then
     bad "$name — file missing"
     continue

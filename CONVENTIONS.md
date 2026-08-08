@@ -216,7 +216,7 @@ a deploy phase is one workflow among many, and a verifier PASS marks work
 complete rather than a session ending. What every session has is an end, and
 something already has to happen at that end: the tree must be left clean.
 
-The contract, which lives in `conductor-builder.md` and applies to any agent
+The contract, which lives in `agents/conductor-builder.md` and applies to any agent
 ending a working session:
 
 1. **The branch passes the same smoke test the next session runs on entry.**

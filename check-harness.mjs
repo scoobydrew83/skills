@@ -267,7 +267,7 @@ const checks = {
     const S = join(SKILLS, 'plugins/coordinated-skills/skills/visual-plan');
     const parts = ['SKILL.md', 'tools/render-plan.mjs', 'tools/plan-serve.mjs', 'tools/plan-comment.mjs', 'tools/capture-plan.mjs', 'commands/vplan.md', 'commands/address-comments.md']
       .filter((f) => existsSync(join(S, f)));
-    const builder = (read(join(SKILLS, 'conductor-builder.md')) || '').includes('plan-comment');
+    const builder = (read(findFile(SKILLS, 'conductor-builder.md')[0]) || '').includes('plan-comment');
     const pass = parts.length === 7 && builder;
     return { pass, evidence: pass ? 'skill packaged (7/7 parts) + builder entry ritual reads comments' : `${parts.length}/7 parts, builder wired: ${builder}` };
   },
@@ -276,7 +276,7 @@ const checks = {
     return { pass: existsSync(p), evidence: existsSync(p) ? p : 'no blocks.json for the active sfdt phase' };
   },
   'H-034': () => {
-    const pass = (read(join(SKILLS, 'harness-improver.md')) || '').includes('comments.jsonl');
+    const pass = (read(findFile(SKILLS, 'harness-improver.md')[0]) || '').includes('comments.jsonl');
     return { pass, evidence: pass ? 'improver mines plan comments' : 'harness-improver.md does not name comments.jsonl' };
   },
 };

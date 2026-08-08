@@ -37,7 +37,7 @@ This is the single highest-value change. Everything else builds on it.
 
 **Do:**
 
-1. Copy `conductor-verifier.md` and `conductor-builder.md` into
+1. Copy `agents/conductor-verifier.md` and `agents/conductor-builder.md` into
    `.claude/agents/` in the repo. Commit them — project-scoped agents are
    shared infrastructure, not personal config.
 2. Add a gating rule to the repo's CLAUDE.md:
@@ -222,8 +222,9 @@ an unbounded improver on an ungated repo is a slop generator.
 
 **Do:**
 
-1. Copy `harness-improver.md`, `doc-gardener.md`, and `slop-gc.md` into
-   `.claude/agents/` alongside the builder/verifier pair. Commit them.
+1. Copy `agents/harness-improver.md`, `agents/doc-gardener.md`, and
+   `agents/slop-gc.md` into `.claude/agents/` alongside the builder/verifier
+   pair. Commit them.
 2. Schedule each on its own cron, using the Phase 4 triage workflow as the
    template. Stagger them so three agents never open PRs into the same
    review window:

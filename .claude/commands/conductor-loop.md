@@ -8,8 +8,8 @@ argument-hint: <task description>
 
 Fire the existing maker/checker pair against the task described in
 `$ARGUMENTS`. This is glue, not new logic — the actual work lives in the
-two agent definitions at the repo root: `conductor-builder.md` and
-`conductor-verifier.md`.
+two agent definitions in `agents/`: `agents/conductor-builder.md` and
+`agents/conductor-verifier.md`.
 
 Steps:
 
