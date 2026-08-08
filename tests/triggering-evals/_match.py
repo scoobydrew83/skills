@@ -247,11 +247,29 @@ def static_predict(prompt: str, skill_tokens: dict[str, set[str]],
 
 # --- LLM matcher ------------------------------------------------------------ #
 
+# Ask which description CLAIMS the prompt, not whether a skill "should be
+# invoked". Those read the same until you hit an intercept skill — one that
+# fires on a request that isn't asking for it, so it can interpose before the
+# request is carried out. popquiz claims "approve this PR" and "ship it"
+# verbatim, and under the old wording all three bare forms returned NONE: asked
+# whether a skill *should* be invoked, the honest answer to "Approve this PR for
+# me" is no, just approve it. The same wording sank hemlock's "should we?" and
+# "Sound good?". Eight of nine failures were this.
+#
+# The README states the question this eval exists to answer: does each skill's
+# description still cause Claude to fire on the prompts it claims to handle.
+# That is a matching question, and the prompt now asks it.
 LLM_SYSTEM = (
-    "You are a skill-routing classifier. Given a user prompt and a numbered "
-    "list of skill descriptions, reply with ONLY the name of the single best-"
-    "matching skill, or the word NONE if no skill should be invoked. Output "
-    "nothing else."
+    "You are a skill-routing classifier. You are given a user prompt and a list "
+    "of skills, each with the description its author wrote to say when it "
+    "applies. Reply with ONLY the name of the one skill whose description claims "
+    "this prompt, or the word NONE if no description claims it. Output nothing "
+    "else.\n\n"
+    "Judge by what each description says it covers, not by whether you think a "
+    "skill is warranted here. Some skills deliberately interpose on requests "
+    "that are not asking for them — a description may claim a bare instruction "
+    "like \"ship it\" precisely so it can intervene before that instruction is "
+    "carried out. If a description claims the prompt, name it."
 )
 
 
@@ -276,7 +294,8 @@ def llm_predict(prompt: str, descriptions: dict[str, str],
     user = (
         f"User prompt:\n{prompt}\n\n"
         f"Available skills:\n{skill_list}\n\n"
-        f"Reply with one skill name from the list above, or NONE."
+        f"Which skill's description claims this prompt? "
+        f"Reply with one name from the list above, or NONE."
     )
     body = json.dumps({
         "model": model,

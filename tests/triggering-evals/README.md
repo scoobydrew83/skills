@@ -111,9 +111,20 @@ LLM mode for the real number.
 
 ## LLM mode
 
-For each prompt we POST to `api.anthropic.com/v1/messages` with the prompt,
-the full list of skill names and descriptions, and a one-line system prompt
-asking the model to reply with a single skill name or `NONE`.
+For each prompt we POST to `api.anthropic.com/v1/messages` with the prompt, the
+full list of skill names and descriptions, and a system prompt asking **which
+description claims this prompt** — reply with one skill name, or `NONE`.
+
+That wording is deliberate. Asking instead whether a skill *should be invoked*
+reads identically until you hit an **intercept skill** — one that fires on a
+request that isn't asking for it, so it can interpose before the request is
+carried out. `popquiz` claims "approve this PR" and "ship it" verbatim, and
+under the old wording every bare form returned `NONE`: asked whether a skill
+should be invoked, the honest answer to "Approve this PR for me" is no, just
+approve it. `hemlock`'s "should we?" went the same way. Eight of nine failures
+in one sweep were this single wording. The eval's job is to check whether a
+description still fires on what it claims, so the harness asks a matching
+question, not a necessity one.
 Model defaults to `claude-haiku-4-5` (override with `TRIGGER_LLM_MODEL`).
 Requests send `temperature: 0` — routing is a classification and resampling it
 only adds noise. **The override must name a model that accepts sampling
