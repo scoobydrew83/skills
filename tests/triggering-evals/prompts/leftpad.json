@@ -10,7 +10,8 @@
     "This import isn't in the lockfile yet. Fine to add?",
     "Should we take the dependency or vendor the twenty lines ourselves?",
     "Is this package still maintained, or is it abandoned?",
-    "The model recommended these five packages — install them all."
+    "The model recommended these five packages — install them all.",
+    "Fact-check these npm packages and install commands before I run them."
   ],
   "should_not_trigger": [
     "We're removing a public config key — how do we not break callers?",

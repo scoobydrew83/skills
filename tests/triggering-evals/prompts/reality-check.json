@@ -2,7 +2,7 @@
   "skill": "reality-check",
   "should_trigger": [
     "Validate this implementation plan — did the other model hallucinate?",
-    "Fact-check these npm packages and install commands before I run them.",
+    "This runbook came out of an AI session — check it before we adopt it.",
     "Sanity-check this MCP server list and tell me which ones are real.",
     "Pressure-test this plan — is any of it overkill or made up?",
     "Is this 'best-practice' pattern real or did the model invent it?",

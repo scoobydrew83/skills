@@ -1,20 +1,21 @@
 ---
 name: reality-check
 description: >-
-  Pressure-test an AI-generated technical plan, recommendation set, setup guide,
-  or tool/config list for hallucinations, factual errors, and unnecessary
-  complexity, then verify the surviving claims against live sources before the
-  user acts on them. Use whenever the user pastes recommendations, an
-  implementation plan, a tooling/MCP/package list, install commands, or config
-  and says "validate this", "fact-check this", "is this real/accurate", "did it
-  hallucinate", "sanity-check this", "pressure-test this", "is this overkill", or
-  asks whether a plan is feasible and worth doing. Especially trigger when the
-  content looks AI-generated and is dense with checkable specifics (package
-  names, repo URLs, CLI flags, file paths, versions, env vars, named
-  "best-practice" patterns, time estimates) that could be fabricated. This is for
-  VERIFYING the accuracy and practical value of an EXISTING plan, not for
-  choosing between open options or deciding from scratch (use a decision/council
-  skill for that).
+  Use whenever someone hands you an AI-generated technical plan, recommendation
+  set, setup guide, or tool/config list and says "validate this", "fact-check
+  this", "is this real", "is this accurate", "did it hallucinate", "sanity-check
+  this", "pressure-test this", "is this overkill", or asks whether a plan is
+  feasible and worth doing. Trigger hardest when the content reads as
+  machine-written and is dense with checkable specifics that could be fabricated
+  — repo URLs, CLI flags, file paths, versions, env vars, named "best-practice"
+  patterns, time estimates. The job: pressure-test the thing for hallucinations,
+  factual errors, and unnecessary complexity, then verify every surviving claim
+  against live sources before the user acts on it. Do NOT trigger for a bare
+  dependency question — whether a specific package is real, alive, and
+  maintained is leftpad's registry rung, so "should we add this package" or "is
+  this crate abandoned" goes there. This VERIFIES an existing plan's accuracy
+  and practical value, not choosing between open options or deciding from
+  scratch (use a decision/council skill for that).
 phase: verify
 hands_off_to: [drift-check, conductor-memory]
 reads: []
