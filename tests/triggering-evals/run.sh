@@ -52,7 +52,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/plugins/coordinated-skills/skills"
+SKILLS_DIR="$REPO_ROOT/.agents/skills"
 PROMPTS_DIR="$SCRIPT_DIR/prompts"
 RESULTS_DIR="$SCRIPT_DIR/.results"
 

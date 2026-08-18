@@ -31,7 +31,7 @@ else
 fi
 
 # 3. Every skill directory carries a SKILL.md.
-for d in plugins/coordinated-skills/skills/*/; do
+for d in .agents/skills/*/; do
   name="$(basename "$d")"
   [[ -f "${d}SKILL.md" ]] && ok "SKILL.md present :: $name" || no "SKILL.md missing :: $name"
 done

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.example.invalid/conductor/loop-policy/v1",
+  "version": 1,
+  "max_parallel_items": 2,
+  "max_consecutive_failures": 3,
+  "autonomous_actions": ["inspect", "plan", "test", "reversible_branch_change"],
+  "human_gates": [
+    "scope_or_acceptance_change",
+    "consequential_assumption",
+    "secrets_or_spending",
+    "external_communication",
+    "destructive_action",
+    "deployment_or_permission_expansion",
+    "merge_or_release",
+    "third_consecutive_failure"
+  ],
+  "evidence": { "require_for_pass": true, "redact_raw_prompts": true }
+}

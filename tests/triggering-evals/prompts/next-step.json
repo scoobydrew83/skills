@@ -1,0 +1,16 @@
+{
+  "skill": "next-step",
+  "should_trigger": [
+    "What should I do next on this project?",
+    "I am back after a week away; where do I restart?",
+    "Read the queue and tell me the safest next action.",
+    "I do not know where to begin with this Conductor project.",
+    "Which task can legally start now?"
+  ],
+  "should_not_trigger": [
+    "This project is too overwhelming; make the first step tiny.",
+    "List every assumption that could make this plan unsafe.",
+    "Route this queue item through the loop state machine.",
+    "Audit our broken Conductor harness without changing it."
+  ]
+}

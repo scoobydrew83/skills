@@ -155,7 +155,7 @@
         "a conductor-init SKILL.md or agent .md exists in <skills>"
       ],
       "passes": true,
-      "evidence": "2026-07-29: ../skills/plugins/coordinated-skills/skills/conductor-init/SKILL.md"
+      "evidence": "2026-07-29: ../skills/.agents/skills/conductor-init/SKILL.md"
     },
     {
       "id": "H-016",
@@ -325,7 +325,7 @@
       "category": "visual-plan",
       "description": "skills: visual-plan skill packaged (SKILL.md + tools + commands) and conductor-builder's entry ritual reads open plan comments",
       "steps": [
-        "plugins/coordinated-skills/skills/visual-plan/{SKILL.md,tools/render-plan.mjs,commands/vplan.md} exist",
+        ".agents/skills/visual-plan/{SKILL.md,tools/render-plan.mjs,commands/vplan.md} exist",
         "conductor-builder.md mentions plan comments"
       ],
       "passes": true,

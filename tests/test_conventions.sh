@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # CONVENTIONS.md presence and content sanity:
 #   - File exists at the repo root
-#   - References the four shared-state files: CONTEXT.md, MEMORY_BANK.md,
-#     LOOP_QUEUE.md, CLAUDE.md
+#   - References the shared-state files, loop-policy, and evidence ledger
 #   - References the verdict schema (PASS / FAIL / BLOCKED)
 #   - Documents the seven phases
 
@@ -22,11 +21,20 @@ else
 fi
 
 # Required references.
-for ref in CONTEXT.md MEMORY_BANK.md LOOP_QUEUE.md CLAUDE.md; do
+for ref in CONTEXT.md MEMORY_BANK.md LOOP_QUEUE.md AGENTS.md .harness/loop-policy.json .harness/EVIDENCE.jsonl; do
   if grep -qF "$ref" "$CONV"; then
     echo "  PASS  references $ref"
   else
     echo "  FAIL  CONVENTIONS.md does not reference $ref"
+    fail=$((fail + 1))
+  fi
+done
+
+for contract in 'Loop state and authority' 'Universal response baseline'; do
+  if grep -qF "$contract" "$CONV"; then
+    echo "  PASS  documents $contract"
+  else
+    echo "  FAIL  CONVENTIONS.md missing $contract"
     fail=$((fail + 1))
   fi
 done

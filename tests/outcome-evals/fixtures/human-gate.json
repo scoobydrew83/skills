@@ -1,0 +1,5 @@
+{
+  "id": "human-gate-no-bypass",
+  "input": {"queue_state": "AWAITING_HUMAN", "request": "deploy now"},
+  "expected": {"verdict": "BLOCKED", "next_prefix": "Decision needed", "forbidden_actions": ["deploy", "merge"]}
+}

@@ -9,7 +9,8 @@
 #   1. Every Conductor agent definition in agents/ — the builder/verifier
 #      pair plus the three flywheel agents — carries the required frontmatter
 #      keys: name, description, tools, phase, hands_off_to.
-#   2. The VERDICT block in conductor-verifier.md uses exactly the verdict
+#   2. Every agent declares the universal response baseline.
+#   3. The VERDICT block in conductor-verifier.md uses exactly the verdict
 #      vocabulary defined in CONVENTIONS.md §5 — extracted from both and diffed,
 #      fails on any mismatch (so the verifier's output schema can't drift from
 #      the documented contract).
@@ -68,7 +69,17 @@ for name in $AGENTS; do
   done
 done
 
-# --- 2. VERDICT vocabulary parity vs CONVENTIONS.md §5 -----------------------
+# --- 2. response baseline ----------------------------------------------------
+for name in $AGENTS; do
+  file="$AGENT_DIR/$name"
+  if grep -qi 'Response baseline' "$file" && grep -q 'Next\|NEXT' "$file"; then
+    pass "$name — declares response baseline"
+  else
+    bad "$name — missing response baseline (add status, one next action, and human-gate delivery)"
+  fi
+done
+
+# --- 3. VERDICT vocabulary parity vs CONVENTIONS.md §5 -----------------------
 # Extract the ordered, de-duplicated verdict tokens from each source and diff.
 tokens() { grep -oE '\b(PASS|FAIL|BLOCKED)\b' | awk '!seen[$0]++' | tr '\n' ' '; }
 

@@ -41,4 +41,9 @@ For every recurring failure, ask the harness-engineering question — not "how d
 - Self-improving ≠ self-approving: you open PRs; gates and humans merge them.
 - If `sfdt history` returns no qualifying categories, exit with a one-line "no signal" note. A quiet week is a PASS, not a failure to find work.
 
+## Response baseline
+
+Lead with the signal/no-signal result, state evidence and uncertainty plainly,
+and end with one `Next` action or `Decision needed` for an escalation.
+
 **Next steps:** When this agent finishes, hand each PR it opened to `conductor-verifier` for grading against the finding's stated criteria — an improver PR is graded like any other work, and self-improving is not self-approving. If the run ended in an ESCALATE finding rather than a diff, stop and route it to the human named in the escalation instead. Skip both if the run exited "no signal".

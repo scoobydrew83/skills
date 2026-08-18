@@ -1,0 +1,68 @@
+# Loop Spec: {{LOOP_NAME}}
+
+> The single source of truth for this loop. Edit a value, then re-run
+> `validate_loop_package.py` to confirm the non-negotiables still hold.
+
+## Goal
+
+{{GOAL}}
+
+## Loop shape
+
+{{LOOP_SHAPE}}  <!-- builder+verifier | phased | queue-driven | nightly-triage -->
+
+## Acceptance criteria (how one unit is judged PASS/FAIL)
+
+A unit PASSES only when **all** of these are objectively true. "Close is FAIL."
+
+{{ACCEPTANCE_CRITERIA}}
+<!-- Each must be checkable, e.g.:
+- `npm test` exits 0
+- `npm run lint` reports 0 errors
+- The new endpoint returns status 200 for the documented request
+-->
+
+Ground-truth gate (optional command that must exit 0 before the verifier looks):
+`{{ACCEPTANCE_COMMAND}}`
+
+## Limits and escalation
+
+| Setting | Value | Overridable |
+|---|---|---|
+| Max iterations (whole run) | {{MAX_ITERATIONS}} | yes |
+| Consecutive-FAIL escalation threshold | {{FAIL_THRESHOLD}} | yes |
+| Work branch | `{{WORK_BRANCH}}` | yes |
+| Commit on PASS | {{COMMIT_ON_PASS}} | yes |
+
+On reaching either limit the loop **stops and escalates to a human** via `LOOP_ESCALATION.md`.
+It never continues past the ceiling and never merges on its own.
+
+## Checkpoints
+
+Each passed unit commits to `{{WORK_BRANCH}}` — small, one goal, reviewable, with a message
+capturing what changed and why. These commits are the rollback points and the audit trail.
+
+## Stopping conditions
+
+The loop ends when: the queue is empty / the single task PASSes, the max-iteration ceiling is
+hit, or a unit escalates after the FAIL threshold.
+
+## Safety (overridable, but defaults are deliberate)
+
+- **Never auto-merge** to the default branch. Work stays on `{{WORK_BRANCH}}`; a human opens
+  and merges the PR.
+- **Prefer reversible actions.** Deletes, deploys, and migrations are gated on explicit human
+  approval, not performed by the loop.
+- **Least privilege.** The loop gets only the tools and paths it needs.
+- **Sandbox before loosening permissions.** Only relax permissions inside a container without
+  network access.
+
+## Comprehension-debt guard
+
+Every checkpoint includes a plain-language summary of what changed and why, so a human can
+understand merged code rather than inherit a black box. The verifier confirms this exists
+before PASS.
+
+## Conventions in force
+
+{{CONVENTIONS}}  <!-- Conductor defaults unless overridden; note any overrides here -->

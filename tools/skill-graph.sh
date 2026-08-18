@@ -5,7 +5,7 @@
 #   tools/skill-graph.sh
 #   tools/skill-graph.sh --help
 #
-# Source of truth is plugins/coordinated-skills/skills/<name>/, not any prior
+# Source of truth is .agents/skills/<name>/, not any prior
 # doc. Any drift between docs and reality gets caught here.
 
 set -euo pipefail
@@ -31,8 +31,8 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/plugins/coordinated-skills/skills"
-OUT="$REPO_ROOT/skill-graph.md"
+SKILLS_DIR="$REPO_ROOT/.agents/skills"
+OUT="${SKILL_GRAPH_OUT:-$REPO_ROOT/skill-graph.md}"
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
 
@@ -161,7 +161,7 @@ done
   echo
   echo "## Source"
   echo
-  echo "Generated $(date '+%Y-%m-%d %H:%M %Z') from $(wc -l < "$ROWS_FILE" | tr -d ' ') skill(s)."
+  echo "Generated from $(wc -l < "$ROWS_FILE" | tr -d ' ') skill(s)."
 } > "$OUT"
 
 echo "wrote: $OUT"

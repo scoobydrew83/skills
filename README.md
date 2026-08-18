@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/scoobydrew83/skills/actions/workflows/test.yml/badge.svg)](https://github.com/scoobydrew83/skills/actions/workflows/test.yml)
 
-A coordinated library of Claude skills with explicit handoffs, shared state, and a maker/checker loop.
+A coordinated library of portable agent skills with explicit handoffs, shared state, and a maker/checker loop.
 
 Most skill collections are a flat folder of independent prompts. This one is wired together: every skill declares which phase of work it belongs to (`intake`, `plan`, `execute`, `verify`, `communicate`, `bookend`, `meta`), which siblings it hands off to when it finishes, and which shared-state files it reads and writes. That turns a pile of skills into a workflow.
 
@@ -11,19 +11,27 @@ Most skill collections are a flat folder of independent prompts. This one is wir
 ## What's in here
 
 - **[`HOW-TO-USE.md`](HOW-TO-USE.md)** — start here. The seven-step chain from idea to shipped, with what each step produces and when to skip it.
-- **[`plugins/coordinated-skills/skills/`](plugins/coordinated-skills/skills)** — the skills themselves, one directory per skill (`SKILL.md` plus any references/scripts). This is the source of truth; edit these directly. A `.skill` zip archive is a build artifact you produce on demand (`tools/pack-skill.sh`) for the drop-in-a-skills-folder use case — it's gitignored, not committed.
+- **[`.agents/skills/`](.agents/skills)** — the skills themselves, one directory per skill (`SKILL.md` plus any references/scripts). This is the source of truth; edit these directly. A `.skill` zip archive is a build artifact you produce on demand (`tools/pack-skill.sh`) for the drop-in-a-skills-folder use case — it's gitignored, not committed.
 - **[`CONVENTIONS.md`](CONVENTIONS.md)** — the contract every skill follows. Coordination header, Next-steps line, phase vocabulary, shared-state files, verdict schema.
 - **[`CONTRIBUTING.md`](CONTRIBUTING.md)** — how to add or modify skills, with the `/skill-new` → `/skill-validate` → `/skill-graph` workflow.
 - **[`agents/`](agents/)** — the Conductor agent definitions: the `conductor-builder` / `conductor-verifier` maker/checker pair that `/conductor-loop` drives, plus the three scheduled flywheel agents (`harness-improver`, `doc-gardener`, `slop-gc`). `tools/validate-agents.sh` holds them to the same frontmatter contract skills follow.
 - **[`HARNESS-FEATURES.json`](HARNESS-FEATURES.json)** + **[`check-harness.mjs`](check-harness.mjs)** — the harness graded by its own pattern. Every "the harness now does X" claim is an entry with a deterministic check; `node check-harness.mjs --repos <dir>` verifies them and a `passes: true` the checker can't reproduce is DRIFT. Run weekly by `.github/workflows/harness-check.yml`.
 - **[`tools/`](tools/)** — bash scripts to validate, graph, pack, and build the plugin from the skill set. `tools/validate-skill.sh --all` is the enforcement pass CI runs.
 - **[`tests/`](tests/)** — the structural test suite (`bash tests/run-all.sh`) CI runs on top of the validators.
-- **[`.claude/commands/`](.claude/commands/)** — slash commands (`/skill-new`, `/skill-validate`, `/skill-pack`, `/skill-graph`, `/skill-status`, `/conductor-loop`) that drive the tools.
+- **[`.claude/commands/`](.claude/commands/)** — optional Claude adapters, including `/conductor-route` and `/conductor-doctor`; the portable loop contract remains in the skills and `AGENTS.md`.
 - **[`skill-graph.md`](skill-graph.md)** — auto-generated phase × handoffs map of the current library.
 
 ## Quick start
 
-Install the whole library as a Claude Code plugin (recommended):
+Install for every skills.sh-supported coding agent (recommended):
+
+```sh
+npx skills add scoobydrew83/skills --all
+```
+
+The installer uses a canonical copy with per-agent symlinks by default; pass
+`--copy` on filesystems that do not support symlinks. Claude Marketplace remains
+available as a generated self-contained package:
 
 ```
 /plugin marketplace add scoobydrew83/skills
@@ -36,7 +44,7 @@ Or grab a single skill à la carte — copy its directory into your skills folde
 
 ```sh
 # Cowork / Claude Code skills folder, adjust path for your setup
-cp -r plugins/coordinated-skills/skills/overwhelm-breakdown ~/.claude/skills/
+cp -r .agents/skills/overwhelm-breakdown ~/.claude/skills/
 ```
 
 Prefer a single portable file? Build a `.skill` archive first:
@@ -51,16 +59,39 @@ Run the slash commands (inside Claude Code, from this repo):
 /skill-status          # show which skills exist and which phase each is in
 /skill-validate --all  # run the conventions checks
 /skill-graph           # regenerate skill-graph.md
+/conductor-doctor       # read-only loop policy, state, and evidence audit
+/conductor-route        # show the one next legal lifecycle action
 ```
 
 Validate the library from the shell:
 
 ```sh
 bash tools/validate-skill.sh --all   # per-skill CONVENTIONS.md checks
+tools/sync-agent-layout.sh --check   # aliases + generated Claude package
 bash tests/run-all.sh                 # full structural suite (validators + repo-shape invariants)
 ```
 
 A green run reports 0 failures (tombstone WARNs are non-blocking).
+
+## Runtime compatibility
+
+The portable unit is a `SKILL.md` directory; skills.sh installs those into its
+supported coding agents. Runtime-specific capabilities are deliberately called
+out instead of inferred.
+
+| Capability | Support |
+| --- | --- |
+| Core skills and handoff conventions | Portable through skills.sh-supported coding agents |
+| Persistent repository instructions | Codex: `AGENTS.md`; Claude Code: `CLAUDE.md` alias; Gemini CLI: `GEMINI.md` alias |
+| Claude Marketplace package and slash commands | Claude Code only |
+| `/goal` completion conditions | Claude Code only (`goal-builder`) |
+| Builder/verifier loop design | Portable; generated headless harness is Claude Code-specific when selected |
+| Session memory packs | Portable; optional resume pointer writes to an explicit session-memory file, never `AGENTS.md` |
+
+For runtimes outside Codex, Claude Code, and Gemini CLI, install the skills with
+skills.sh and use that runtime's documented instruction-file mechanism. This
+repository does not claim equivalent slash commands, subagents, or autonomous
+loop controls where the runtime does not provide them.
 
 ## Usage
 
@@ -85,10 +116,13 @@ Installed together, the skills route to each other. Each one ends by naming its
 likely successor, and Claude's router picks that up — so a session flows through
 phases without a top-level controller:
 
-`intake → plan → execute → verify → bookend`, with `communicate` as an overlay.
+`orient → frame → authorize → execute → verify → review → learn`, implemented
+through the existing intake/plan/execute/verify/bookend phases, with
+`communicate` as a universal delivery overlay.
 
-- **intake** — `overwhelm-breakdown` turns a too-big ask into one doable step;
-  `conductor-init` seeds a fresh repo's harness.
+- **intake** — `next-step` recovers one safe action from live state;
+  `overwhelm-breakdown` turns a too-big ask into one doable step; `conductor-init`
+  seeds a fresh repo's harness.
 - **plan** — `visual-plan` renders the plan as reviewable, comment-blockable
   blocks over the repo's ground truth; `experiment-designer` locks one test's
   threshold before the run; `derisk-sequencer` orders many tests.
@@ -104,6 +138,11 @@ phases without a top-level controller:
   snapshot state so the next session resumes cold.
 - **communicate** — `neurodivergent-comms` changes how an answer is packaged,
   not what's produced.
+
+Conductor projects also carry `.harness/loop-policy.json` (human gates and
+limits) and `.harness/EVIDENCE.jsonl` (redacted reproducible evidence). The
+router never advances an item past a human gate, and the third verifier failure
+blocks for human review.
 
 Example chain: `overwhelm-breakdown → agent-orchestration → reality-check →
 conductor-memory`. The full map is in [`skill-graph.md`](skill-graph.md).
@@ -141,11 +180,11 @@ doer never grades its own work, and "close is FAIL."**
 
 ## Add a new skill
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md). The short version: `/skill-new <name>` to scaffold a directory under `plugins/coordinated-skills/skills/`, edit its `SKILL.md`, `/skill-validate <name>`, then `/skill-graph` to update the map. (`/skill-pack` is only needed when you want a standalone `.skill` file to distribute.)
+See [`CONTRIBUTING.md`](CONTRIBUTING.md). The short version: `/skill-new <name>` to scaffold a directory under `.agents/skills/`, edit its `SKILL.md`, `/skill-validate <name>`, then `/skill-graph` to update the map. (`/skill-pack` is only needed when you want a standalone `.skill` file to distribute.)
 
 ## Architecture
 
-Each skill is a directory (`plugins/coordinated-skills/skills/<name>/`) containing a `SKILL.md` with frontmatter, body, and optional references/scripts; a `.skill` zip archive of that directory is an optional build artifact for à-la-carte distribution. Beyond the standard `name` / `description`, every SKILL.md in this library carries four coordination keys (`phase`, `hands_off_to`, `reads`, `writes`) and ends with a tailored `**Next steps:**` sentence that names the actual successor skill. Claude's auto-router picks up that closing sentence, so the routing is data-driven rather than orchestrated by a top-level controller. Shared state lives in a small set of files (`CONTEXT.md`, `MEMORY_BANK.md`, `LOOP_QUEUE.md`, `CLAUDE.md`) defined in CONVENTIONS.md §4. Verification skills (`drift-check`, `reality-check`) emit a `Conductor verdict: PASS | FAIL | BLOCKED` block that the maker/checker conductor loop consumes. The contract is in [`CONVENTIONS.md`](CONVENTIONS.md).
+Each skill is a directory (`.agents/skills/<name>/`) containing a `SKILL.md` with frontmatter, body, and optional references/scripts; a `.skill` zip archive of that directory is an optional build artifact for à-la-carte distribution. Beyond the standard `name` / `description`, every SKILL.md in this library carries four coordination keys (`phase`, `hands_off_to`, `reads`, `writes`) and ends with a tailored `**Next steps:**` sentence that names the actual successor skill. The portable router makes state transitions explicit rather than assuming a top-level Claude controller. Shared state lives in `CONTEXT.md`, `MEMORY_BANK.md`, `LOOP_QUEUE.md`, `AGENTS.md`, `.harness/loop-policy.json`, and `.harness/EVIDENCE.jsonl` as defined in CONVENTIONS.md §4. Verification skills (`drift-check`, `reality-check`) emit a `Conductor verdict: PASS | FAIL | BLOCKED` block that the maker/checker conductor loop consumes. The contract is in [`CONVENTIONS.md`](CONVENTIONS.md).
 
 ## Status
 

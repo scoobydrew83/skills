@@ -19,5 +19,5 @@ failed, how many warnings. For each FAIL, name:
   §2 for Next steps, §3 for phase vocabulary, §6 for naming hygiene)
 
 Don't auto-fix. The repair path is: edit
-`plugins/coordinated-skills/skills/<name>/SKILL.md` directly →
+`.agents/skills/<name>/SKILL.md` directly →
 `/skill-validate <name>`.

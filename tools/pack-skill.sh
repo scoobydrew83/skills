@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # pack-skill.sh — build a distributable <skill-name>.skill archive from its
-# source directory at plugins/coordinated-skills/skills/<skill-name>/.
+# source directory at .agents/skills/<skill-name>/.
 #
 # The source of truth is the unpacked directory; the .skill archive is a build
 # artifact (gitignored) for the "drop a single skill into your skills folder"
@@ -26,13 +26,13 @@ Usage:
 
 Arguments:
   skill-name   Bare skill name (no .skill extension). Source dir must exist at
-               plugins/coordinated-skills/skills/<skill-name>/.
+               .agents/skills/<skill-name>/.
   --all        Pack every skill directory into dist/.
 
 Example:
   tools/pack-skill.sh overwhelm-breakdown
     → builds dist/overwhelm-breakdown.skill from
-      plugins/coordinated-skills/skills/overwhelm-breakdown/
+      .agents/skills/overwhelm-breakdown/
 EOF
 }
 
@@ -43,7 +43,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SRC_BASE="$REPO_ROOT/plugins/coordinated-skills/skills"
+SRC_BASE="$REPO_ROOT/.agents/skills"
 DIST="$REPO_ROOT/dist"
 
 if ! command -v zip >/dev/null 2>&1; then

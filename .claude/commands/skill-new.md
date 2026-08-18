@@ -6,7 +6,7 @@ argument-hint: <skill-name>
 
 # /skill-new $ARGUMENTS
 
-Scaffold a new skill directory at `plugins/coordinated-skills/skills/<name>/`
+Scaffold a new skill directory at `.agents/skills/<name>/`
 ready for editing. The skill directories are the source of truth.
 
 Workflow:
@@ -14,17 +14,17 @@ Workflow:
 1. Parse `$ARGUMENTS` as the bare skill name. Reject if it isn't hyphen-case
    (`^[a-z][a-z0-9-]*$`) — point at CONVENTIONS.md §6 if the user gave
    something else.
-2. Refuse if `plugins/coordinated-skills/skills/<name>/` already exists.
+2. Refuse if `.agents/skills/<name>/` already exists.
 3. Ask the user (one question at a time) for:
    - One-paragraph `description` with trigger phrases and anti-triggers
    - `phase` (one of intake/plan/execute/verify/communicate/bookend/meta —
      see CONVENTIONS.md §3)
    - `hands_off_to:` — 0–4 sibling skill names. Validate that each is a real
-     skill in the repo by checking the directories under
-     `plugins/coordinated-skills/skills/`; reject unknowns.
+   skill in the repo by checking the directories under `.agents/skills/`;
+   reject unknowns.
    - `reads:` and `writes:` — defaults `[]`. Suggest CONTEXT.md /
      MEMORY_BANK.md if the user describes interaction with shared state.
-4. Write `plugins/coordinated-skills/skills/<name>/SKILL.md` with this
+4. Write `.agents/skills/<name>/SKILL.md` with this
    template, substituting the answers:
 
    ```
@@ -49,7 +49,7 @@ Workflow:
    ```
 
 5. Remind the author of next steps:
-   - Edit `plugins/coordinated-skills/skills/<name>/SKILL.md` to write the real body.
+   - Edit `.agents/skills/<name>/SKILL.md` to write the real body.
    - Run `/skill-validate <name>` to check conventions.
    - Run `/skill-graph` to regenerate the handoff map.
    - Run `/skill-pack <name>` only if you need a standalone `.skill` file to distribute.

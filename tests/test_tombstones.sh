@@ -10,7 +10,7 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/plugins/coordinated-skills/skills"
+SKILLS_DIR="$REPO_ROOT/.agents/skills"
 
 # Expected tombstone → survivor mapping (from COORDINATION-STATUS.md).
 declare -A EXPECTED

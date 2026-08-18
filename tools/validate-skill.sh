@@ -8,7 +8,8 @@
 #
 # Checks for each skill:
 #   - SKILL.md exists in the skill's source directory
-#   - Frontmatter has name, description, phase, hands_off_to, reads, writes
+#   - YAML frontmatter parses as a mapping with string name and description
+#   - Frontmatter has name, description, phase, response_contract, hands_off_to, reads, writes
 #   - phase value is one of intake/plan/execute/verify/communicate/bookend/meta
 #   - Every hands_off_to entry names a real skill in this repo
 #   - Body contains a "**Next steps:**" line
@@ -41,7 +42,8 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/plugins/coordinated-skills/skills"
+SKILLS_DIR="$REPO_ROOT/.agents/skills"
+FRONTMATTER_VALIDATOR="$SCRIPT_DIR/validate-frontmatter.rb"
 ALLOWED_PHASES="intake plan execute verify communicate bookend meta"
 
 # ---------------------------------------------------------------------------
@@ -104,6 +106,14 @@ validate_one() {
   fi
   record_pass "skill-md-present"
 
+  if ruby "$FRONTMATTER_VALIDATOR" "$skill_md" >/dev/null 2>&1; then
+    record_pass "frontmatter-valid-yaml"
+  else
+    detail=$(ruby "$FRONTMATTER_VALIDATOR" "$skill_md" 2>&1 || true)
+    record_fail "frontmatter-valid-yaml" "$detail"
+    return
+  fi
+
   # ----- Frontmatter extraction -----
   # Frontmatter is the block between the first two "---" lines.
   local frontmatter
@@ -124,13 +134,21 @@ validate_one() {
 
   # ----- Required keys -----
   local key
-  for key in name description phase hands_off_to reads writes; do
+  for key in name description phase response_contract hands_off_to reads writes; do
     if printf "%s\n" "$frontmatter" | grep -qE "^${key}:"; then
       record_pass "key-${key}"
     else
       record_fail "key-${key}" "missing '$key:' in frontmatter (see CONVENTIONS.md §1)"
     fi
   done
+
+  local response_contract
+  response_contract=$(printf "%s\n" "$frontmatter" | sed -nE 's/^response_contract:[[:space:]]*([^[:space:]]+).*/\1/p' | head -n1)
+  if [[ "$response_contract" == "universal" ]]; then
+    record_pass "response-contract-universal"
+  else
+    record_fail "response-contract-universal" "response_contract must be 'universal' (CONVENTIONS.md §1 and §5)"
+  fi
 
   # ----- phase value -----
   local phase_value

@@ -264,7 +264,7 @@ const checks = {
     return { pass, evidence: pass ? 'plan tools + check:plan wired' : `${tools.length}/3 tools in sfdt/tools, check:plan wired: ${wired}` };
   },
   'H-032': () => {
-    const S = join(SKILLS, 'plugins/coordinated-skills/skills/visual-plan');
+    const S = join(SKILLS, '.agents/skills/visual-plan');
     const parts = ['SKILL.md', 'tools/render-plan.mjs', 'tools/plan-serve.mjs', 'tools/plan-comment.mjs', 'tools/capture-plan.mjs', 'commands/vplan.md', 'commands/address-comments.md']
       .filter((f) => existsSync(join(S, f)));
     const builder = (read(findFile(SKILLS, 'conductor-builder.md')[0]) || '').includes('plan-comment');

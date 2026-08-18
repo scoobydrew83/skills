@@ -12,7 +12,7 @@
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SMOKE="$SCRIPT_DIR/../plugins/coordinated-skills/skills/loop-creator/scripts/smoke_harness.sh"
+SMOKE="$SCRIPT_DIR/../.agents/skills/loop-creator/scripts/smoke_harness.sh"
 
 if [[ ! -f "$SMOKE" ]]; then
   echo "  FAIL  smoke_harness.sh missing from the loop-creator skill"

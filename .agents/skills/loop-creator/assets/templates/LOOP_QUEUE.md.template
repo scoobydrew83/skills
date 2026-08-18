@@ -1,0 +1,20 @@
+# LOOP_QUEUE — {{LOOP_NAME}}
+
+Work queue and source of truth. The harness processes unchecked `- [ ]` items top to bottom,
+runs builder/verifier on each, commits on PASS, and flips it to `- [x]`. A unit that escalates
+stops the queue until a human resolves it.
+
+Each entry: the task, its acceptance pointer, and (the harness maintains) status + FAIL count.
+
+## Queue
+
+- [ ] {{FIRST_TASK}}
+<!-- - [ ] Next task — criteria: see LOOP_SPEC.md / or inline `pytest tests/test_x.py` exits 0 -->
+
+## Done
+
+<!-- completed items move here automatically as `- [x]` -->
+
+## Escalated
+
+<!-- see LOOP_ESCALATION.md for context on anything that hit the FAIL threshold -->

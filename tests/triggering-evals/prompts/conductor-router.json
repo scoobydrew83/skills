@@ -1,0 +1,16 @@
+{
+  "skill": "conductor-router",
+  "should_trigger": [
+    "What is the next legal Conductor lifecycle phase?",
+    "Resume this loop and route the top queue item.",
+    "Does this verifier failure go back to the builder or to a human?",
+    "Reconcile the queue state with the latest verdict.",
+    "Enforce the three-failure stop for this item."
+  ],
+  "should_not_trigger": [
+    "I am overwhelmed and need one small starter action.",
+    "What assumptions should we challenge before planning?",
+    "Check whether the harness files are malformed.",
+    "Implement the pending queue item now."
+  ]
+}

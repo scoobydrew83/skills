@@ -20,11 +20,11 @@ Start here:
 
 The Claude Code slash commands in `.claude/commands/` are the user-facing
 entry points. Each one wraps a `tools/` script and adds a bit of guidance. The
-skill directories under `plugins/coordinated-skills/skills/<name>/` are the
+skill directories under `.agents/skills/<name>/` are the
 source of truth — you edit them directly.
 
 1. **`/skill-new <name>`** — scaffold
-   `plugins/coordinated-skills/skills/<name>/SKILL.md` with the right
+   `.agents/skills/<name>/SKILL.md` with the right
    frontmatter and a Next-steps placeholder. The command will ask you for
    description, phase, and `hands_off_to:` targets.
 2. **Edit the new `SKILL.md`.** Write the real body. Replace the Next-steps
@@ -44,7 +44,7 @@ committed).
 ## Style notes
 
 - Skill names are hyphen-case (`my-skill`) and match the skill's directory
-  name under `plugins/coordinated-skills/skills/`.
+  name under `.agents/skills/`.
 - Descriptions list real trigger phrases and anti-triggers — Claude routes
   on description matching, so this is what determines whether the skill
   actually fires.

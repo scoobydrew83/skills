@@ -1,0 +1,14 @@
+{
+  "should_trigger": [
+    "Move our skills into .agents/skills and keep Claude's plugin generated.",
+    "Make AGENTS.md the shared instruction file for Codex, Claude, and Gemini.",
+    "Audit whether our agent skill package works across multiple coding agents.",
+    "Set up symlinks for CLAUDE.md and GEMINI.md without duplicating instructions.",
+    "Create a portable skills.sh distribution with a generated Claude adapter."
+  ],
+  "should_not_trigger": [
+    "Write a new system prompt for our support bot.",
+    "Summarize the decisions from this session for tomorrow.",
+    "Debug why our deployment workflow failed."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "skill": "conductor-doctor",
+  "should_trigger": [
+    "Is this Conductor harness ready to run?",
+    "Why is the loop router blocked?",
+    "Audit the policy, queue, criteria, and evidence without changing anything.",
+    "Check whether our generated package and aliases are healthy.",
+    "Diagnose why a claimed passing loop has no reproducible evidence."
+  ],
+  "should_not_trigger": [
+    "Tell me the next task to take from a healthy queue.",
+    "Route this queue item from verifying to done.",
+    "Set up the Conductor loop in a new repository.",
+    "Fix every harness problem you find automatically."
+  ]
+}

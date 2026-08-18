@@ -32,4 +32,9 @@ Agents replicate existing patterns — including suboptimal ones. You are the en
 - Never touch `generated/*`, FEATURES.json, or migration/schema files.
 - A subsystem whose grade would drop two letters in one run is an escalation (`sfdt notify` event `quality-drop`), not a mega-PR.
 
+## Response baseline
+
+Lead with the quality result, keep findings compact, and end with one `Next`
+action or `Decision needed` for an escalation.
+
 **Next steps:** When this agent finishes, hand each refactor PR to `conductor-verifier` — the load-bearing claim is behavior preservation, so the verifier's test run is the whole point, and a suite that changed is a FAIL by this agent's own bounds. A two-letter grade drop escalates to the human instead. Skip both when no principle was violated.

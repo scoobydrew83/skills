@@ -8,7 +8,7 @@ argument-hint: <skill-name | --all>
 
 Wrapper around `bash tools/pack-skill.sh $ARGUMENTS`.
 
-The skill directories under `plugins/coordinated-skills/skills/` are the source
+The skill directories under `.agents/skills/` are the source
 of truth; this command produces a `dist/<name>.skill` build artifact (gitignored)
 for the "drop a single skill into your skills folder" use case. It does **not**
 modify the source.

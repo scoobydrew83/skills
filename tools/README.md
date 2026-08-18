@@ -1,7 +1,7 @@
 # tools/
 
 Shell scripts that operate on the skill source directories under
-`plugins/coordinated-skills/skills/<name>/`. All are plain bash and rely only
+`.agents/skills/<name>/`. All are plain bash and rely only
 on macOS-default `unzip` / `zip`. Run them from the repo root.
 
 The skill directories are the **source of truth** — edit them directly. The
@@ -15,6 +15,7 @@ user-facing entry points are the Claude Code slash commands in
 Checks one or all skills against `CONVENTIONS.md`. Verifies:
 
 - the skill's directory and `SKILL.md` exist
+- Frontmatter is valid YAML with string `name` and `description` fields
 - Frontmatter contains `name`, `description`, `phase`, `hands_off_to`,
   `reads`, `writes`
 - `phase` is one of `intake | plan | execute | verify | communicate | bookend | meta`
@@ -72,9 +73,11 @@ tools/build-plugin.sh
 - All scripts use absolute paths derived from their own location; you can
   invoke them from anywhere.
 - `.skill` archives and `dist/` are build outputs and gitignored; the skill
-  directories under `plugins/coordinated-skills/skills/` are what's committed.
+  directories under `.agents/skills/` are what's committed.
 
 ## Dependencies
 
-`bash`, `unzip`, `zip`, plus standard POSIX utilities (`awk`, `sed`, `grep`,
-`find`, `sort`, `tr`, `mktemp`). All ship with macOS.
+`bash`, `ruby`, `python3`, `unzip`, `zip`, plus standard POSIX utilities (`awk`,
+`sed`, `grep`, `find`, `sort`, `tr`, `mktemp`). Ruby's standard YAML parser
+prevents invalid frontmatter from reaching a marketplace package; `python3` runs
+the loop-policy, transition, and outcome-fixture validators.

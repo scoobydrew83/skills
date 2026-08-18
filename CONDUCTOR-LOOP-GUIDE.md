@@ -40,7 +40,7 @@ This is the single highest-value change. Everything else builds on it.
 1. Copy `agents/conductor-verifier.md` and `agents/conductor-builder.md` into
    `.claude/agents/` in the repo. Commit them — project-scoped agents are
    shared infrastructure, not personal config.
-2. Add a gating rule to the repo's CLAUDE.md:
+2. Add a gating rule to the repo's AGENTS.md:
 
    ```
    ## Phase gates
@@ -81,7 +81,7 @@ session.
    ## Done (verifier-passed)
    ```
 
-2. Add loop semantics to CLAUDE.md:
+2. Add loop semantics to AGENTS.md:
 
    ```
    ## Loop protocol
@@ -190,7 +190,7 @@ anything except LOOP_QUEUE.md.
 
 The article's warning, made enforceable:
 
-**Do — add to CLAUDE.md and enforce via branch protection:**
+**Do — add to AGENTS.md and enforce via branch protection:**
 
 1. **Comprehension gate.** Nothing merges to main unread. The verifier
    reduces review burden; it never replaces review. Branch-protect main:
@@ -207,7 +207,7 @@ The article's warning, made enforceable:
    BLOCKED-HUMAN. One command, written down, tested once.
 
 **Acceptance criteria:** branch protection active; kill switch tested; caps
-written in CLAUDE.md where the loop reads them.
+written in AGENTS.md where the loop reads them.
 
 **Checkpoint:** commit `loop(5): guardrails enforced` — system is live.
 
@@ -272,8 +272,9 @@ the harness it runs in.
 - **Morning (5 min):** review triage PR → merge or edit queue → loop runs.
 - **Midday:** review verifier-passed PRs. Read the diffs. Merge what you
   understand; queue questions on what you don't.
-- **Weekly:** prune MEMORY_BANK.md lessons into CLAUDE.md rules (your
-  update-rules skill is the natural home for this).
+- **Weekly:** review MEMORY_BANK.md lessons for candidate durable rules; a human
+  approves any policy change before it is added to AGENTS.md. Do not copy
+  mutable session notes into AGENTS.md.
 
 ## Rollout order across your repos
 

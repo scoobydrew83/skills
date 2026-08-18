@@ -1,0 +1,16 @@
+{
+  "skill": "assumption-grill",
+  "should_trigger": [
+    "What are we assuming before we build this?",
+    "Find the consequential ambiguities in this plan.",
+    "Make a decision card for this irreversible architecture choice.",
+    "Who needs to decide these unclear acceptance criteria?",
+    "What is the smallest experiment that resolves this risky unknown?"
+  ],
+  "should_not_trigger": [
+    "I do not know what task to do next.",
+    "Break this huge project into one 20-minute action.",
+    "Sequence the build phases for this settled complex feature.",
+    "Audit whether our loop policy and evidence files are valid."
+  ]
+}

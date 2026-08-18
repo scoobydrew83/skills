@@ -14,6 +14,11 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
+      - name: Set up Ruby for strict frontmatter validation
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
       - name: Validate every skill against CONVENTIONS.md
         run: bash tools/validate-skill.sh --all
 

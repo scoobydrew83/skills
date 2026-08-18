@@ -4,16 +4,17 @@ These are the rules every skill in this library follows so they compose into a
 real workflow instead of fourteen silos. If you add a skill to this set, or
 fork one of these for your own project, hold to the contract below.
 
-Status: phase 1 conventions, applied 2026-06-16. Phase 2 (top-level router,
-non-code conductor-loop ingestion, session-close auto-fire) is deferred.
+Status: loop-first conventions, updated 2026-08-07. The router, session-close,
+human-gate, and evidence contracts below are part of the active harness.
 
 ## 1. Coordination header (required in every SKILL.md)
 
-Every SKILL.md frontmatter MUST include these four keys in addition to
+Every SKILL.md frontmatter MUST include these five keys in addition to
 `name` and `description`:
 
 ```yaml
 phase: intake | plan | execute | verify | communicate | bookend | meta
+response_contract: universal
 hands_off_to: [skill-name, skill-name]
 reads:  [CONTEXT.md, MEMORY_BANK.md]
 writes: [MEMORY_BANK.md]
@@ -21,6 +22,9 @@ writes: [MEMORY_BANK.md]
 
 - **`phase`** — which lifecycle phase this skill belongs to. Single value from
   the vocabulary in §3.
+- **`response_contract`** — must be `universal`. The skill follows the
+  neurodivergent-friendly baseline in §5: status first, literal uncertainty,
+  compact chunks, and one next action or explicitly named human decision.
 - **`hands_off_to`** — the 0–4 sibling skills this skill should suggest next
   when it finishes. Empty list `[]` is valid for overlays and terminal skills.
   Use the exact skill `name`; don't guess.
@@ -71,8 +75,8 @@ phase that owns its primary output and document the sub-phases inside.
 
 ## 4. Shared state contract
 
-Five files coordinate state across skills. Three originate in the Conductor
-Method and predate this convention set; `CLAUDE.md` is project-standard; and
+Seven files coordinate state across skills. Three originate in the Conductor
+Method and predate this convention set; `AGENTS.md` is project-standard; and
 `FEATURES.json` is the ground-truth artifact added with the harness. Use the
 same filenames every time so skills can find them.
 
@@ -92,9 +96,11 @@ same filenames every time so skills can find them.
   infrastructure (`conductor-builder`, `conductor-verifier`, the nightly
   triage Action). Most skills here don't read or write it directly today;
   that may change in a later phase.
-- **`CLAUDE.md`** — the per-project Claude Code instruction file. Holds
-  loop protocol, gating rules, and the managed "Session Memory" block that
-  `conductor-memory` refreshes. Read by Claude Code at session start.
+- **`AGENTS.md`** — the per-project, cross-agent instruction file. Holds
+  durable loop protocol and gating rules; it is not a mutable session-memory
+  store. `CLAUDE.md` and `GEMINI.md`, when required by a client, should be
+  aliases rather than divergent copies. Put changing session context in
+  `MEMORY_BANK.md` or a dedicated memory artifact instead.
 - **`FEATURES.json`** — the phase's acceptance criteria as machine-checkable
   entries, and the thing verification grades against. JSON on purpose: models
   mangle JSON less than Markdown. Seeded from the spec by `conductor-init`;
@@ -102,6 +108,13 @@ same filenames every time so skills can find them.
   a form it can actually run. Where `CONTEXT.md` holds the prose mission and
   the constraints that aren't feature-shaped, `FEATURES.json` holds the
   criteria — when the two disagree, the JSON wins.
+- **`.harness/loop-policy.json`** — machine-readable limits and required human
+  gates. It is durable policy beside `AGENTS.md`; the router and doctor validate
+  it before execution. It never contains secrets.
+- **`.harness/EVIDENCE.jsonl`** — append-only, redacted execution evidence.
+  Each line names a run, queue item, phase, actor, reproducible checks, verdict,
+  gate status, and next action. Store references and command summaries, never
+  raw prompts, secrets, or private source content by default.
 
 ### FEATURES.json edit rules
 
@@ -188,13 +201,39 @@ cluster on, so a skipped or free-text line is a silently lost signal.
 Telemetry never blocks work: a skill that can't write its line proceeds
 anyway. A missing line is a missing measurement, never a failed run.
 
+### Loop state and authority
+
+`LOOP_QUEUE.md` items use exactly one state: `ORIENTING`, `AWAITING_HUMAN`,
+`PENDING`, `IN_PROGRESS`, `VERIFYING`, `BLOCKED_HUMAN`, or `DONE`. A router may
+move work only along this path:
+
+```
+ORIENTING → AWAITING_HUMAN | PENDING
+PENDING → IN_PROGRESS → VERIFYING → DONE
+VERIFYING → IN_PROGRESS | BLOCKED_HUMAN
+```
+
+`AWAITING_HUMAN` advances only after the recorded human decision; a third
+consecutive `FAIL` advances to `BLOCKED_HUMAN`. `DONE` is terminal. No agent
+may move an item around a human gate.
+
+### Universal response baseline
+
+Every skill and Conductor agent applies `neurodivergent-comms` as a delivery
+baseline: lead with the outcome or status, identify material uncertainty
+literally, use compact chunks, mark progress/endpoints for multi-step work, and
+finish with one `Next` action. At a required gate, use `Decision needed` in
+place of `Next`. User-stated formatting preferences override this baseline.
+This is a communication contract, never a diagnostic claim and never a reason
+to withhold needed technical detail.
+
 ## 6. Skill description hygiene
 
 The library coordinates by description matching, so descriptions carry
 weight:
 
 - Use a hyphen-case `name` that matches the skill's directory name
-  (`my-skill` → `plugins/coordinated-skills/skills/my-skill/SKILL.md`).
+  (`my-skill` → `.agents/skills/my-skill/SKILL.md`).
 - Frontmatter description should list real trigger phrases the user might
   type, anti-triggers ("Do NOT trigger when…"), and the explicit
   partner-skill suggestions when relevant.

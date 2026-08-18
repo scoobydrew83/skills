@@ -10,7 +10,7 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-VP="$REPO_ROOT/plugins/coordinated-skills/skills/visual-plan"
+VP="$REPO_ROOT/.agents/skills/visual-plan"
 
 pass=0
 fail=0

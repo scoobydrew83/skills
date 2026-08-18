@@ -8,7 +8,9 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | Skill | phase | hands_off_to | notes |
 |---|---|---|---|
 | `conductor-init` | intake | loop-creator, agent-orchestration |  |
+| `next-step` | intake | assumption-grill, overwhelm-breakdown, agent-orchestration, conductor-router |  |
 | `overwhelm-breakdown` | intake | agent-orchestration, neurodivergent-comms, session-bookend |  |
+| `assumption-grill` | plan | next-step, derisk-sequencer, agent-orchestration |  |
 | `derisk-sequencer` | plan | experiment-designer, agent-orchestration |  |
 | `experiment-designer` | plan | hemlock, derisk-sequencer |  |
 | `visual-plan` | plan | agent-orchestration, loop-creator |  |
@@ -18,6 +20,7 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | `prompt-template-generator` | execute | drift-check, reality-check |  |
 | `repo-troubleshooting-guide` | execute | drift-check |  |
 | `system-prompt-builder` | execute | reality-check, drift-check, conductor-memory |  |
+| `conductor-doctor` | verify | next-step, conductor-router, agent-workspace-compatibility |  |
 | `drift-check` | verify | reality-check, conductor-memory |  |
 | `grandfather` | verify | conductor-memory |  |
 | `hemlock` | verify | derisk-sequencer, experiment-designer |  |
@@ -31,6 +34,8 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | `session-bookend` | bookend | overwhelm-breakdown, agent-orchestration, conductor-memory |  |
 | `session-continuity` | bookend | session-bookend |  |
 | `adaptive-communication` | meta | neurodivergent-comms | DEPRECATED tombstone |
+| `agent-workspace-compatibility` | meta | drift-check |  |
+| `conductor-router` | meta | next-step, assumption-grill, conductor-doctor |  |
 | `idea-validator` | meta | hemlock | DEPRECATED tombstone |
 | `task-decomposition` | meta | overwhelm-breakdown | DEPRECATED tombstone |
 
@@ -40,9 +45,11 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 graph LR
   subgraph intake
     conductor-init
+    next-step
     overwhelm-breakdown
   end
   subgraph plan
+    assumption-grill
     derisk-sequencer
     experiment-designer
     visual-plan
@@ -56,6 +63,7 @@ graph LR
     system-prompt-builder
   end
   subgraph verify
+    conductor-doctor
     drift-check
     grandfather
     hemlock
@@ -75,6 +83,8 @@ graph LR
   end
   subgraph meta
     adaptive-communication["adaptive-communication<br/><i>DEPRECATED</i>"]
+    agent-workspace-compatibility
+    conductor-router
     idea-validator["idea-validator<br/><i>DEPRECATED</i>"]
     task-decomposition["task-decomposition<br/><i>DEPRECATED</i>"]
   end
@@ -83,9 +93,19 @@ graph LR
   agent-orchestration --> drift-check
   agent-orchestration --> conductor-memory
   agent-orchestration --> session-bookend
+  agent-workspace-compatibility --> drift-check
+  assumption-grill --> next-step
+  assumption-grill --> derisk-sequencer
+  assumption-grill --> agent-orchestration
+  conductor-doctor --> next-step
+  conductor-doctor --> conductor-router
+  conductor-doctor --> agent-workspace-compatibility
   conductor-init --> loop-creator
   conductor-init --> agent-orchestration
   conductor-memory --> session-continuity
+  conductor-router --> next-step
+  conductor-router --> assumption-grill
+  conductor-router --> conductor-doctor
   derisk-sequencer --> experiment-designer
   derisk-sequencer --> agent-orchestration
   drift-check --> reality-check
@@ -101,6 +121,10 @@ graph LR
   loop-creator --> reality-check
   loop-creator --> drift-check
   loop-creator --> goal-builder
+  next-step --> assumption-grill
+  next-step --> overwhelm-breakdown
+  next-step --> agent-orchestration
+  next-step --> conductor-router
   overwhelm-breakdown --> agent-orchestration
   overwhelm-breakdown --> neurodivergent-comms
   overwhelm-breakdown --> session-bookend
@@ -126,4 +150,4 @@ graph LR
 
 ## Source
 
-Generated 2026-07-28 22:38 CDT from 26 skill(s).
+Generated from 31 skill(s).

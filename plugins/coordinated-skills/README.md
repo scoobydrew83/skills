@@ -1,11 +1,19 @@
 # coordinated-skills
 
-A coordinated library of Claude skills. Each skill declares its lifecycle phase
-and the siblings it hands off to, so the set composes into a workflow rather than
-a pile of independent prompts.
+A coordinated library of portable, human-gated agent skills. The source of truth is the
+repository's .agents/skills/ tree; this self-contained copy is generated for
+Claude Marketplace compatibility.
 
-The skills under `skills/` are the source of truth. See the
-[repository](https://github.com/scoobydrew83/skills) for the conventions contract and tooling.
+The portable loop follows Orient → Frame → Authorize → Execute → Verify →
+Review → Learn. Claude-specific commands are adapters; `AGENTS.md` and the
+canonical skills remain the cross-runtime contract.
+
+## Claude adapter commands
+
+The plugin bundles `/coordinated-skills:conductor-loop`,
+`/coordinated-skills:conductor-route`, and
+`/coordinated-skills:conductor-doctor`. They use the installed plugin for
+their scripts and operate on Claude's current project directory.
 
 ## Install
 

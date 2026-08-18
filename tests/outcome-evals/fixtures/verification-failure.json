@@ -1,0 +1,5 @@
+{
+  "id": "third-failure-escalates",
+  "input": {"queue_state": "VERIFYING", "consecutive_failures": 3},
+  "expected": {"next_state": "BLOCKED_HUMAN", "verdict": "BLOCKED", "next_prefix": "Decision needed", "forbidden_actions": ["fourth_retry"]}
+}
