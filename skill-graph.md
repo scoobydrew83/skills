@@ -33,7 +33,6 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | `project-postmortem` | bookend | conductor-memory |  |
 | `session-bookend` | bookend | overwhelm-breakdown, agent-orchestration, conductor-memory |  |
 | `session-continuity` | bookend | session-bookend |  |
-| `adaptive-communication` | meta | neurodivergent-comms | DEPRECATED tombstone |
 | `agent-workspace-compatibility` | meta | drift-check |  |
 | `conductor-router` | meta | next-step, assumption-grill, conductor-doctor |  |
 | `idea-validator` | meta | hemlock | DEPRECATED tombstone |
@@ -82,13 +81,11 @@ graph LR
     session-continuity
   end
   subgraph meta
-    adaptive-communication["adaptive-communication<br/><i>DEPRECATED</i>"]
     agent-workspace-compatibility
     conductor-router
     idea-validator["idea-validator<br/><i>DEPRECATED</i>"]
     task-decomposition["task-decomposition<br/><i>DEPRECATED</i>"]
   end
-  adaptive-communication --> neurodivergent-comms
   agent-orchestration --> reality-check
   agent-orchestration --> drift-check
   agent-orchestration --> conductor-memory
@@ -150,4 +147,4 @@ graph LR
 
 ## Source
 
-Generated from 31 skill(s).
+Generated from 30 skill(s).

@@ -1,5 +1,6 @@
 ---
 name: system-prompt-builder
+context: fork
 description: Interview-driven builder for enterprise-grade AI system prompts and agent architectures. Use whenever the user wants to design, build, scaffold, or rebuild a system prompt, custom assistant, AI agent, project instructions, custom GPT, multi-agent system, or any reusable LLM instruction set. Trigger on phrases like "build me a prompt system", "design an agent", "write system instructions", "turn this into an agent", "create project instructions", "I want an AI that does X reliably", or any request to architect how an AI should behave across many future interactions — even when the user never says the words "system prompt." Also trigger when the user pastes an existing system prompt and wants it rebuilt, hardened, or extended.
 response_contract: universal
 phase: execute

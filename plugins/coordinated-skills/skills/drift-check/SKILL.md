@@ -1,5 +1,6 @@
 ---
 name: drift-check
+context: fork
 description: >-
   Audit a set of related project documents for internal contradictions and
   drift from their stated mission, with a skeptical eye that distrusts

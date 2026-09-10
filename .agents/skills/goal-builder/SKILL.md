@@ -1,5 +1,6 @@
 ---
 name: goal-builder
+context: fork
 description: >-
   Turn a vague intent into a correct, transcript-verifiable Claude Code /goal condition through a short question-and-answer interview. This is a Claude Code adapter: use it only when the user asks for /goal, a Claude Code unattended session, or a reusable .claude/commands slash command. It turns an open-ended prompt into a condition such as "npm test exits 0, without editing the test file" and rejects finish lines a transcript-reading evaluator cannot check. For portable builder/verifier loops, use loop-creator instead.
 compatibility: Claude Code only; requires its /goal command and optional .claude/commands integration.

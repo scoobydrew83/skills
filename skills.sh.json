@@ -6,7 +6,7 @@
       "title": "Coordinated workflow",
       "description": "Skills for planning, execution, verification, and session continuity.",
       "skills": [
-        "adaptive-communication", "agent-orchestration", "agent-workspace-compatibility",
+        "agent-orchestration", "agent-workspace-compatibility",
         "assumption-grill", "conductor-doctor", "conductor-init", "conductor-memory", "conductor-router", "derisk-sequencer", "drift-check",
         "experiment-designer", "goal-builder", "grandfather", "hemlock", "idea-validator",
         "leftpad", "loop-creator", "neurodivergent-comms", "next-step", "overwhelm-breakdown", "popquiz",

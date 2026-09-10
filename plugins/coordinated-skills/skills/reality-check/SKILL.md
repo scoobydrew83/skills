@@ -1,5 +1,6 @@
 ---
 name: reality-check
+context: fork
 description: >-
   Use whenever someone hands you an AI-generated technical plan, recommendation
   set, setup guide, or tool/config list and says "validate this", "fact-check

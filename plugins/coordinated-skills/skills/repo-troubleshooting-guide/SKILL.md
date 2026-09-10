@@ -1,5 +1,6 @@
 ---
 name: repo-troubleshooting-guide
+context: fork
 description: Generate a clean, professional troubleshooting guide (a TROUBLESHOOTING.md) by analyzing a code repository — detecting its tech stack and mining real evidence (raised exceptions, error strings, env vars, ports, Docker services, CI) to document common failure modes with step-by-step fixes. Use this whenever the user wants to create, build, or generate a troubleshooting doc, guide, runbook, or ops reference for a repo, codebase, or project; wants to document common errors, setup problems, failure modes, or "how to fix X"; or points Claude at a repository and asks for a debugging/operations reference. Trigger even if the user doesn't say the exact word "troubleshooting" — e.g. "document the common errors in this repo", "make a debugging runbook", "build a setup-issues guide", "write an ops doc for this project".
 response_contract: universal
 phase: execute

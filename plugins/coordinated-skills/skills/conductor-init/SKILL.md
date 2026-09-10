@@ -1,5 +1,6 @@
 ---
 name: conductor-init
+context: fork
 description: >-
   Initialize a repo for the Conductor Method loop: write init.sh, seed
   FEATURES.json from the spec, create CONTEXT.md and MEMORY_BANK.md, verify a
