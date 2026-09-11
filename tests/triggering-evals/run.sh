@@ -77,7 +77,7 @@ for skill_dir in "$SKILLS_DIR"/*/; do
     # trigger. _match.py drops them from the router menu, so a prompt file
     # would score 0.00 by construction. Keep in sync with the DEPRECATED +
     # "Do NOT trigger" check in _match.py:load_skill_descriptions.
-    adaptive-communication|task-decomposition|idea-validator) continue ;;
+    task-decomposition|idea-validator) continue ;;
   esac
   [[ -f "$PROMPTS_DIR/$name.json" ]] || missing+=("$name")
 done

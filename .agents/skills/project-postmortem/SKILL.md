@@ -1,5 +1,6 @@
 ---
 name: project-postmortem
+context: fork
 description: Generate an evidence-grounded project retrospective — pulled from git history and decision docs, not memory — that grades the project on separate dimensions, splits what went right from wrong, reduces the failure to its root ordering error, extracts transferable lessons for the next project, and names what survives. Use whenever a project ships, stalls, or gets sunset and someone wants the writeup — "post-mortem", "retrospective", "what went wrong with X", "we're sunsetting X, write it up", or mid-project "why did this go sideways". The method cites commit hashes or sources for every claim, builds a timeline of when validation happened vs building, separates pros from cons including uncomfortable symmetries, and ends with a per-dimension scorecard plus a what-survives list — then runs a check that fails any vanity scorecard or uncited narrative. Distinct from drift-check (audits live docs) and conductor-memory/session-bookend (capture session state for continuity); this extracts backward-looking lessons.
 response_contract: universal
 phase: bookend

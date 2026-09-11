@@ -1,5 +1,6 @@
 ---
 name: loop-creator
+context: fork
 description: Design and generate portable autonomous/semi-autonomous AI work loops and the prompts that drive them — builder/verifier (maker/checker) loops, phased build loops, queue-driven multi-task loops, and nightly triage. Every loop has explicit acceptance criteria, a verifier separated from the builder ("close is FAIL"), commit checkpoints, a hard max-iteration plus human-escalation stop, and safe stopping conditions. Use whenever the user asks for a self-correcting, maker/checker, evaluator-optimizer, queue-driven, or iterate-until-it-passes process. It emits generic loop artifacts by default; it emits a headless Claude Code harness only when Claude Code is explicitly requested.
 compatibility: Portable core; optional headless harness requires Claude Code.
 response_contract: universal

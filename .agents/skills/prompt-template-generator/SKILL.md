@@ -1,5 +1,6 @@
 ---
 name: prompt-template-generator
+context: fork
 description: Analyze a software project's files and generate a tailored, copy-paste-ready prompt-template cookbook (a Markdown "PROMPT-TEMPLATES.md") with the project's real stack, paths, subsystems, and conventions already filled in. Use this whenever the user wants to create prompt templates, a prompt cookbook, a prompt library, prompt scaffolding, reusable AI-coding prompts, or a "prompt template generator" for a codebase — or says things like "make prompt templates for my project", "build a prompt guide for this repo", "generate copy-paste prompts for my codebase", or "turn my project into a set of reusable Claude/Cursor prompts". Trigger it even when the user just points at a project and asks for ready-to-use prompts, since the value is filling templates with project-specific facts they'd otherwise type by hand.
 response_contract: universal
 phase: execute

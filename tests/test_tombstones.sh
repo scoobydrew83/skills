@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tombstone test: the two skills that were merged in Phase 1 must still exist
+# Tombstone test: the skills that were merged in Phase 1 must still exist
 # as DEPRECATED tombstones, with phase: meta and hands_off_to pointing at the
 # survivor that absorbed them.
 #
@@ -14,7 +14,6 @@ SKILLS_DIR="$REPO_ROOT/.agents/skills"
 
 # Expected tombstone → survivor mapping (from COORDINATION-STATUS.md).
 declare -A EXPECTED
-EXPECTED[adaptive-communication]=neurodivergent-comms
 EXPECTED[task-decomposition]=overwhelm-breakdown
 EXPECTED[idea-validator]=hemlock
 
