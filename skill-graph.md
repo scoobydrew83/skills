@@ -36,6 +36,7 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | `agent-workspace-compatibility` | meta | drift-check |  |
 | `conductor-router` | meta | next-step, assumption-grill, conductor-doctor |  |
 | `idea-validator` | meta | hemlock | DEPRECATED tombstone |
+| `skill-librarian` | meta | drift-check |  |
 | `task-decomposition` | meta | overwhelm-breakdown | DEPRECATED tombstone |
 
 ## Handoff graph
@@ -84,6 +85,7 @@ graph LR
     agent-workspace-compatibility
     conductor-router
     idea-validator["idea-validator<br/><i>DEPRECATED</i>"]
+    skill-librarian
     task-decomposition["task-decomposition<br/><i>DEPRECATED</i>"]
   end
   agent-orchestration --> reality-check
@@ -136,6 +138,7 @@ graph LR
   session-bookend --> agent-orchestration
   session-bookend --> conductor-memory
   session-continuity --> session-bookend
+  skill-librarian --> drift-check
   system-prompt-builder --> reality-check
   system-prompt-builder --> drift-check
   system-prompt-builder --> conductor-memory
@@ -147,4 +150,4 @@ graph LR
 
 ## Source
 
-Generated from 30 skill(s).
+Generated from 31 skill(s).
