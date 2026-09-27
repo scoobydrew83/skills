@@ -1,0 +1,18 @@
+{
+  "skill": "skill-librarian",
+  "should_trigger": [
+    "Audit my skills library for duplicates and overlaps.",
+    "Do overwhelm-breakdown and next-step overlap? Which one owns this?",
+    "Refresh all my skills for the new model; strip rules we don't need anymore.",
+    "I'm about to add a new skill, check whether an existing one already covers it.",
+    "My installed skills don't match the repo. What's stale?",
+    "Consolidate and dedupe my Claude skills.",
+    "Which skill should hold the guidance about looking around before editing Notion?"
+  ],
+  "should_not_trigger": [
+    "Audit my project docs for internal contradictions.",
+    "Is this AI-generated setup guide accurate?",
+    "I'm overwhelmed by this project, where do I start?",
+    "Build a memory pack from this conversation."
+  ]
+}

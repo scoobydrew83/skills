@@ -168,9 +168,3 @@ which trips people up sometimes."
 
 Same information. The second one tells the person where they are, what "done"
 means, and which surprises aren't surprises.
-
-**Next steps:** This skill is a delivery overlay — it doesn't hand off, it
-layers on. If the underlying request was actually about getting unstuck on a
-big project, the partner skill is `overwhelm-breakdown`. If the user is
-wrapping a session, `session-bookend` is the natural close. Otherwise, just
-keep delivering in the adapted style until the conversation moves on.
