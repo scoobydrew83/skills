@@ -8,7 +8,7 @@ blocks hand edits to the generated plugin.
 
 The Salesforce skills (`scoobydrew83/sfdt-skills`) are audited in
 [§6](#6-salesforce-skills-sfdt-skills). That repo is generated from the
-`scoobydrew83/sfdt` monorepo, so fixes belong in the monorepo.
+`scoobydrew83/sfdt` monorepo, so the fixes were made there.
 
 ## Contents
 1. Anthropic best practices: where the library stood and what changed
@@ -184,51 +184,46 @@ The coverage-threshold key is documented in two different files. The sfdt-cli
 description claims "deployment, testing, coverage", which collides with
 sf-deploy and sf-test.
 
-**Ranked fixes**
-1. **Production safety.**
-   - Add a production gate to sf-deploy: detect production via `isSandbox`,
-     require validate → quick-deploy, and stop to confirm before destructive
-     changes.
-   - Add warnings to `--ignore-conflicts` and `--no-prompt` (sf-scratch-org)
-     and to bulk delete and anonymous Apex (sf-data).
-   - Longer term, ship a PreToolUse hook through the Claude plugin target.
-2. **Code Analyzer v5 accuracy** (sf-pmd-scan; check against
-   `sf code-analyzer run --help`):
-   - selector syntax `engine=pmd` → `pmd`
-   - `rules list --engine` → `rules --rule-selector`
-   - remove `--version`
-   - update the engine list (`sfge`, `flow`, `regex`, `cpd`, `retire-js`)
-3. **Handoffs and anti-triggers.** Give every skill a Next-steps line, narrow
-   sfdt-cli's triggers, and drop the over-broad triggers `component`, `query`,
-   `SELECT` and `security review`.
-4. **De-duplicate by ownership:**
-   - apex-review owns the Apex rules
-   - sf-test owns test standards and the coverage threshold
-   - sf-data owns SOQL and loading
-   - sf-scratch-org owns push/pull
-   - org-audit delegates to the others
-5. **Portability.**
-   - "this Salesforce project" → "a Salesforce DX project"
-   - read paths from `sfdx-project.json` `packageDirectories` instead of
-     hardcoding `force-app/main/default`
-   - rename `SF-Rebuild-Ruleset`
-6. **Progressive disclosure.**
-   - Move the rule catalogs, templates, ruleset XML, CI YAML and command
-     catalogs into `references/`, so each SKILL.md opens with its workflow.
-   - Add Contents lists to sfdt-cli's `config.md` and `development.md`.
-7. **Factual fixes:**
-   - sf-test: assert style, the per-class "75%" claim, and an assert in the
-     catch-block template
-   - sf-deploy: RunLocalTests is not the only option for production
-   - sf-flow-review: callout ≠ bulkification; the version-count note
-   - sf-data: the OFFSET 2,000-row cap; the COUNT() claim
-   - apex-review: prefer `WITH USER_MODE` over `SECURITY_ENFORCED`
-8. **Version pins.** Remove API `63.0`, "Spring '26 beta" and Node ≥ 18.
-9. **`triggers:` frontmatter.** It is not part of the spec and nothing in
-   either repo reads it. Fold its phrases into descriptions unless an sfdt
-   export target uses it.
-10. **CI.** Add a validator (description length, links, manifest ↔ frontmatter
-    match) to the sync job.
+The coverage threshold has two keys with different jobs:
+`deployment.coverageThreshold` gates deploys and `testConfig.coverageThreshold`
+drives test reports. The skills didn't say which was which. The sfdt-cli
+description also claimed "deployment, testing, coverage", which collided with
+sf-deploy and sf-test.
+
+**Fixed** on branch `claude/magical-lamport-g38l6g` of `scoobydrew83/sfdt`. These
+reach `sfdt-skills` on the next release sync.
+
+| Area | Change |
+|---|---|
+| Production safety | sf-deploy has a production gate: check `isSandbox` (fail safe), validate → quick-deploy, and explicit confirmation before destructive changes or `sfdt rollback`. sf-data warns before bulk delete and anonymous Apex; sf-scratch-org warns before `--ignore-conflicts` and `--no-prompt` |
+| Code Analyzer v5 | Selectors are now bare tokens (`pmd`, `"1,2"`, `pmd:Security`), listing uses `sf code-analyzer rules --rule-selector`, the fake `--version` is gone, and changed-file scans diff against `origin/main` without deleted files. Checked against Salesforce's CLI reference via search ([run](https://developer.salesforce.com/docs/platform/salesforce-cli-reference/guide/cli_reference_code-analyzer_run.html), [migration guide](https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/migrate.html)) |
+| Handoffs and triggers | Every skill ends with Next steps. Descriptions are third person and name the sibling that owns the neighbouring job. Removed triggers: `component`, `query`, `SELECT`, `security review`, `deploy salesforce`, `org audit` |
+| De-duplication | sf-deploy points to sf-scratch-org for push/pull instead of repeating it |
+| Portability | "this Salesforce project" wording removed; paths defer to `sfdx-project.json`; the ruleset was renamed from `SF-Rebuild-Ruleset` |
+| Factual fixes | sf-test (Assert class, the coverage rules, the catch-block template), sf-deploy (test levels), sf-flow-review (callout ≠ bulkification, version note, Process Builder and Workflow Rules retirement), sf-data (OFFSET cap, COUNT), sf-apex-review (USER_MODE preferred) |
+| Version pins | API `63.0`, "Spring '26 beta", and Node ≥ 18 removed (the CLI requires ≥ 22.15.0) |
+
+The repo's skill tests (31) and contract checks pass. The full suite shows
+the same results with and without these changes (4,266 tests pass); its 121
+test files that don't load fail the same way on a clean checkout.
+
+**Not changed, with reasons**
+- **Moving catalogs to `references/`.** The `cursor`, `windsurf` and `codex`
+  export targets inline only the SKILL.md body (`src/commands/skills.js`), so
+  splitting content out would silently drop it for those users. Do the split
+  together with an exporter change that appends `references/*.md` to the
+  rules file.
+- **`triggers:` frontmatter.** Kept, because the rules-file export renders it
+  as a "Triggers:" line.
+- **Multi-line descriptions.** The exporter's frontmatter parser reads one
+  line per key, so descriptions must stay single-line YAML.
+- **Remaining de-duplication.** SOQL-in-loops and CRUD/FLS rules still appear
+  in sf-data, sf-org-audit and sf-pmd-scan. This is better done during the
+  `references/` split.
+- **Contents lists** for sfdt-cli's `config.md` and `development.md`, and a
+  bundled `scripts/audit.sh` for sf-org-audit's greps.
+- **A PreToolUse hook for production deploys.** The skills pack format can't
+  ship hooks; it needs the Claude plugin target.
 
 ## 7. Deferred recommendations
 
