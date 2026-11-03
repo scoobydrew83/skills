@@ -38,7 +38,7 @@ Run the scanner to produce a structured inventory. It is stdlib-only Python and 
 JSON describing the stack and failure-mode signals:
 
 ```bash
-python scripts/scan_repo.py <repo-path> --out /tmp/evidence.json
+python3 scripts/scan_repo.py <repo-path> --out /tmp/evidence.json
 ```
 
 Read `/tmp/evidence.json`. Key fields:

@@ -12,7 +12,7 @@ SKILLS_DIR="$REPO_ROOT/.agents/skills"
 
 # Pick a small, stable skill with references/scripts so the test exercises a
 # multi-file tree, not just SKILL.md.
-SKILL="session-continuity"
+SKILL="derisk-sequencer"
 SRC="$SKILLS_DIR/$SKILL"
 
 if [[ ! -d "$SRC" ]]; then

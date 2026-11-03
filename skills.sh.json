@@ -6,13 +6,31 @@
       "title": "Coordinated workflow",
       "description": "Skills for planning, execution, verification, and session continuity.",
       "skills": [
-        "agent-orchestration", "agent-workspace-compatibility",
-        "assumption-grill", "conductor-doctor", "conductor-init", "conductor-memory", "conductor-router", "derisk-sequencer", "drift-check",
-        "experiment-designer", "goal-builder", "grandfather", "hemlock", "idea-validator",
-        "leftpad", "loop-creator", "neurodivergent-comms", "next-step", "overwhelm-breakdown", "popquiz",
-        "project-postmortem", "prompt-template-generator", "reality-check",
-        "repo-troubleshooting-guide", "session-bookend", "session-continuity", "skill-librarian",
-        "system-prompt-builder", "task-decomposition", "tinfoil", "visual-plan"
+        "agent-orchestration",
+        "assumption-grill",
+        "conductor-doctor",
+        "conductor-init",
+        "conductor-memory",
+        "derisk-sequencer",
+        "drift-check",
+        "goal-builder",
+        "grandfather",
+        "hemlock",
+        "leftpad",
+        "loop-creator",
+        "neurodivergent-comms",
+        "next-step",
+        "overwhelm-breakdown",
+        "popquiz",
+        "project-postmortem",
+        "prompt-template-generator",
+        "reality-check",
+        "repo-troubleshooting-guide",
+        "session-bookend",
+        "skill-librarian",
+        "system-prompt-builder",
+        "tinfoil",
+        "visual-plan"
       ]
     }
   ]

@@ -5,7 +5,12 @@
     "I am back after a week away; where do I restart?",
     "Read the queue and tell me the safest next action.",
     "I do not know where to begin with this Conductor project.",
-    "Which task can legally start now?"
+    "Which task can legally start now?",
+    "What is the next legal Conductor lifecycle phase?",
+    "Resume this loop and route the top queue item.",
+    "Does this verifier failure go back to the builder or to a human?",
+    "Reconcile the queue state with the latest verdict.",
+    "Enforce the three-failure stop for this item."
   ],
   "should_not_trigger": [
     "This project is too overwhelming; make the first step tiny.",

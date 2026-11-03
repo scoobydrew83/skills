@@ -1,6 +1,15 @@
 ---
 name: popquiz
-description: Makes your AI agent think like the reviewer who won't merge what you can't explain. Comprehension debt — code that ships without anyone understanding it — is a loan against every future incident. Use this whenever agent-generated or unfamiliar code is about to merge — before approving a PR, before merging loop-generated work, at the end of any autonomous build session, or whenever someone says "merge it", "ship it", "approve this PR", "LGTM", or accepts a large diff they didn't write line-by-line. Especially trigger for autonomous/headless agent output and multi-file diffs. The skill runs a 5-rung explain ladder ending in a written quiz the human (or authorizing agent) must answer before APPROVE is allowed. Ships with a linter that fails any review containing an APPROVE verdict without a completed quiz, unanswered questions, or rubber-stamp phrases. Do NOT use for trivial diffs the author wrote by hand and can already explain — the gate is for understanding gaps, not ceremony.
+description: >-
+  Gates merges on comprehension: before agent-generated or unfamiliar code
+  merges, runs a five-rung explain ladder ending in a written quiz that the
+  human or authorizing agent must answer before APPROVE is allowed. Use before
+  approving a PR, before merging loop-generated or autonomous agent output, at
+  the end of an autonomous build session, or when someone says "merge it", "ship
+  it", "approve this PR", "LGTM", or accepts a large multi-file diff they did
+  not write line by line. A bundled linter fails any review with an APPROVE
+  verdict but no completed quiz, unanswered questions, or rubber-stamp phrases.
+  Not for small diffs the author wrote by hand and can already explain.
 response_contract: universal
 phase: verify
 hands_off_to: [conductor-memory]
@@ -58,8 +67,10 @@ APPROVE | EXPLAIN-FIRST | REJECT
 
 ## Linter
 
+Run it on the review document, fix what it flags, and re-run until it passes:
+
 ```bash
-python scripts/linter.py <review.md>
+python3 scripts/linter.py <review.md>
 ```
 
 Fails on: missing sections; fewer than 3 quiz questions; any `Q` without a matching non-empty `A`; APPROVE verdict with an incomplete quiz; Riskiest Line without a `file:line` reference; rubber-stamp phrases ("LGTM", "looks good to me", "seems fine", "trust the tests") anywhere in the document.

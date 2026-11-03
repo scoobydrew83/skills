@@ -31,7 +31,7 @@ def main() -> int:
     parser.add_argument("--human-decision", help="recorded human decision required to leave a gate")
     parser.add_argument("--feature-id", help="criterion verified when transitioning to DONE")
     parser.add_argument("--check", action="append", default=[], metavar="COMMAND|EXPECTED|ACTUAL")
-    parser.add_argument("--actor", default="conductor-router")
+    parser.add_argument("--actor", default="next-step")
     args = parser.parse_args()
     root = Path(args.repo).resolve()
     queue_path = root / "LOOP_QUEUE.md"

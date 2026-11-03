@@ -1,6 +1,17 @@
 ---
 name: tinfoil
-description: Makes your AI agent think like the security reviewer who assumes every input is hostile until the code proves otherwise. Not paranoid — just right often enough that it stopped being funny. Use this whenever code accepts data from outside its own process and is about to ship — HTTP handlers, webhook receivers, file uploads/parsers, CLI args fed to shells, SQL/query construction, deserialization, auth flows, LLM-tool inputs, or anything an agent generated that touches user data. Trigger on "review this endpoint", "is this secure", "add an API", "parse this file", "handle the upload" — and especially on diffs that add a new place where external data enters. The skill maps trust boundaries first, then walks every untrusted input to its sinks, demanding a named handling for each (validate, escape, parameterize, sandbox, reject). Ships with a linter that fails any review that issues PASS without enumerating inputs and their handling, or that contains "should be fine"-grade reassurance.
+description: >-
+  Reviews code that accepts data from outside its own process, assuming every
+  input is hostile until the code proves otherwise: map trust boundaries, walk
+  each untrusted input to its sinks, and require a named handling for each
+  (validate, escape, parameterize, sandbox, reject). Use when such code is about
+  to ship — HTTP handlers, webhook receivers, file uploads and parsers, CLI args
+  passed to shells, SQL or query construction, deserialization, auth flows, LLM-
+  tool inputs, or agent-generated code that touches user data — or when someone
+  asks "review this endpoint", "is this secure", "add an API", "parse this
+  file", or "handle the upload". A bundled linter fails any review that passes
+  without enumerating inputs and their handling, or that relies on "should be
+  fine" reassurance.
 response_contract: universal
 phase: verify
 hands_off_to: [conductor-memory]
@@ -54,8 +65,10 @@ PASS | FLAG | BLOCK
 
 ## Linter
 
+Run it on the review document, fix what it flags, and re-run until it passes:
+
 ```bash
-python scripts/linter.py <review.md>
+python3 scripts/linter.py <review.md>
 ```
 
 Fails on: missing sections; an Inputs section with no `Input:` lines and no justified `No external inputs:` proof; any `Input:` line missing its `Handling:` or `Attack defeated:` fields; PASS verdict while Gaps lists anything other than "None found"; reassurance phrases ("should be fine", "internal only so it's safe", "users would never", "sanitized" without a mechanism) anywhere in the document.

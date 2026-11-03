@@ -94,6 +94,10 @@ it into `.claude/commands/<name>.md` from `assets/templates/slash-command.md.tem
 `$ARGUMENTS` (or `$1`, `$2`) for the parts that change per run — the check command, the file to
 protect. Then they invoke `/<name>` instead of retyping the goal.
 
+When the goal will be edited later or handed to someone else, also fill
+`assets/templates/goal-worksheet.md.template` — it records the intent, end state,
+check, and constraints behind the condition so the reasoning survives.
+
 ## Present
 
 Give the user, concisely:

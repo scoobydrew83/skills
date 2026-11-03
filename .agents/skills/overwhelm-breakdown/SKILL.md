@@ -26,11 +26,6 @@ writes: []
 When someone is frozen in front of something big, the job is to get them moving,
 not to map the whole thing.
 
-> *Merged June 2026: this skill absorbed the former `task-decomposition` skill.
-> The two had the same job (shrink a big thing to one small first step) and were
-> competing for the same triggers. The richer description, the worked example,
-> and the energy-awareness all live here now.*
-
 ## Why "one step", not "the whole plan"
 
 Overwhelm comes from trying to hold the entire staircase in your head at once.

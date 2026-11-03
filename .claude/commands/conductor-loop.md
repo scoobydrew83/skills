@@ -16,7 +16,7 @@ Steps:
 1. Confirm the task in `$ARGUMENTS` has acceptance criteria. If not, ask the
    user to add them before invoking the loop (the verifier needs them to
    grade against).
-2. Read the installed `loop-creator` and `conductor-router` skills for the
+2. Read the installed `loop-creator` and `next-step` skills for the
    portable protocol — especially worktree/branching rules and FAIL escalation.
 3. Invoke `conductor-builder` (as a subagent) with:
    - The task description

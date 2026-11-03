@@ -1,6 +1,16 @@
 ---
 name: grandfather
-description: Makes your AI agent think like the maintainer who has never once broken a user without a deprecation path — every existing caller gets grandfathered in. Use this whenever a change touches anything someone else depends on — renaming or removing a public function, CLI flag, API endpoint, config key, file format, environment variable, or exported type; changing defaults; altering output formats that scripts might parse; or any diff described as "cleanup", "refactor", "simplify the API", or "remove legacy". Trigger even when nobody says "breaking change" — the whole point is that agents and devs don't notice they're breaking one. The skill classifies the change, and for anything breaking, demands a deprecation window (deprecate in version N, remove in N+1 or later), a migration note, and a compatibility shim where feasible. Ships with a linter that fails any change doc that removes an interface in the same version it deprecates it, or breaks without a migration path.
+description: >-
+  Reviews changes to anything other people depend on and requires a deprecation
+  path for every breaking change: classify the change, then for breaking ones
+  demand a deprecation window (deprecate in version N, remove in N+1 or later),
+  a migration note, and a compatibility shim where feasible. Use when a change
+  renames or removes a public function, CLI flag, API endpoint, config key, file
+  format, environment variable, or exported type; changes defaults; alters
+  output that scripts may parse; or is described as "cleanup", "refactor",
+  "simplify the API", or "remove legacy" — even when nobody says "breaking
+  change". A bundled linter fails any change doc that removes an interface in
+  the same version it deprecates it, or breaks callers without a migration path.
 response_contract: universal
 phase: verify
 hands_off_to: [conductor-memory]
@@ -57,8 +67,10 @@ For `internal` and `additive` classifications, Deprecation Path and Migration ma
 
 ## Linter
 
+Run it on the review document, fix what it flags, and re-run until it passes:
+
 ```bash
-python scripts/linter.py <review.md>
+python3 scripts/linter.py <review.md>
 ```
 
 Fails on: missing sections; invalid classification; `breaking` change with `Deprecated in` and `Removed in` set to the same version; `breaking` change missing either version or the Migration section; a SHIP verdict on a `breaking` change with no deprecation path; the phrase "nobody uses this" or "probably safe to remove" anywhere (Hyrum's Law violations).

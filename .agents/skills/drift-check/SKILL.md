@@ -2,20 +2,16 @@
 name: drift-check
 context: fork
 description: >-
-  Audit a set of related project documents for internal contradictions and
-  drift from their stated mission, with a skeptical eye that distrusts
-  suspiciously clean alignment. Use whenever the user points at multiple docs
-  (spec, PLANNING.md, README, AGENTS.md, .cursorrules, system prompt, TASK
+  Audits a set of related project documents for internal contradictions and
+  drift from their stated mission, distrusting suspiciously clean alignment such
+  as identical copy-pasted claims. Use when someone points at several docs
+  (spec, PLANNING.md, README, AGENTS.md, .cursorrules, system prompt, task
   tracker, ADRs) and asks "are these consistent", "do my docs agree", "has my
   spec drifted", "check alignment", "is my README in sync", "audit my project
-  for consistency", or shares a self-alignment/audit report. Especially trigger
-  when documents should agree on the same facts (tech stack, metrics, feature
-  lists, naming, architecture, tone) and the task is finding where they silently
-  diverge, or where identical copy-pasted claims masquerade as validation. Lead
-  with the real state of alignment and the biggest contradiction, never a vanity
-  score. For cross-document consistency and mission-drift within a project's own
-  materials, not verifying external claims (use reality-check) or choosing
-  between options (use a council skill).
+  for consistency", or shares a self-alignment report — especially when the docs
+  should agree on tech stack, metrics, feature lists, naming, architecture, or
+  tone. Not for verifying external claims (reality-check) or choosing between
+  options.
 response_contract: universal
 phase: verify
 hands_off_to: [reality-check, conductor-memory]
@@ -65,7 +61,7 @@ Go past the matrix and look for the patterns a surface comparison misses — van
 `scripts/cross_doc_scan.py` is a deterministic helper: point it at the document set and it surfaces (a) metric values that differ across files for the same unit (likely contradictions) and (b) long lines duplicated verbatim across files (the copy-paste signal). It's a flashlight, not the judgment — it finds candidates fast, but classifying them is still semantic work you do.
 
 ```bash
-python scripts/cross_doc_scan.py PLANNING.md README.md .cursorrules system-prompt.md
+python3 scripts/cross_doc_scan.py PLANNING.md README.md .cursorrules system-prompt.md
 ```
 
 If you were given only a self-audit/alignment report rather than the source documents, say so: you can audit the report (and a perfect self-score is the first thing to distrust), but the real check needs the underlying docs.

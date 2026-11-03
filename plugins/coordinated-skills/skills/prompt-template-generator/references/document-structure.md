@@ -1,5 +1,11 @@
 # Output Document Structure
 
+## Contents
+- The core principle: filled vs. bracketed
+- Section order
+- Section templates
+
+
 This is the blueprint for the document the skill produces. The goal is a
 **copy-paste-ready prompt cookbook tailored to one specific project**: a developer
 opens it, copies a block, fills in a couple of `[BRACKETS]`, and pastes it into

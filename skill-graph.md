@@ -8,36 +8,30 @@ _If this drifts from the skill directories, the source wins — regenerate with 
 | Skill | phase | hands_off_to | notes |
 |---|---|---|---|
 | `conductor-init` | intake | loop-creator, agent-orchestration |  |
-| `next-step` | intake | assumption-grill, overwhelm-breakdown, agent-orchestration, conductor-router |  |
+| `next-step` | intake | assumption-grill, overwhelm-breakdown, agent-orchestration, conductor-doctor |  |
 | `overwhelm-breakdown` | intake | agent-orchestration, neurodivergent-comms, session-bookend |  |
 | `assumption-grill` | plan | next-step, derisk-sequencer, agent-orchestration |  |
-| `derisk-sequencer` | plan | experiment-designer, agent-orchestration |  |
-| `experiment-designer` | plan | hemlock, derisk-sequencer |  |
+| `derisk-sequencer` | plan | hemlock, agent-orchestration, loop-creator |  |
 | `visual-plan` | plan | agent-orchestration, loop-creator |  |
-| `agent-orchestration` | execute | reality-check, drift-check, conductor-memory, session-bookend |  |
+| `agent-orchestration` | execute | popquiz, reality-check, drift-check, session-bookend |  |
 | `goal-builder` | execute | loop-creator |  |
-| `loop-creator` | execute | reality-check, drift-check, goal-builder |  |
+| `loop-creator` | execute | reality-check, drift-check, goal-builder, popquiz |  |
 | `prompt-template-generator` | execute | drift-check, reality-check |  |
 | `repo-troubleshooting-guide` | execute | drift-check |  |
 | `system-prompt-builder` | execute | reality-check, drift-check, conductor-memory |  |
-| `conductor-doctor` | verify | next-step, conductor-router, agent-workspace-compatibility |  |
+| `conductor-doctor` | verify | next-step, skill-librarian |  |
 | `drift-check` | verify | reality-check, conductor-memory |  |
 | `grandfather` | verify | conductor-memory |  |
-| `hemlock` | verify | derisk-sequencer, experiment-designer |  |
+| `hemlock` | verify | derisk-sequencer |  |
 | `leftpad` | verify | reality-check |  |
 | `popquiz` | verify | conductor-memory |  |
 | `reality-check` | verify | drift-check, conductor-memory |  |
 | `tinfoil` | verify | conductor-memory |  |
 | `neurodivergent-comms` | communicate | — |  |
-| `conductor-memory` | bookend | session-continuity |  |
+| `conductor-memory` | bookend | session-bookend |  |
 | `project-postmortem` | bookend | conductor-memory |  |
-| `session-bookend` | bookend | overwhelm-breakdown, agent-orchestration, conductor-memory |  |
-| `session-continuity` | bookend | session-bookend |  |
-| `agent-workspace-compatibility` | meta | drift-check |  |
-| `conductor-router` | meta | next-step, assumption-grill, conductor-doctor |  |
-| `idea-validator` | meta | hemlock | DEPRECATED tombstone |
-| `skill-librarian` | meta | drift-check |  |
-| `task-decomposition` | meta | overwhelm-breakdown | DEPRECATED tombstone |
+| `session-bookend` | bookend | overwhelm-breakdown, agent-orchestration, conductor-memory, next-step |  |
+| `skill-librarian` | meta | drift-check, conductor-doctor |  |
 
 ## Handoff graph
 
@@ -51,7 +45,6 @@ graph LR
   subgraph plan
     assumption-grill
     derisk-sequencer
-    experiment-designer
     visual-plan
   end
   subgraph execute
@@ -79,51 +72,39 @@ graph LR
     conductor-memory
     project-postmortem
     session-bookend
-    session-continuity
   end
   subgraph meta
-    agent-workspace-compatibility
-    conductor-router
-    idea-validator["idea-validator<br/><i>DEPRECATED</i>"]
     skill-librarian
-    task-decomposition["task-decomposition<br/><i>DEPRECATED</i>"]
   end
+  agent-orchestration --> popquiz
   agent-orchestration --> reality-check
   agent-orchestration --> drift-check
-  agent-orchestration --> conductor-memory
   agent-orchestration --> session-bookend
-  agent-workspace-compatibility --> drift-check
   assumption-grill --> next-step
   assumption-grill --> derisk-sequencer
   assumption-grill --> agent-orchestration
   conductor-doctor --> next-step
-  conductor-doctor --> conductor-router
-  conductor-doctor --> agent-workspace-compatibility
+  conductor-doctor --> skill-librarian
   conductor-init --> loop-creator
   conductor-init --> agent-orchestration
-  conductor-memory --> session-continuity
-  conductor-router --> next-step
-  conductor-router --> assumption-grill
-  conductor-router --> conductor-doctor
-  derisk-sequencer --> experiment-designer
+  conductor-memory --> session-bookend
+  derisk-sequencer --> hemlock
   derisk-sequencer --> agent-orchestration
+  derisk-sequencer --> loop-creator
   drift-check --> reality-check
   drift-check --> conductor-memory
-  experiment-designer --> hemlock
-  experiment-designer --> derisk-sequencer
   goal-builder --> loop-creator
   grandfather --> conductor-memory
   hemlock --> derisk-sequencer
-  hemlock --> experiment-designer
-  idea-validator --> hemlock
   leftpad --> reality-check
   loop-creator --> reality-check
   loop-creator --> drift-check
   loop-creator --> goal-builder
+  loop-creator --> popquiz
   next-step --> assumption-grill
   next-step --> overwhelm-breakdown
   next-step --> agent-orchestration
-  next-step --> conductor-router
+  next-step --> conductor-doctor
   overwhelm-breakdown --> agent-orchestration
   overwhelm-breakdown --> neurodivergent-comms
   overwhelm-breakdown --> session-bookend
@@ -137,12 +118,12 @@ graph LR
   session-bookend --> overwhelm-breakdown
   session-bookend --> agent-orchestration
   session-bookend --> conductor-memory
-  session-continuity --> session-bookend
+  session-bookend --> next-step
   skill-librarian --> drift-check
+  skill-librarian --> conductor-doctor
   system-prompt-builder --> reality-check
   system-prompt-builder --> drift-check
   system-prompt-builder --> conductor-memory
-  task-decomposition --> overwhelm-breakdown
   tinfoil --> conductor-memory
   visual-plan --> agent-orchestration
   visual-plan --> loop-creator
@@ -150,4 +131,4 @@ graph LR
 
 ## Source
 
-Generated from 31 skill(s).
+Generated from 25 skill(s).

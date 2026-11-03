@@ -13,6 +13,9 @@
 #   - phase value is one of intake/plan/execute/verify/communicate/bookend/meta
 #   - Every hands_off_to entry names a real skill in this repo
 #   - Body contains a "**Next steps:**" line
+#   - Anthropic limits: description <= 1024 chars, body <= 500 lines, valid
+#     name; warns on non-third-person descriptions and long references/ files
+#     without a table of contents (tools/check-best-practices.rb)
 #
 # Output is one line per check. Tombstones (description starts with DEPRECATED)
 # are validated but their hands_off_to may legitimately point only at survivors —
@@ -44,6 +47,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SKILLS_DIR="$REPO_ROOT/.agents/skills"
 FRONTMATTER_VALIDATOR="$SCRIPT_DIR/validate-frontmatter.rb"
+BEST_PRACTICES="$SCRIPT_DIR/check-best-practices.rb"
 ALLOWED_PHASES="intake plan execute verify communicate bookend meta"
 
 # ---------------------------------------------------------------------------
@@ -211,6 +215,16 @@ validate_one() {
   else
     record_fail "next-steps-line" "body has no line starting with '**Next steps:**' (CONVENTIONS.md §2)"
   fi
+
+  # ----- Anthropic authoring limits (description, name, length, TOCs) -----
+  local bp_status bp_check bp_msg
+  while IFS=$'\t' read -r bp_status bp_check bp_msg; do
+    case "$bp_status" in
+      PASS) record_pass "$bp_check" ;;
+      FAIL) record_fail "$bp_check" "$bp_msg" ;;
+      WARN) record_warn "$bp_check" "$bp_msg" ;;
+    esac
+  done < <(ruby "$BEST_PRACTICES" "$skill_md" 2>/dev/null)
 
   # ----- Tombstone advisory -----
   if printf "%s\n" "$frontmatter" | grep -qE '^[[:space:]]*DEPRECATED' \

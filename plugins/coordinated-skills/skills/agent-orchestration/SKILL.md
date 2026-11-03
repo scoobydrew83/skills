@@ -1,26 +1,19 @@
 ---
 name: agent-orchestration
 description: >-
-  Coordinate a phased, multi-specialist workflow for complex software work that
-  spans several build stages — design, planning, implementation, testing, and
-  deployment. Use this whenever a request bundles multiple stages together, e.g.
-  "design this feature, plan the implementation, and scaffold the code", "take
-  this idea to a working skeleton", "help me build X end to end", or any time the
-  user wants structured coordination across the full build lifecycle rather than
-  one isolated step. Trigger even when the user never says "orchestrate" or
-  "agents" — what matters is that the task clearly has several stages that
-  benefit from being sequenced with explicit phase boundaries and checkpoints.
-  Do NOT trigger for single-stage asks ("fix this bug", "write this function") —
-  those are handled directly without orchestration overhead. Do NOT trigger when
-  the person is signalling they are stuck, paralysed, or overwhelmed by the size
-  of the work — even on a genuinely multi-stage build, that combination calls for
-  overwhelm-breakdown and its one concrete next step rather than a sequenced plan.
-  Do NOT trigger on a brand-new project or product idea nobody has validated yet —
-  sequencing construction before anyone has asked whether the thing should exist
-  at all is precisely what hemlock is for, so it goes there first.
+  Coordinates a phased, multi-specialist workflow for software work that spans
+  several build stages — design, planning, implementation, testing, and
+  deployment — with explicit phase boundaries and checkpoints. Use when a
+  request bundles multiple stages, such as "design this feature, plan it, and
+  scaffold the code", "take this idea to a working skeleton", or "help me build
+  X end to end", even if the user never says "orchestrate" or "agents". Not for
+  single-stage asks ("fix this bug", "write this function"); not when the person
+  is stuck or overwhelmed by the size of the work (overwhelm-breakdown gives one
+  next step); and not for an unvalidated new idea (hemlock decides first whether
+  it should exist).
 response_contract: universal
 phase: execute
-hands_off_to: [reality-check, drift-check, conductor-memory, session-bookend]
+hands_off_to: [popquiz, reality-check, drift-check, session-bookend]
 reads: [CONTEXT.md, MEMORY_BANK.md]
 writes: [MEMORY_BANK.md]
 ---
@@ -31,14 +24,18 @@ Act as a conductor for complex builds: move through the work in named phases,
 adopting a different specialist lens in each, and hand the user one coherent
 plan rather than a pile of disconnected outputs.
 
-## Why phases
+## How to run it
 
-Complex builds go wrong when someone jumps from idea straight to code. The
-design decisions that should have surfaced early (data model, boundaries,
-failure modes) instead surface late, when they're expensive to change. Phasing
-forces those decisions into the open in the right order. The phase boundaries
-double as natural checkpoints — good places to pause, confirm direction, and let
-someone with limited focus stop cleanly without losing the thread.
+1. **Confirm the slice and scope.** Restate what you heard as the set of phases
+   you'll run, and a rough total time. One line, then go — don't interrogate.
+2. **Run each phase to its artifact.** Open with the phase name, do the work,
+   close with the named output. Keep each phase self-contained.
+3. **Checkpoint at boundaries.** After a phase that makes a consequential choice
+   (especially Design), pause: "Here's the shape — good to build on this, or
+   adjust?" This matters most when the user signalled limited time or energy.
+4. **Synthesize at the end.** Don't just stack the phase outputs. Pull them into
+   one plan the user can act on: here's the design, here's the order, here's the
+   skeleton, here's what's next. The synthesis is the deliverable.
 
 ## The phases
 
@@ -72,18 +69,12 @@ Claude Code, Cowork), you may genuinely dispatch phases to subagents and say so.
 Otherwise, the phases are sequential reasoning passes, and that's fine — name
 them clearly and move through them.
 
-## How to run it
+## Why phases
 
-1. **Confirm the slice and scope.** Restate what you heard as the set of phases
-   you'll run, and a rough total time. One line, then go — don't interrogate.
-2. **Run each phase to its artifact.** Open with the phase name, do the work,
-   close with the named output. Keep each phase self-contained.
-3. **Checkpoint at boundaries.** After a phase that makes a consequential choice
-   (especially Design), pause: "Here's the shape — good to build on this, or
-   adjust?" This matters most when the user signalled limited time or energy.
-4. **Synthesize at the end.** Don't just stack the phase outputs. Pull them into
-   one plan the user can act on: here's the design, here's the order, here's the
-   skeleton, here's what's next. The synthesis is the deliverable.
+Complex builds go wrong when someone jumps from idea straight to code: design
+decisions (data model, boundaries, failure modes) surface late, when they're
+expensive to change. Phase boundaries force them into the open in order and
+double as checkpoints where someone with limited focus can stop cleanly.
 
 ## Output shape
 
@@ -126,9 +117,9 @@ know what's settled.
   lifecycle, that's a different need — a single-step breakdown — and orchestration
   may be too much machinery. Match the tool to the actual problem.
 
-**Next steps:** After the build/scaffold phase, suggest `reality-check` if the
+**Next steps:** Before any generated code merges, suggest `popquiz` so someone
+can explain what is about to ship. After the build/scaffold phase, suggest `reality-check` if the
 plan was AI-generated and dense with checkable specifics, or `drift-check` if
 the project has accumulated multiple specs/READMEs that should agree. When the
-orchestrated work concludes, suggest `session-bookend` to close cleanly, or
-`conductor-memory` if the session produced reasoning worth persisting across
-sessions. Skip the suggestion if the user is clearly done.
+orchestrated work concludes, suggest `session-bookend` to close cleanly (it
+can hand off to `conductor-memory` when the reasoning is worth persisting). Skip the suggestion if the user is clearly done.
