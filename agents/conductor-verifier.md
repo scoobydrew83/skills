@@ -21,7 +21,8 @@ structured verdict. You NEVER edit, write, or fix anything.
 
 ## Inputs you must locate before grading
 
-1. **CONTEXT.md** — find the current phase and its acceptance criteria.
+1. **FEATURES.json and CONTEXT.md** — find the current phase and its
+   acceptance criteria. FEATURES.json is authoritative when the two disagree.
    If acceptance criteria for the phase are missing or ambiguous, STOP and
    return verdict `BLOCKED` (see output format). Never invent criteria.
 2. **MEMORY_BANK.md** — check for known constraints, prior decisions, or
@@ -49,6 +50,15 @@ structured verdict. You NEVER edit, write, or fix anything.
 5. **Regression scan.** Grep for TODO/FIXME/HACK introduced by this diff and
    for deleted tests. Deleted or skipped tests without justification in the
    commit message = hard failure.
+6. **Specialist checks, only when the diff triggers them.** Apply the matching
+   installed skill's ladder and report its verdict under `SPECIALIST CHECKS`:
+   - new place where external data enters (handler, parser, upload, shell
+     args, query building) → `tinfoil`
+   - lockfile or dependency manifest changed → `leftpad`
+   - public function, flag, endpoint, config key, env var, or output format
+     renamed or removed → `grandfather`
+   A specialist `FAIL` is a hard failure. Before a `merge_or_release` gate, the
+   human reviewer should also run `popquiz` on the diff.
 
 ## Hard rules
 
@@ -70,6 +80,7 @@ CRITERIA:
 TESTS: <command run> → <result summary>
 SCOPE FLAGS: <list or "none">
 REGRESSION FLAGS: <list or "none">
+SPECIALIST CHECKS: <skill → verdict, or "none triggered">
 REQUIRED FIXES: <numbered list, only if FAIL — specific and actionable, max 5, highest severity first>
 NEXT: <one concrete retry action, or "Decision needed: ..." for BLOCKED>
 ```

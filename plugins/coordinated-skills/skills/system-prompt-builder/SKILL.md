@@ -71,11 +71,7 @@ Before writing, walk the generated design against `references/design-principles.
 
 ### Step 4 — Generate the system prompt
 
-Build the complete system prompt following the archetype's required skeleton. Write it to a file:
-
-```
-/mnt/user-data/outputs/<short-name>-system-prompt.md
-```
+Build the complete system prompt following the archetype's required skeleton. Write it to a file named `<short-name>-system-prompt.md` in the environment's output location (the working directory in Claude Code; the downloadable outputs folder on claude.ai).
 
 Requirements:
 - **Complete and self-contained** — the user can paste it directly into a project, custom GPT, or API system field with no further editing (beyond filling any clearly-marked `[VARIABLES]`).
@@ -83,7 +79,7 @@ Requirements:
 - Include **at least one complete worked example** for any archetype with subjective judgment or routing.
 - Mark every assumption you made inline, so the user can correct it.
 
-Present the file with `present_files`. Then give a short plain-language summary of what you built and which assumptions you made.
+Share the file the way the environment supports (for example a file-presentation tool if one exists). Then give a short plain-language summary of what you built and which assumptions you made.
 
 ### Step 5 — Offer the review pass (optional)
 

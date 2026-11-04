@@ -18,7 +18,7 @@ response_contract: universal
 phase: intake
 hands_off_to: [loop-creator, agent-orchestration]
 reads: [CONTEXT.md, MEMORY_BANK.md]
-writes: [CONTEXT.md, MEMORY_BANK.md]
+writes: [init.sh, FEATURES.json, CONTEXT.md, MEMORY_BANK.md, LOOP_QUEUE.md]
 ---
 
 # Conductor Init
@@ -135,7 +135,7 @@ Rules for the seed:
 - **Categories** describe the kind of check (`functional`, `regression`,
   `contract`, `perf`), not its importance.
 
-### 4. Create `CONTEXT.md` and `MEMORY_BANK.md`
+### 4. Create `CONTEXT.md`, `MEMORY_BANK.md`, and `LOOP_QUEUE.md`
 
 `CONTEXT.md` — mission, current phase, and the phase's acceptance criteria. The
 criteria section points at FEATURES.json rather than restating it; two copies of
@@ -169,18 +169,33 @@ Append-only in spirit. One line per settled decision, verdict, or lesson:
 - <today> · conductor-init · DECISION · baseline initialized, criteria seeded from <spec>
 ```
 
+`LOOP_QUEUE.md` — the work queue the router reads, one item per line using the
+lifecycle states in `CONVENTIONS.md`. Seed it with a single orienting item so
+`next-step` has something legal to route:
+
+```markdown
+# LOOP QUEUE
+
+- [ ] ORIENTING: phase <N> — confirm criteria and policy before the first build item
+```
+
 ### 5. Verify the baseline
 
-Actually run them. Not "should pass" — run them:
+Actually run them. Not "should pass" — run them, and tick each off:
 
-- `bash init.sh` exits 0.
-- The test command passes.
-- The lint command passes.
-- `FEATURES.json` parses (`node -e "JSON.parse(...)"` or `jq . FEATURES.json`).
-- Copy `assets/loop-policy.json.template` to `.harness/loop-policy.json`, then
-  run `python3 tools/validate-loop-policy.py .harness/loop-policy.json` when
-  this skill library is available. Create `.harness/EVIDENCE.jsonl` without raw
-  prompts or secrets; the first builder/verifier run appends evidence.
+```
+- [ ] `bash init.sh` exits 0
+- [ ] The test command passes
+- [ ] The lint command passes
+- [ ] `FEATURES.json` parses (`jq . FEATURES.json` or `node -e "JSON.parse(...)"`)
+- [ ] `.harness/loop-policy.json` copied from `assets/loop-policy.json.template` and valid
+- [ ] `.harness/EVIDENCE.jsonl` exists, with no raw prompts or secrets
+```
+
+Validate the policy with `python3 tools/validate-loop-policy.py
+.harness/loop-policy.json` when this skill library's repo is available;
+otherwise confirm it parses as JSON and keeps every human gate from the
+template. The first builder/verifier run appends evidence.
 
 Any failure stops the sequence. Report the failing command and its output; do
 not fix the project's code to make the baseline green. That's building, and it
@@ -201,7 +216,8 @@ one-command, that goes in too — it's part of the baseline.
 ## What you hand off
 
 A repo where the next agent can run one command to know if it's broken, and
-read one JSON file to know what "done" means. Report back: the four artifacts,
+read one JSON file to know what "done" means. Report back: the artifacts created (init.sh, FEATURES.json, CONTEXT.md,
+MEMORY_BANK.md, LOOP_QUEUE.md, `.harness/`),
 the test and lint commands you verified, the number of seeded features, and
 anything the spec was too vague to make checkable.
 
@@ -211,5 +227,5 @@ that's the normal path, and Phase 0 exists to feed it. Suggest
 `agent-orchestration` instead when the work ahead is a multi-stage build the user
 wants sequenced by hand rather than looped unattended. If you stopped short
 because the spec couldn't yield checkable criteria, suggest neither — the user
-needs to settle scope first, and `overwhelm-breakdown` or `task-decomposition` is
+needs to settle scope first, and `overwhelm-breakdown` is
 the better door.

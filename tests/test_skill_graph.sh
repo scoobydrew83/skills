@@ -28,7 +28,7 @@ else
   exit 1
 fi
 
-for skill in next-step assumption-grill conductor-router conductor-doctor; do
+for skill in next-step assumption-grill conductor-doctor; do
   if grep -q "\`$skill\`" "$graph"; then
     echo "  PASS  graph includes $skill"
   else

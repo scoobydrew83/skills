@@ -25,6 +25,9 @@ A unit PASSES only if **every** criterion is objectively, demonstrably met:
   cases — over-engineering is its own failure.
 - **Confirm the plain-language summary exists** and actually describes what changed. No
   summary, or a summary that doesn't match the diff → FAIL (comprehension-debt guard).
+- **Specialist checks when the diff triggers them.** New external input boundary → apply
+  `tinfoil`; dependency or lockfile change → `leftpad`; renamed or removed public interface →
+  `grandfather`. A specialist FAIL is a FAIL. Skip any that the diff doesn't trigger.
 
 ## Required output
 

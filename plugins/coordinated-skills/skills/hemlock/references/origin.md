@@ -1,0 +1,3 @@
+# hemlock origin story
+
+a project got ~50 commits of disciplined execution — tests, CI, clean architecture, falsifiable experiments — before anyone ran the one web search that would have killed it on day one. It de-risked the parts that were never in doubt ("can we build a clean version of this?" — yes, trivially) and left the load-bearing doubt untouched: *is this better than what already exists?* The answer was no; the core mechanic was commodity. The search took thirty seconds. The commits took weeks. hemlock exists so that search always runs first. The lesson is not "be less rigorous" — it is **rigor in the wrong order is expensive rigor.**

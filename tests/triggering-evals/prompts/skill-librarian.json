@@ -7,7 +7,12 @@
     "I'm about to add a new skill, check whether an existing one already covers it.",
     "My installed skills don't match the repo. What's stale?",
     "Consolidate and dedupe my Claude skills.",
-    "Which skill should hold the guidance about looking around before editing Notion?"
+    "Which skill should hold the guidance about looking around before editing Notion?",
+    "Move our skills into .agents/skills and keep Claude's plugin generated.",
+    "Make AGENTS.md the shared instruction file for Codex, Claude, and Gemini.",
+    "Audit whether our agent skill package works across multiple coding agents.",
+    "Set up symlinks for CLAUDE.md and GEMINI.md without duplicating instructions.",
+    "Create a portable skills.sh distribution with a generated Claude adapter."
   ],
   "should_not_trigger": [
     "Audit my project docs for internal contradictions.",

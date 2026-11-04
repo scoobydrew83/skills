@@ -16,7 +16,7 @@ printf '%s\n' '- [ ] AWAITING_HUMAN | P0-buyer-signal | Authorize the five-agenc
 printf '%s\n' '{"features":[{"id":"F-P0","category":"validation","description":"Buyer-validation gate is recorded before any Phase 1 work.","steps":["Record explicit human authorization", "Record reproducible review evidence"],"passes":false,"evidence":null}]}' > "$tmp/FEATURES.json"
 
 doctor="$ROOT/.agents/skills/conductor-doctor/scripts/doctor.py"
-runner="$ROOT/.agents/skills/conductor-router/scripts/transition.py"
+runner="$ROOT/.agents/skills/next-step/scripts/transition.py"
 
 doctor_out="$(python3 "$doctor" "$tmp" || true)"
 if grep -q '"verdict": "BLOCKED"' <<<"$doctor_out"; then

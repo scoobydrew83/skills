@@ -5,7 +5,7 @@ description: Read Conductor state and report the one next legal lifecycle action
 
 # /conductor-route
 
-Use the portable `conductor-router` contract; this command is a Claude adapter,
+Use the portable `next-step` contract; this command is a Claude adapter,
 not a second loop implementation.
 
 1. Set `skills_root="${CLAUDE_PLUGIN_ROOT:-.}/skills"`. When this command runs
@@ -20,4 +20,4 @@ not a second loop implementation.
    `Decision needed` if the item is at a human gate.
 
 Never change queue state, invoke a builder, merge, deploy, or bypass policy from
-this command. The user or the portable router owns the next transition.
+this command. The user, or `next-step` with `scripts/transition.py`, owns the next transition.

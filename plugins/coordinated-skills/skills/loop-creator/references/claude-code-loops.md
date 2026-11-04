@@ -1,5 +1,16 @@
 # Claude Code loops: codebase mode and headless execution
 
+## Contents
+- Explore before you build
+- Deriving acceptance criteria from the repo
+- Headless execution
+- `claude -p` drains stdin — never drive a queue with `while read`
+- Never report completion from the plan
+- Evidence-based verification
+- GitHub Actions: triage, not autonomous fixing
+- Safeguards (apply to every codebase loop)
+
+
 Read this only when the loop is in scope of a real codebase or Claude Code execution. Grounding:
 Claude Code best practices (explore→plan→code→commit, headless mode, verification subagents,
 git workflow) and the documented headless safeguards.

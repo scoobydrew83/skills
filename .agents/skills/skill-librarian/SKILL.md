@@ -1,129 +1,143 @@
 ---
 name: skill-librarian
 description: >-
-  Audit, refresh, and maintain a library of existing skills so it stays lean,
-  non-duplicated, and written for current models. Use whenever the user wants to
-  review, clean up, consolidate, merge, dedupe, refresh, or "update all my
-  skills", asks whether two skills overlap, wants to know which skill owns a
-  piece of guidance, asks why an installed skill behaves differently from the
-  repo, or is about to add a new skill to a library that already has many. Also
-  use before creating a new skill, to check that its job isn't already owned.
-  Do NOT trigger for auditing project documents (use drift-check), for writing
-  one brand-new skill's body from scratch, or for verifying an AI-generated
-  plan (use reality-check).
+  Audits, refreshes, and maintains a library of skills so it stays lean,
+  non-duplicated, portable across agents, and aligned with Anthropic's skill
+  authoring guidance. Use when someone wants to review, clean up, consolidate,
+  merge, dedupe, refresh, or "update all my skills", asks whether two skills
+  overlap or which skill owns a piece of guidance, asks why an installed skill
+  behaves differently from the repo, is about to add a skill to a library that
+  already has many, or is setting up or migrating a portable layout
+  (.agents/skills as source, AGENTS.md as canonical instructions, generated
+  Claude, Codex, Gemini, or skills.sh packages). Not for auditing project
+  documents (drift-check), writing one new skill's body from scratch, or
+  verifying an AI-generated plan (reality-check).
 response_contract: universal
 phase: meta
-hands_off_to: [drift-check]
-reads: [MEMORY_BANK.md]
+hands_off_to: [drift-check, conductor-doctor]
+reads: [MEMORY_BANK.md, AGENTS.md, CONVENTIONS.md]
 writes: [MEMORY_BANK.md]
 ---
 
 # Skill Librarian
 
-This skill is about the library as a whole: which skills should exist, where
-each piece of guidance lives, and whether each skill is still written for the
-model that reads it. Structural rules for this repository (coordination header,
-Next-steps line, phases, renames, tombstones) live in `CONVENTIONS.md` and
-`CONTRIBUTING.md`; follow them rather than restating them here. For drafting
-and evaluating a single skill in depth, Anthropic's skill-creator skill is the
-companion tool.
+Keeps the library as a whole healthy: which skills should exist, where each
+piece of guidance lives, whether each skill is written for the model that reads
+it, and whether every installed copy matches the source. Structural rules for
+this repository (coordination header, Next-steps line, phases) live in
+`CONVENTIONS.md` and `CONTRIBUTING.md`; follow them rather than restating them.
+For drafting and evaluating one skill in depth, Anthropic's skill-creator skill
+is the companion tool.
 
-## The goal
+Done means: an inventory, a decision for every overlap, drafted edits for skills
+the user owns, passing repository checks, and a trigger test for each change.
 
-A library where every piece of guidance has exactly one home, every skill has
-a job no other skill claims, installed copies match the source, and
-instructions are as light as the current model allows. Done means: an
-inventory, a decision for every overlap, drafted edits for skills the user
-owns, passing repository tests, and a short trigger test for each change.
+## Audit workflow
+
+Copy this checklist and tick it off:
+
+```
+- [ ] 1. Inventory: every skill's phase, description, owner (repo / vendor / Anthropic)
+- [ ] 2. Compare installed copies against the source tree; flag stale or doubled installs
+- [ ] 3. Group overlaps (same user situation, shared procedures or examples)
+- [ ] 4. Decide each group: merge, anti-trigger, keep as link, disable vendor copy, reinstall
+- [ ] 5. Check each owned skill against the authoring checklist below
+- [ ] 6. Draft changes; keep the more specific name, absorb unique material
+- [ ] 7. Validate, fix, re-run until clean (commands below)
+- [ ] 8. Record one MEMORY_BANK line in the library's format
+```
+
+In this repository, step 7 is:
+
+```bash
+bash tools/validate-skill.sh --all      # conventions + Anthropic limits
+bash tools/sync-agent-layout.sh --check # aliases and generated package
+bash tests/run-all.sh                   # full suite
+```
+
+Fix every FAIL and re-run. After changing canonical skills, regenerate with
+`bash tools/build-plugin.sh` and `bash tools/skill-graph.sh`, and update the
+routing fixtures in `tests/triggering-evals/prompts/`.
+
+## Authoring checklist (Anthropic guidance)
+
+| Check | Rule |
+|---|---|
+| Description | Third person, says what the skill does and when to use it, ≤ 1,024 characters. It is always loaded, so every word costs context in every session |
+| Name | Lowercase letters, digits, hyphens; ≤ 64 characters; no "anthropic" or "claude" |
+| SKILL.md size | Under 500 lines; lead with the workflow in the first screen, not backstory |
+| Progressive disclosure | Detail goes in files linked directly from SKILL.md (one level deep). Reference files over 100 lines open with a Contents list |
+| Degrees of freedom | Exact scripts for fragile, repeatable, high-stakes steps; templates for the common case; goals and context for exploratory work |
+| Feedback loops | Where output can be checked, give a validate → fix → re-run loop and a copyable checklist |
+| Hard rules | Rules that must never break belong in hooks, scripts, or tests, not only prose |
+| Time-sensitive text | No "as of" dates or changelog notes in the body; history lives in git |
+| Testing | Trigger and outcome checks on every model the skill will run on (Haiku needs more explicit steps than Opus) |
+
+`tools/validate-skill.sh` enforces the description, name, and size limits and
+warns on non-third-person descriptions and long references without a Contents
+list.
 
 ## Principles
 
 ### 1. One home per piece of information
 
-Each fact, rule, or procedure lives in one skill. Anything else that needs it
-links to that skill by name instead of repeating it.
-
-Why: a duplicated rule drifts. When one copy is updated and the other isn't,
-the model sees two conflicting instructions and has to guess which is current.
-
-- **Across skills.** Before adding guidance, ask whether it warrants its own
-  skill or belongs inside an existing one. If another skill needs it, link.
-- **Within a skill.** Say each rule once, where it matters most, not in the
-  description, the body, and an example.
-- A thin skill or command that only routes to a fuller one is a link, not a
-  duplicate. Leave it.
+Each fact, rule, or procedure lives in one skill; anything else that needs it
+links by name. A duplicated rule drifts, and the model then sees two conflicting
+instructions. Say each rule once within a skill, too. A thin skill or command
+that only routes to a fuller one is a link, not a duplicate.
 
 ### 2. Write for the model's intelligence
 
-State the goal, give the context needed for good decisions, and say what done
-looks like so the model knows when to stop and when to keep going. Prefer that
-over rigid step lists.
+State the goal, the context needed for good decisions, and what done looks like.
+Add a rigid rule only with evidence (a real failure, a real risk, a repeated
+correction), and say why it exists. Habits like "think step by step" and
+capitalized ALWAYS/NEVER compensated for weaker models and can now narrow
+judgment. Periodically remove a rule and retest; if output holds, it was dead
+weight.
 
-- Add a rigid rule only when there is evidence it is needed: a real failure, a
-  real risk, or a correction the user kept repeating.
-- After each rule, say why it exists, so the model can apply its intent in
-  cases the rule didn't anticipate.
-- Skills written months ago or for an earlier model are candidates for a
-  lighter rewrite. Habits like "think step by step", "double-check your work",
-  and capitalized ALWAYS/NEVER compensated for weaker models and can now narrow
-  judgment instead of guiding it.
-- Encourage periodically removing a rule and retesting. If output holds up
-  without it, the rule was dead weight.
-
-**Exception: safety and irreversibility.** Guardrails that prevent data loss,
-destructive actions, security exposure, human-gate bypass, or spending money
-stay unless the user explicitly decides otherwise. Their evidence is the risk
-itself, not a past failure. The loop policy and human gates in this library are
-examples.
+**Exception: safety and irreversibility.** Guardrails against data loss,
+destructive actions, security exposure, human-gate bypass, or spending stay
+unless the user decides otherwise. Their evidence is the risk itself.
 
 ### 3. Look around before acting on an outside system
 
-When a skill has the model touch an external system (a repo, a Drive, a Notion
-workspace, a Salesforce org), it should explore how that system is organized
-before changing anything.
-
-Why: acting on an assumed structure is the most common way agents create
-duplicates, write to the wrong place, or redo work that already exists.
-
-For a simple system, a one-line "look around first" is enough. For a complex
-system used often, map it once, store the map as its own skill (it then has
-one home), and link to it. Apply this to the library itself: read the source
-tree and conventions before proposing any change.
+A skill that touches an external system (repo, Drive, Notion, Salesforce org)
+should explore its structure before changing anything. For a complex system
+used often, map it once as its own skill and link to it.
 
 ## Library rules
 
-- **Check source against installed copies.** Installed plugins can lag the
-  repository. Before diagnosing an overlap, confirm the source still has it;
-  a duplicate that exists only in a stale install is fixed by reinstalling,
-  not by editing.
-- **Resolve trigger collisions.** Two skills whose descriptions fire on the
-  same phrases compete. Give each an anti-trigger naming the other.
-- **Don't restate the platform.** If the environment already does something
-  natively, a skill should add only what the platform lacks: a format, a
-  standard, a boundary.
-- **Don't edit skills you don't own.** Vendor and marketplace plugins are
-  overwritten on update. Recommend disabling one of two overlapping vendor
-  skills instead.
-- **Retire with a tombstone**, following the library's existing pattern, and
-  update every reference to the retired name. The repository tests catch
-  dangling references.
+- **Check source against installed copies** before diagnosing an overlap; a
+  duplicate in a stale install is fixed by reinstalling, not editing.
+- **Resolve trigger collisions** by giving each skill an anti-trigger naming
+  the other.
+- **Don't restate the platform.** Add only what the environment lacks.
+- **Don't edit skills you don't own.** Vendor plugins are overwritten on
+  update; recommend disabling one of two overlapping copies instead.
+- **Retire by deleting.** Move unique material into the survivor, update every
+  reference to the old name (the repository tests catch dangling ones), and
+  note the redirect in the commit message. Deprecated stubs still load their
+  description into every session and can still be picked.
 
-## Audit workflow
+## Portable layout (setup or migration)
 
-1. **Inventory.** List every skill with its phase, description, and owner
-   (this repo, vendor, or Anthropic). Compare the installed set against the
-   source tree and flag anything stale or installed twice.
-2. **Find overlaps.** Group skills whose descriptions target the same user
-   situation or whose bodies share procedures or examples.
-3. **Decide each group:** merge, add anti-triggers, keep as a link, disable a
-   vendor copy, or reinstall from source. One sentence of reasoning each.
-4. **Draft changes** for skills this repo owns, keeping the more specific name
-   and absorbing unique material from the retired skill.
-5. **Validate.** Run the repository's validation and test scripts, update the
-   routing fixtures, and regenerate the skill graph and plugin copy.
-6. **Record the result** as one MEMORY_BANK line in the library's format.
+1. Inspect the canonical skills directory, provider package outputs,
+   instruction aliases, and the build/check commands before changing anything.
+2. Keep one authored tree under `.agents/skills/`. Provider packages that
+   disallow external symlinks are generated as physical copies (here:
+   `bash tools/build-plugin.sh` → `plugins/coordinated-skills/`).
+3. Make `AGENTS.md` the canonical always-on instruction file, with relative
+   aliases (`CLAUDE.md`, `GEMINI.md`). Never overwrite a real instruction file
+   without explicit approval; `tools/sync-agent-layout.sh --apply` only creates
+   missing aliases.
+4. Keep the build deterministic with a check mode that detects generated-output
+   drift (`tools/sync-agent-layout.sh --check`). Test clean setup, stale output,
+   broken links, and repeated runs.
+5. Use skills.sh for cross-agent installation, in copy mode where symlinks are
+   unavailable.
 
-**Next steps:** When an audit finds that the library's own docs (README,
-CONVENTIONS, skill graph) disagree with each other or with the skills, suggest
-`drift-check` to audit that document set. Skip if the user clearly wants to
-stop.
+**Next steps:** When the library's own docs (README, CONVENTIONS, skill graph)
+disagree with each other or with the skills, suggest `drift-check`. When a
+target repository's Conductor harness, aliases, or generated package need a
+read-only health check, suggest `conductor-doctor`. Skip if the user clearly
+wants to stop.

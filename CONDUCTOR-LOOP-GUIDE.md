@@ -9,6 +9,13 @@ Each phase below has explicit acceptance criteria and a commit checkpoint.
 Run phases in order. The system is resumable — state lives in files, so any
 phase can be picked up cold.
 
+Skills that automate parts of this guide: `conductor-init` (Phase 0 seeding),
+`loop-creator` (the builder/verifier package), `next-step` (routing queue
+items), and `conductor-doctor` (read-only health check). Where this guide and
+`CONVENTIONS.md` disagree — for example on queue state names, or on
+FEATURES.json being the authoritative source of acceptance criteria —
+`CONVENTIONS.md` wins.
+
 ---
 
 ## Phase 0 — Prerequisites (15 min)
@@ -193,15 +200,16 @@ The article's warning, made enforceable:
 **Do — add to AGENTS.md and enforce via branch protection:**
 
 1. **Comprehension gate.** Nothing merges to main unread. The verifier
-   reduces review burden; it never replaces review. Branch-protect main:
+   reduces review burden; it never replaces review. The `popquiz` skill is
+   the portable version of this gate. Branch-protect main:
    require 1 human review + green CI on every loop PR.
 2. **Budget gate.** Cap loop sessions (max turns / spend per run; max 3 new
    queue items per night; 2 parallel tracks). A loop running unattended is
    also a loop making mistakes unattended — caps bound the blast radius.
 3. **Memory hygiene.** Every verifier-passed item appends one "lesson" line
-   to MEMORY_BANK.md. Your update-rules skill already does this for
-   mistakes; this extends it to the loop's successes so tomorrow's run is
-   smarter than today's.
+   to MEMORY_BANK.md, for successes as well as mistakes, so tomorrow's run is
+   smarter than today's. `session-bookend` and the verifier both append in
+   the same one-line format.
 4. **Kill switch.** Document the disable path: pause the GitHub Action
    (`gh workflow disable nightly-triage`) and tag all queue items
    BLOCKED-HUMAN. One command, written down, tested once.

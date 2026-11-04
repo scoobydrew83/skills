@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only queue router used by next-step and conductor-router."""
+"""Read-only queue router used by next-step and the /conductor-route command."""
 import json
 import re
 import sys

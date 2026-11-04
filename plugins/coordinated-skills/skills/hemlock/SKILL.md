@@ -2,10 +2,21 @@
 name: hemlock
 context: fork
 description: >-
-  Use BEFORE any new project, product, feature, or "I have an idea" moment — whenever someone is about to build something and the riskiest thing is the premise, not the code. Triggers include "I want to build X", "should I build X", "is this idea worth it", "validate this idea", "does this beat what already exists", "new project idea", "let's start on", "kick off", any plan that schedules construction before validation, and mid-build "should I keep going or kill it". Trigger even on enthusiasm ("I have a great idea for…"), not just doubt — enthusiasm is when this skill earns its keep. Makes your AI agent think like the skeptic who kills your project on day one so day fifty doesn't have to: the cheapest code is the project you never started. Runs a 6-rung kill ladder (incumbent → riskiest assumption → cheapest decisive test → pre-registered kill bar → run → verdict) and refuses to authorize building until every rung is climbed. Bundled linter fails any verdict with an unnamed incumbent, unranked assumptions, or a kill bar written after the result. Supersedes idea-validator. Distinct from reality-check (verifies an existing plan for hallucinations), experiment-designer (designs one test), and derisk-sequencer (orders many tests) — hemlock decides whether the project deserves any tests at all.
+  Decides whether a new project, product, or feature should be built at all, by
+  climbing a six-rung kill ladder: name the incumbent, rank the riskiest
+  assumptions, pick the cheapest decisive test, pre-register a kill bar, run it,
+  and issue GO, CONDITIONAL-GO, or NO-GO. Use when someone proposes building
+  something new and the premise is the main risk — "I want to build X", "should
+  I build X", "is this idea worth it", "validate this idea", "does this beat
+  what already exists", "I have a great idea for…", a plan that schedules
+  construction before validation, or mid-build "should I keep going or kill it".
+  A bundled linter fails any verdict with an unnamed incumbent, unranked
+  assumptions, or a kill bar written after the result. Not for fact-checking an
+  existing plan (reality-check) or ordering tests for an idea that already has a
+  GO (derisk-sequencer).
 response_contract: universal
 phase: verify
-hands_off_to: [derisk-sequencer, experiment-designer]
+hands_off_to: [derisk-sequencer]
 reads: [CONTEXT.md]
 writes: [MEMORY_BANK.md]
 ---
@@ -20,7 +31,7 @@ The whole skill compresses to one sentence:
 
 > **Validate the riskiest, cheapest-to-test assumption first — not the easiest component first.**
 
-Origin story: a project got ~50 commits of disciplined execution — tests, CI, clean architecture, falsifiable experiments — before anyone ran the one web search that would have killed it on day one. It de-risked the parts that were never in doubt ("can we build a clean version of this?" — yes, trivially) and left the load-bearing doubt untouched: *is this better than what already exists?* The answer was no; the core mechanic was commodity. The search took thirty seconds. The commits took weeks. hemlock exists so that search always runs first. The lesson is not "be less rigorous" — it is **rigor in the wrong order is expensive rigor.**
+Why it exists: see the origin story in [references/origin.md](references/origin.md). The lesson is not "be less rigorous" — it is **rigor in the wrong order is expensive rigor.**
 
 ## When to reach for this
 
@@ -99,23 +110,23 @@ GO | NO-GO | CONDITIONAL-GO
 
 ## Linter
 
-Run before accepting any verdict:
+Run before accepting any verdict, fix what it flags, and re-run until it passes:
 
 ```bash
-python scripts/linter.py <verdict.md>
+python3 scripts/linter.py <verdict.md>
 ```
 
 Fails on: missing core sections, incumbent without an Evidence line, fewer than 2 ranked assumptions, kill bar without a pre-registration date, kill bar with no numeric/binary condition, a Result section appearing before the Kill Bar section, verdict outside the three allowed values, or weasel phrases ("no real competitors", "I'll know it when I see it", "should be fine") anywhere in the document.
 
 ## Worked examples
 
-See `references/worked-examples.md` for two fully worked validations: a **NO-GO done right** (a real, correct mechanic that turned out to be commodity, killed on pre-registered evidence) and a **CONDITIONAL-GO** (a thesis that failed but left a smaller, testable product standing).
+See [references/worked-examples.md](references/worked-examples.md) for two fully worked validations: a **NO-GO done right** (a real, correct mechanic that turned out to be commodity, killed on pre-registered evidence) and a **CONDITIONAL-GO** (a thesis that failed but left a smaller, testable product standing).
 
 ## When NOT to use
 
 - Mid-build execution problems ("this test is failing") — not a premise question.
 - Choosing between two validated options — use a decision/council process.
-- Designing the third experiment on an already-GO'd idea — use `experiment-designer` directly. hemlock is the gate at the door, not the hallway.
+- Designing the third experiment on an already-GO'd idea — use `derisk-sequencer` (single-experiment mode) directly. hemlock is the gate at the door, not the hallway.
 - Verifying an already-written technical plan for hallucinations — that's `reality-check`.
 
 ## Conductor verdict
@@ -130,4 +141,4 @@ When the project has a `MEMORY_BANK.md`, append one line in the shared format (o
 
 ---
 
-**Next steps:** On a GO or CONDITIONAL-GO, suggest `derisk-sequencer` to turn the ranked assumptions into a build-after-test sequence, or `experiment-designer` to rigorously design the single decisive test a CONDITIONAL-GO hinges on. On a NO-GO, stop — name what survives and don't sequence a dead idea.
+**Next steps:** On a GO or CONDITIONAL-GO, suggest `derisk-sequencer` to turn the ranked assumptions into a build-after-test sequence, using its single-experiment mode to pre-register the one decisive test a CONDITIONAL-GO hinges on. On a NO-GO, stop — name what survives and don't sequence a dead idea.

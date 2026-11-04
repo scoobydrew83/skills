@@ -1,6 +1,16 @@
 ---
 name: leftpad
-description: Makes your AI agent think like the dev who remembers March 2016, when an 11-line npm package got unpublished and broke the internet. Every dependency is a stranger with commit access to your product. Use this whenever a new dependency is about to enter a project — any "npm install", "pip install", "cargo add", "add this package", "there's a library for that", import of something not yet in the lockfile, or an AI-generated plan that lists packages to install. Trigger especially on AI-recommended package lists, because hallucinated or abandoned packages survive unchallenged without live registry verification. The skill runs a 6-rung dependency ladder (do we need this at all → stdlib → already-installed deps → vendor the 20 lines → verify the package is real, alive, and maintained on the registry → add with an exit plan) and refuses ADD verdicts without live registry evidence. Ships with a linter that fails any decision doc approving a dependency without stdlib/existing-dep checks and registry proof.
+description: >-
+  Vets a new dependency before it enters a project with a six-rung ladder: do we
+  need it at all, is it in the standard library, does an installed dependency
+  cover it, can we vendor the few lines, is the package real, alive, and
+  maintained on the live registry, and what is the exit plan. Use when a new
+  dependency is about to be added — "npm install", "pip install", "cargo add",
+  "add this package", "there's a library for that", an import not yet in the
+  lockfile, or an AI-generated plan that lists packages to install (hallucinated
+  and abandoned packages are common there). ADD verdicts require live registry
+  evidence; a bundled linter fails any decision doc that approves a dependency
+  without standard-library and existing-dependency checks and registry proof.
 response_contract: universal
 phase: verify
 hands_off_to: [reality-check]
@@ -61,8 +71,10 @@ For non-ADD verdicts, Registry Evidence and Exit Plan may state `N/A — resolve
 
 ## Linter
 
+Run it on the review document, fix what it flags, and re-run until it passes:
+
 ```bash
-python scripts/linter.py <decision.md>
+python3 scripts/linter.py <decision.md>
 ```
 
 Fails on: missing sections; ADD verdict without a `Registry:` line containing `name@version`, a `Last publish:` date, and an `Exit Plan`; missing stdlib or existing-deps check lines; hand-wave phrases ("it's popular", "everyone uses it", "should be maintained") anywhere in the document.

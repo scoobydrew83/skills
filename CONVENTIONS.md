@@ -4,7 +4,7 @@ These are the rules every skill in this library follows so they compose into a
 real workflow instead of fourteen silos. If you add a skill to this set, or
 fork one of these for your own project, hold to the contract below.
 
-Status: loop-first conventions, updated 2026-08-07. The router, session-close,
+Status: loop-first conventions. The router, session-close,
 human-gate, and evidence contracts below are part of the active harness.
 
 ## 1. Coordination header (required in every SKILL.md)
@@ -66,8 +66,8 @@ Seven phases. Pick one per skill:
   task; changes how the answer is packaged.
 - **`bookend`** — open or close a session, snapshot state, retrieve
   prior context. Output: a launchpad or a handoff.
-- **`meta`** — about the library itself (tombstones, deprecated stubs,
-  router skills if/when added). Not user-triggered work.
+- **`meta`** — about the library itself (auditing and maintaining the skill
+  set and its layout). Not user-triggered work.
 
 A skill belongs to exactly one phase. If something legitimately spans phases
 (e.g. `agent-orchestration` runs design → plan → build → test), put it in the
@@ -159,8 +159,9 @@ This is a starting format — refine it once we've run a week with real entries.
 
 ## 5. Verdict schema
 
-Verification skills (`drift-check`, `reality-check`, `conductor-verifier`)
-emit a `Conductor verdict:` block alongside their richer report:
+Verification skills (`drift-check`, `reality-check`, `hemlock`, `tinfoil`,
+`leftpad`, `grandfather`, `popquiz`, `conductor-doctor`, and the
+`conductor-verifier` agent) emit a `Conductor verdict:` block alongside their richer report:
 
 - **`PASS`** — every load-bearing criterion is satisfied with evidence.
 - **`FAIL`** — at least one criterion is unmet, fabricated, or
@@ -227,16 +228,38 @@ place of `Next`. User-stated formatting preferences override this baseline.
 This is a communication contract, never a diagnostic claim and never a reason
 to withhold needed technical detail.
 
-## 6. Skill description hygiene
+## 6. Skill authoring and description hygiene
 
-The library coordinates by description matching, so descriptions carry
-weight:
+The library coordinates by description matching, and every description is
+loaded into every session, so descriptions carry weight. These rules follow
+Anthropic's Agent Skills authoring guidance; `tools/validate-skill.sh`
+enforces the ones marked **(checked)**.
 
-- Use a hyphen-case `name` that matches the skill's directory name
-  (`my-skill` → `.agents/skills/my-skill/SKILL.md`).
-- Frontmatter description should list real trigger phrases the user might
-  type, anti-triggers ("Do NOT trigger when…"), and the explicit
-  partner-skill suggestions when relevant.
+- **Name (checked):** hyphen-case, ≤ 64 characters, no "anthropic" or
+  "claude", matching the directory (`my-skill` → `.agents/skills/my-skill/`).
+- **Description (checked ≤ 1,024 characters):** third person, opening with
+  what the skill does, then when to use it with real trigger phrases, then
+  anti-triggers naming the sibling that owns the neighbouring job ("Not for
+  … (other-skill)"). Keep method details and history in the body. The
+  validator warns on descriptions that open with "Makes your…", "Use…", or
+  "You…".
+- **Body (checked ≤ 500 lines):** lead with the workflow in the first screen;
+  rationale and backstory come after or move to `references/`.
+- **Progressive disclosure:** link supporting files directly from SKILL.md
+  (one level deep). Reference files over 100 lines start with a `## Contents`
+  list (warned).
+- **Degrees of freedom:** bundled scripts for fragile or repeatable steps,
+  templates for the common case, goals and context for exploratory work.
+  Avoid capitalised ALWAYS/NEVER unless the rule guards safety or
+  irreversibility.
+- **Feedback loops:** a skill with a linter or validator says "run, fix,
+  re-run until it passes"; long procedures offer a copyable `- [ ]` list.
+- **No time-sensitive text** in skill bodies ("merged in June", "as of …").
+  History lives in git.
+- **Retiring a skill:** delete it, move unique material into the survivor,
+  update every reference, and add it to `RETIRED` in
+  `tests/test_retired_skills.sh`. Don't leave a DEPRECATED stub: it still
+  loads its description into every session.
 - The body's `**Next steps:**` line names successors by their exact
   `name`. Renaming a skill means updating every `hands_off_to:` and every
   Next steps line that references it.
@@ -265,9 +288,10 @@ ending a working session:
    work left in place reads as intentional to whoever picks it up.
 3. **Append the MEMORY_BANK.md line** (§4 format, §5 skill telemetry). This
    is the durable trace of the session.
-4. **Then fire the memory write** — `conductor-memory` for a session with
-   decisions or context worth carrying forward, `session-bookend` for a
-   routine stop. Step 3 is mandatory; step 4 is the fuller snapshot.
+4. **Then write the handoff** — `session-bookend` for the closing handoff,
+   followed by `conductor-memory` when the session produced decisions or
+   context worth a durable pack. Step 3 is mandatory; step 4 is the fuller
+   snapshot.
 
 So `conductor-memory` no longer waits to be asked: reaching the end of a
 session *is* the trigger, and the exit checklist is what makes it fire.
@@ -276,7 +300,8 @@ Sessions that produced nothing worth carrying still complete steps 1–3.
 ## 8. Tooling
 
 The library ships with a small toolchain that enforces this contract.
-`tools/validate-skill.sh --all` checks every skill against §1–§3,
+`tools/validate-skill.sh --all` checks every skill against §1–§3 and the
+Anthropic limits in §6,
 `tools/skill-graph.sh` regenerates `skill-graph.md` from the skill source
 directories so doc-drift is caught immediately, and `tests/run-all.sh`
 runs the full structural + cross-skill consistency suite. The Claude Code

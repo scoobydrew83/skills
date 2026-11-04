@@ -86,7 +86,7 @@ def main() -> int:
     failed = [c for c in checks if not c["ok"]]
     verdict = "PASS" if not failed else ("BLOCKED" if any(c["label"] in {"loop policy", "acceptance criteria", "LOOP_QUEUE.md", "queue gate"} for c in failed) else "FAIL")
     result = {"verdict": verdict, "root": str(root), "checks": checks,
-              "next": "Run conductor-router on the top PENDING item" if verdict == "PASS" else "Repair the first failed check, then rerun conductor-doctor"}
+              "next": "Run next-step on the top PENDING item" if verdict == "PASS" else "Repair the first failed check, then rerun conductor-doctor"}
     print(json.dumps(result, indent=2))
     return 0 if verdict == "PASS" else 1
 

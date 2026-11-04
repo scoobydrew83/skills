@@ -1,5 +1,10 @@
 # Output Template
 
+## Contents
+- Required structure
+- Authoring rules
+
+
 Every generated guide follows this structure. Adapt section names to the repo's actual
 subsystems, drop sections that don't apply, and add repo-specific sections when the scan
 warrants. Keep it clean and professional: **no emoji, no exclamation-point pep talk, no

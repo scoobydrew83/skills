@@ -2,21 +2,17 @@
 name: reality-check
 context: fork
 description: >-
-  Use whenever someone hands you an AI-generated technical plan, recommendation
-  set, setup guide, or tool/config list and says "validate this", "fact-check
-  this", "is this real", "is this accurate", "did it hallucinate", "sanity-check
-  this", "pressure-test this", "is this overkill", or asks whether a plan is
-  feasible and worth doing. Trigger hardest when the content reads as
-  machine-written and is dense with checkable specifics that could be fabricated
-  — repo URLs, CLI flags, file paths, versions, env vars, named "best-practice"
-  patterns, time estimates. The job: pressure-test the thing for hallucinations,
-  factual errors, and unnecessary complexity, then verify every surviving claim
-  against live sources before the user acts on it. Do NOT trigger for a bare
-  dependency question — whether a specific package is real, alive, and
-  maintained is leftpad's registry rung, so "should we add this package" or "is
-  this crate abandoned" goes there. This VERIFIES an existing plan's accuracy
-  and practical value, not choosing between open options or deciding from
-  scratch (use a decision/council skill for that).
+  Verifies an AI-generated technical plan, recommendation set, setup guide, or
+  tool and config list for hallucinations, factual errors, and unnecessary
+  complexity, then checks every surviving claim against live sources before
+  anyone acts on it. Use when someone shares such content and asks "validate
+  this", "fact-check this", "is this real", "is this accurate", "did it
+  hallucinate", "sanity-check this", or "pressure-test this" — especially when
+  it is dense with checkable specifics like repo URLs, CLI flags, file paths,
+  versions, env vars, named best-practice patterns, or time estimates. Not for
+  deciding whether an idea is worth building (hemlock), choosing between open
+  options, or a single dependency question such as "is this package abandoned"
+  (leftpad).
 response_contract: universal
 phase: verify
 hands_off_to: [drift-check, conductor-memory]
@@ -76,9 +72,9 @@ For each claim, land on a status: **verified ✅ / unverifiable ⚠️ / wrong-o
 **Use the bundled checker for existence claims.** Resolving package/repo names by eye is the same fallible judgment that hallucinated them. Instead, batch every named package, crate, and repo through `scripts/verify_artifacts.py`, which hits the real registries (npm, PyPI, crates.io, GitHub) and returns existence + current version:
 
 ```bash
-python scripts/verify_artifacts.py \
+python3 scripts/verify_artifacts.py \
   --npm @some/package --pypi some-lib --crates some-crate --repo owner/repo
-# or pipe a manifest: echo '{"pypi":["mem0"]}' | python scripts/verify_artifacts.py --stdin
+# or pipe a manifest: echo '{"pypi":["mem0"]}' | python3 scripts/verify_artifacts.py --stdin
 ```
 
 It exits non-zero if anything fails to resolve. This reliably catches fake names (`pip install mem0` 404s — the real package is `mem0ai`) and wrong versions. For GitHub repo checks, set `GITHUB_TOKEN` to avoid unauthenticated rate limits. Still read the docs for *capability* and *config* claims — the script only proves a name resolves, not that it does what was promised.

@@ -4,7 +4,7 @@ description: >-
   Extract and build a complete memory pack from an agent conversation or session, synthesizing it into vault-ready artifacts so the next session resumes with full context. Produces a conversation summary, artifact index, communication-style and project-context notes, a machine-readable seed JSON and persona YAML, verification and maintenance checklists, and a generalized integration.py that copies the pack into an Obsidian vault and can update a session-memory pointer file (with an optional MCP/vector-store hook). Use this whenever the user says 'build conductor memory', 'extract memory from this conversation', 'capture this session', 'snapshot our progress', 'save this to memory', or 'update conductor memory' - and also when wrapping up a substantial working session whose context should persist as durable artifacts across agents, Obsidian, or MCP. A plain spoken wrap-up belongs to session-bookend; this skill creates durable artifacts when the handoff must outlive the conversation.
 response_contract: universal
 phase: bookend
-hands_off_to: [session-continuity]
+hands_off_to: [session-bookend]
 reads: [CONTEXT.md, MEMORY_BANK.md]
 writes: [MEMORY_BANK.md, CONTEXT.md]
 ---
@@ -71,7 +71,7 @@ the user if something can't be reasonably inferred. You can pass overrides as fl
   working directory; integration will copy it into the vault in Phase 4.
 - On **claude.ai** (no access to the user's machine): create it under
   `/mnt/user-data/outputs/` so the user can download it, and treat Phase 4 integration
-  as instructions for him to run locally rather than something you execute.
+  as instructions for the user to run locally rather than something you execute.
 
 > **Checkpoint 0:** You know the input source, the project name + paths, and where
 > the pack will be written. If any of those is a guess that would be costly to get
@@ -84,7 +84,7 @@ boilerplate files (integration.py, verification, maintenance) with your config
 substituted in, so you never hand-write that boilerplate.
 
 ```bash
-python scripts/scaffold_memory.py --output <where-to-create> \
+python3 scripts/scaffold_memory.py --output <where-to-create> \
   --project conductor --vault ~/your-vault --memory-subdir Conductor/memory \
   --resume-file ~/your-vault/Conductor/MEMORY_BANK.md
 ```
@@ -135,7 +135,7 @@ Run the validator. It objectively checks presence, that JSON/YAML parse and carr
 required keys, and that the prose files were actually filled in.
 
 ```bash
-python scripts/validate_memory.py --dir <pack_dir>
+python3 scripts/validate_memory.py --dir <pack_dir>
 ```
 
 If anything FAILs, fix it and re-run. Common misses: a `_TODO_` left in
@@ -184,7 +184,7 @@ deliverable, not a long write-up about it.
   `assets/config.example.json`, `assets/templates/` (boilerplate sources).
 
 **Next steps:** This skill is the close-bookend for substantive sessions.
-After the pack lands, suggest `session-continuity` as the matching open
-skill for the next session — pointing at the resume line is exactly the
+After the pack lands, suggest `session-bookend` as the matching opening
+recap for the next session — pointing at the resume line is exactly the
 retrieval it's built for. Skip the suggestion when the snapshot is for
 archival only and no follow-up session is planned.

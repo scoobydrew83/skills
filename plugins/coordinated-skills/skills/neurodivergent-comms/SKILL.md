@@ -1,23 +1,16 @@
 ---
 name: neurodivergent-comms
 description: >-
-  Format and pace responses so they're genuinely usable for neurodivergent
-  people — ADHD and autistic readers especially — and adapt how you communicate
-  whenever someone states a processing or pacing preference. Use whenever
-  someone mentions ADHD, autism, being neurodivergent, executive-function or
-  focus struggles, sensory or overwhelm needs, or asks for explanations that
-  are extra-structured, predictable, literal, step-by-step, or "no surprises".
-  Also use when someone signals low energy, fatigue, or being overwhelmed and
-  would benefit from gentler pacing and effort-sized options — or when they
-  hand you a clear communication preference like "just give me the steps, no
-  explanation", "break it down", "chunk this for me", or "exactly what will
-  happen". This is a DELIVERY layer: apply it on top of whatever the underlying
-  task is, even when the person doesn't name a format. These preferences shape
-  your REPLY rather than the work itself — when what needs chunking is a large
-  project the person is stuck in front of, and they want one step they can
-  actually start today, that is overwhelm-breakdown. Do NOT treat it as a
-  fixed template to stamp on every reply — read the cues and adapt, because
-  ADHD and autistic needs sometimes pull in different directions.
+  Formats and paces replies so they are usable for neurodivergent readers, ADHD
+  and autistic people especially, and adapts delivery whenever someone states a
+  processing or pacing preference. Use when someone mentions ADHD, autism, being
+  neurodivergent, executive-function or focus struggles, sensory or overwhelm
+  needs, low energy, or asks for replies that are extra-structured, predictable,
+  literal, step-by-step, "no surprises", or "just the steps, no explanation". It
+  is a delivery layer applied on top of the underlying task, read from cues
+  rather than stamped as a fixed template, because ADHD and autistic needs
+  sometimes pull in different directions. Not for shrinking a large project the
+  person is stuck in front of to one startable step (overwhelm-breakdown).
 response_contract: universal
 phase: communicate
 hands_off_to: []
@@ -32,11 +25,9 @@ This is a delivery style, not a workflow. Whatever the task, this skill changes
 who's told you (directly or through clear cues) that the packaging of an
 answer matters to them. It runs as an overlay on whatever else you're doing.
 
-> *Merged June 2026: this skill absorbed the former `adaptive-communication`
-> skill. They were two takes on the same question — "how do I package this
-> answer so it lands?" — and were competing for the same triggers. The
-> before/after example, the literal-clarity guidance, and the "respond to what
-> they told you, not to a label you inferred" caution all live here now.*
+Every skill in this library already follows the light response baseline in
+`AGENTS.md` (status first, literal uncertainty, compact chunks, one next
+action). This skill is the deeper, cue-driven mode on top of that baseline.
 
 ## Why this isn't one template
 
@@ -169,8 +160,7 @@ which trips people up sometimes."
 Same information. The second one tells the person where they are, what "done"
 means, and which surprises aren't surprises.
 
-**Next steps:** This skill is a delivery overlay — it doesn't hand off, it
-layers on. If the underlying request was actually about getting unstuck on a
-big project, the partner skill is `overwhelm-breakdown`. If the user is
-wrapping a session, `session-bookend` is the natural close. Otherwise, just
-keep delivering in the adapted style until the conversation moves on.
+**Next steps:** None by default — this is a delivery overlay, so return to the
+underlying task. If the cues show the person is stuck in front of a large
+project rather than asking for a differently packaged reply, suggest
+`overwhelm-breakdown`.

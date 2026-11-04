@@ -51,7 +51,7 @@ You need the files on disk, not just a description.
 Run the inventory script:
 
 ```bash
-python scripts/analyze_project.py <project_root>
+python3 scripts/analyze_project.py <project_root>
 ```
 
 It prints a summary and writes `.prompt-template-analysis.json` with: project

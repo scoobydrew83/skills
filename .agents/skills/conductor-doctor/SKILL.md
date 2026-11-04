@@ -10,7 +10,7 @@ description: >-
   repair a repository; it is read-only by design.
 response_contract: universal
 phase: verify
-hands_off_to: [next-step, conductor-router, agent-workspace-compatibility]
+hands_off_to: [next-step, skill-librarian]
 reads: [CONTEXT.md, MEMORY_BANK.md, LOOP_QUEUE.md]
 writes: [MEMORY_BANK.md]
 ---
@@ -30,7 +30,6 @@ claimed pass is `FAIL`. Use `PASS` only when every available check is clean.
 Do not turn a diagnostic result into a fix. Route the user to the owner of the
 repair, and preserve the evidence for a verifier to reproduce.
 
-**Next steps:** When the doctor finds state that needs a human decision,
-suggest `next-step`. When the harness is healthy and a queue item is ready,
-suggest `conductor-router`. When cross-agent aliases or package layout fail,
-suggest `agent-workspace-compatibility`.
+**Next steps:** When the doctor finds state that needs a human decision, or the
+harness is healthy and a queue item is ready, suggest `next-step`. When
+cross-agent aliases or package layout fail, suggest `skill-librarian`.

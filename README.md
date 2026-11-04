@@ -71,7 +71,9 @@ tools/sync-agent-layout.sh --check   # aliases + generated Claude package
 bash tests/run-all.sh                 # full structural suite (validators + repo-shape invariants)
 ```
 
-A green run reports 0 failures (tombstone WARNs are non-blocking).
+A green run reports 0 failures. `validate-skill.sh` also enforces Anthropic's
+authoring limits (description ≤ 1,024 characters, SKILL.md ≤ 500 lines, valid
+name) and warns on non-third-person descriptions.
 
 ## Runtime compatibility
 
@@ -120,12 +122,13 @@ phases without a top-level controller:
 through the existing intake/plan/execute/verify/bookend phases, with
 `communicate` as a universal delivery overlay.
 
-- **intake** — `next-step` recovers one safe action from live state;
-  `overwhelm-breakdown` turns a too-big ask into one doable step; `conductor-init`
-  seeds a fresh repo's harness.
+- **intake** — `next-step` recovers one safe action from live state and routes
+  one legal Conductor queue transition; `overwhelm-breakdown` turns a too-big
+  ask into one doable step; `conductor-init` seeds a fresh repo's harness.
 - **plan** — `visual-plan` renders the plan as reviewable, comment-blockable
-  blocks over the repo's ground truth; `experiment-designer` locks one test's
-  threshold before the run; `derisk-sequencer` orders many tests.
+  blocks over the repo's ground truth; `assumption-grill` turns consequential
+  ambiguity into decision cards; `derisk-sequencer` orders tests ahead of
+  building and pre-registers single experiments.
 - **execute** — the builders (`agent-orchestration`, `system-prompt-builder`,
   `prompt-template-generator`, `loop-creator`, `goal-builder`,
   `repo-troubleshooting-guide`) produce the deliverable.
@@ -133,11 +136,16 @@ through the existing intake/plan/execute/verify/bookend phases, with
   (cross-doc contradictions), `hemlock` (should this exist at all),
   `tinfoil` (hostile input), `leftpad` (dependency intake), `grandfather`
   (breaking changes) and `popquiz` (merge comprehension) grade it, emitting
-  `PASS | FAIL | BLOCKED`.
-- **bookend** — `session-bookend`, `conductor-memory`, `session-continuity`
-  snapshot state so the next session resumes cold.
+  `PASS | FAIL | BLOCKED`. `conductor-doctor` audits the harness itself. The
+  loop's verifier applies `tinfoil`, `leftpad`, and `grandfather` when a diff
+  triggers them, and `popquiz` gates merges.
+- **bookend** — `session-bookend` (recall, opening recap, closing handoff),
+  `conductor-memory` (durable memory pack), and `project-postmortem`
+  (end-of-project lessons).
 - **communicate** — `neurodivergent-comms` changes how an answer is packaged,
   not what's produced.
+- **meta** — `skill-librarian` audits and maintains the library itself,
+  including its portable `.agents/skills` layout.
 
 Conductor projects also carry `.harness/loop-policy.json` (human gates and
 limits) and `.harness/EVIDENCE.jsonl` (redacted reproducible evidence). The
@@ -154,7 +162,8 @@ Coordination is **opt-in**: handoffs are suggestions, and the shared-state files
 **Starting it.** There is no "start coordination" command — coordination is
 emergent, not a mode you switch on. You start by invoking whichever skill matches
 where you are; it suggests the next when it finishes. For the full chain, the
-front door is the only `intake` skill:
+front door is an `intake` skill — `next-step` when the project already exists,
+or `overwhelm-breakdown` when the ask feels too big:
 
 ```
 /coordinated-skills:overwhelm-breakdown
@@ -184,11 +193,11 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md). The short version: `/skill-new <name>`
 
 ## Architecture
 
-Each skill is a directory (`.agents/skills/<name>/`) containing a `SKILL.md` with frontmatter, body, and optional references/scripts; a `.skill` zip archive of that directory is an optional build artifact for à-la-carte distribution. Beyond the standard `name` / `description`, every SKILL.md in this library carries four coordination keys (`phase`, `hands_off_to`, `reads`, `writes`) and ends with a tailored `**Next steps:**` sentence that names the actual successor skill. The portable router makes state transitions explicit rather than assuming a top-level Claude controller. Shared state lives in `CONTEXT.md`, `MEMORY_BANK.md`, `LOOP_QUEUE.md`, `AGENTS.md`, `.harness/loop-policy.json`, and `.harness/EVIDENCE.jsonl` as defined in CONVENTIONS.md §4. Verification skills (`drift-check`, `reality-check`) emit a `Conductor verdict: PASS | FAIL | BLOCKED` block that the maker/checker conductor loop consumes. The contract is in [`CONVENTIONS.md`](CONVENTIONS.md).
+Each skill is a directory (`.agents/skills/<name>/`) containing a `SKILL.md` with frontmatter, body, and optional references/scripts; a `.skill` zip archive of that directory is an optional build artifact for à-la-carte distribution. Beyond the standard `name` / `description`, every SKILL.md in this library carries four coordination keys (`phase`, `hands_off_to`, `reads`, `writes`) and ends with a tailored `**Next steps:**` sentence that names the actual successor skill. The portable router makes state transitions explicit rather than assuming a top-level Claude controller. Shared state lives in `CONTEXT.md`, `MEMORY_BANK.md`, `LOOP_QUEUE.md`, `AGENTS.md`, `.harness/loop-policy.json`, and `.harness/EVIDENCE.jsonl` as defined in CONVENTIONS.md §4. Verification skills (`drift-check`, `reality-check`, the reviewer skills, and `conductor-doctor`) emit a `Conductor verdict: PASS | FAIL | BLOCKED` block that the maker/checker conductor loop consumes. The contract is in [`CONVENTIONS.md`](CONVENTIONS.md).
 
 ## Status
 
-Phase 1 (headers, merges, conventions) and Phase 1.5 (tooling, slash commands, tests, CONTRIBUTING) are shipped. Phase 2a (repository + CI) is this commit.
+25 skills. The November 2026 audit ([`docs/SKILLS-AUDIT.md`](docs/SKILLS-AUDIT.md)) merged six overlapping or deprecated skills, brought every description within Anthropic's authoring limits, and added validator checks so they stay there.
 
 ## License
 

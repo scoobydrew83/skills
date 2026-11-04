@@ -1,14 +1,33 @@
 ---
 name: derisk-sequencer
-description: Turn a validated idea into a risk-ordered sequence of experiments and build steps, with one hard rule — no product code is scheduled before the test that de-risks it. Use whenever someone has an idea worth building and asks what to do in what order — "what should I build first", "what order do I tackle this", "sequence this plan", "de-risk this roadmap", or presents a build plan that front-loads construction ahead of validation. The method lists the load-bearing assumptions, scores each by risk divided by cost-to-test, orders experiments cheapest-decisive first with kill-gates between them, places every build step after its unlocking test, and defers governance, breadth, and optimization until their gates clear — then emits an ordered sequence and a linter that flags build-before-its-test. Distinct from task-decomposition and overwhelm-breakdown (which collapse a big task to one next step for momentum) and agent-orchestration (which sequences build phases); this sequences de-risking ahead of building. Do NOT trigger when the idea itself has not been validated yet — ordering the work for something nobody has decided should exist assumes the very answer hemlock is there to give, so that goes to hemlock first.
+description: >-
+  Plans how to test before building: orders a validated idea's experiments and
+  build steps by risk retired per unit cost, or designs one falsifiable
+  experiment with its pass/fail bar fixed before the run. The hard rule is that
+  no product code is scheduled before the test that de-risks it, and no
+  threshold moves after the result is in. Use when someone asks "what should I
+  build first", "what order do I tackle this", "sequence this plan", "de-risk
+  this roadmap", "how do I test whether X", "design an experiment for this",
+  "what would falsify this", or is about to "just run it and look at the
+  numbers" with no threshold. Ships linters for build-before-test sequences and
+  unfalsifiable pre-registrations. Not for deciding whether an idea should
+  exist at all (hemlock) or for checking an existing plan's facts
+  (reality-check).
 response_contract: universal
 phase: plan
-hands_off_to: [experiment-designer, agent-orchestration]
+hands_off_to: [hemlock, agent-orchestration, loop-creator]
 reads: []
 writes: []
 ---
 
 # De-risk Sequencer
+
+Two modes, one currency (risk ÷ cost-to-test):
+
+| Situation | Mode | Where |
+|---|---|---|
+| Several assumptions or a whole build plan to order | **Sequence** | This file, workflow below |
+| One risky question to settle with a test | **Single experiment** | [references/experiment.md](references/experiment.md) |
 
 Given something worth building, decide **what order to attack it in** so that the cheapest tests that could kill the project run before the expensive construction that assumes the project lives.
 
@@ -28,16 +47,17 @@ Sequencing by **risk retired per unit cost** flips it. You spend the first, chea
 
 ## When to reach for this vs neighbors
 
-- **task-decomposition / overwhelm-breakdown** collapse a big, vague, overwhelming thing down to *one doable next step* — they optimize for momentum and emotional unblocking. This skill is colder and analytical: it orders the *whole* sequence by risk, and its "first step" is whatever retires the most risk cheapest, which is not always the most motivating thing.
+- **overwhelm-breakdown** collapses a big, vague, overwhelming thing down to *one doable next step* — it optimizes for momentum and emotional unblocking. This skill is colder and analytical: it orders the *whole* sequence by risk, and its "first step" is whatever retires the most risk cheapest, which is not always the most motivating thing.
 - **agent-orchestration** sequences the *phases of construction* (design → plan → implement → test → deploy). This sequences *validation ahead of construction* — a different axis. Often you run this skill first, then orchestrate the build of whatever survives.
-- **idea-validator** produces the GO and the ranked assumptions; this turns that ranking into an executable order. They share the same risk ÷ cost-to-test currency on purpose.
+- **hemlock** produces the GO and the ranked assumptions; this turns that ranking into an executable order. They share the same risk ÷ cost-to-test currency on purpose.
+- **goal-builder** writes a Claude Code `/goal` stop condition for an agent loop; a pre-registered experiment is a measurement that settles a question, which is different.
 
 ---
 
 ## The workflow
 
 ### Step 1 — List the load-bearing assumptions
-Inherit them from an idea-validator run if one exists, or surface them now. A load-bearing assumption is one where *false → the project doesn't work or doesn't matter*. Convenience assumptions ("we'll use Postgres") aren't load-bearing; differentiation and demand and the hard technical "can this even be done" usually are.
+Inherit them from a hemlock run if one exists, or surface them now. A load-bearing assumption is one where *false → the project doesn't work or doesn't matter*. Convenience assumptions ("we'll use Postgres") aren't load-bearing; differentiation and demand and the hard technical "can this even be done" usually are.
 
 ### Step 2 — Score each by risk ÷ cost-to-test
 - **Risk** = (fatal if false?) × (how likely to be false). A non-fatal or near-certain assumption scores low even if it's important-sounding.
@@ -55,12 +75,19 @@ Governance, open protocols, multi-platform breadth, and performance optimization
 - **Governance / protocol / breadth** → after product-market validation. Building capture-resistance for a product with no proven need is scaffolding on sand.
 - **Optimization** → after a correct baseline exists. Optimizing before correctness is validated is a correctness-bug generator.
 
-### Step 6 — Emit the sequence and lint it
-Produce the ordered table (template below) and run:
+### Step 6 — Lock the first test's bar
+Before step 1 runs, pre-register it with the single-experiment method in
+[references/experiment.md](references/experiment.md): hypothesis, numeric
+metric, PASS / FAIL / KILL rule, empty Result section.
+
+### Step 7 — Emit the sequence and lint until clean
+Produce the ordered table (template below), then run the linter, fix what it
+flags, and re-run until it passes:
 ```bash
-python scripts/sequence_linter.py <your-sequence.md>
+python3 scripts/sequence_linter.py <your-sequence.md>
+python3 scripts/falsifiability_linter.py <your-prereg.md>   # single-experiment mode
 ```
-The linter flags any build step with no `unlocked-by` test, any governance/breadth/optimization step scheduled before its gate, and any step missing a kill-condition.
+The sequence linter flags any build step with no `unlocked-by` test, any governance/breadth/optimization step scheduled before its gate, and any step missing a kill-condition. The falsifiability linter flags a missing numeric threshold, a missing FAIL/KILL branch, a filled-in Result on a pre-registration, an unstated sample size, and vague-verb criteria.
 
 ---
 
@@ -89,4 +116,4 @@ Emit a table where every row is a step. `Type` is `test`, `build`, or `defer`. `
 
 ---
 
-**Next steps:** With the sequence in hand, suggest `experiment-designer` to lock the pass/fail bar on the first de-risking test before it runs, then `agent-orchestration` to sequence the build of whatever survives the kill-gates. Skip if the ordering was all the user wanted.
+**Next steps:** If the sequence's first test is a whole-idea GO/NO-GO, suggest `hemlock`; once the kill-gates clear, suggest `agent-orchestration` to sequence the build of what survives, or `loop-creator` when the build should run as a builder/verifier loop. Skip if the ordering or the single experiment was all the user wanted.

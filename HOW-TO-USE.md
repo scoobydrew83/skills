@@ -5,7 +5,7 @@ order. Each one tells you the next when it finishes.
 
 ```
 hemlock → conductor-init → visual-plan → agent-orchestration
-        → reality-check → drift-check → conductor-memory
+        → reality-check → drift-check → session-bookend
 ```
 
 That's it. The rest of this page is detail you can take or leave.
@@ -118,10 +118,12 @@ and **block the features they cite** until you resolve them with an answer.
 
 Optional detour. Skip if hemlock left nothing open.
 
-- **One unknown to test** → `/coordinated-skills:experiment-designer`
-  (locks the threshold before the run)
+- **One unknown to test** → `/coordinated-skills:derisk-sequencer` in
+  single-experiment mode (locks the threshold before the run)
 - **Several unknowns to order** → `/coordinated-skills:derisk-sequencer`
   (sequences the tests cheapest-decisive-first)
+- **An ambiguity a human must settle** → `/coordinated-skills:assumption-grill`
+  (a decision card with owner and the smallest test)
 
 Then come back to step 4.
 
@@ -179,18 +181,27 @@ match what got built? Does the README still describe reality?
 > and *close is FAIL*. That's why steps 5 and 6 are separate skills, not a
 > self-review at the end of step 4.
 
+**Before you merge:** run `/coordinated-skills:popquiz` on any diff you didn't
+write line by line. Add `tinfoil` (new external input), `leftpad` (new
+dependency), or `grandfather` (renamed or removed public interface) when the
+diff calls for them.
+
 ---
 
 ### Step 7 of 7 — Save state for next time
 
 ```
-/coordinated-skills:conductor-memory
+/coordinated-skills:session-bookend
 ```
 
-Snapshots what happened into `MEMORY_BANK.md` so a cold session tomorrow picks
-up without you re-explaining anything.
+Writes a closing handoff — done today, exact current state, the very next step,
+open questions, where artifacts live — and appends a session lesson to
+`MEMORY_BANK.md`, so a cold session tomorrow picks up without re-explaining.
+Tomorrow, the same skill gives the opening recap.
 
-**Done when:** `MEMORY_BANK.md` reflects this session.
+**Done when:** the handoff exists and `MEMORY_BANK.md` reflects this session.
+Want a durable, vault-ready memory pack as well? Follow with
+`/coordinated-skills:conductor-memory`.
 
 **This is the last step.** The chain is complete.
 
@@ -205,8 +216,10 @@ up without you re-explaining anything.
 | Just had the idea | `hemlock` |
 | Idea survived, need a repo | `conductor-init` |
 | Need to see and approve the plan | `visual-plan` |
-| One assumption to test | `experiment-designer` |
-| Many assumptions to order | `derisk-sequencer` |
+| Back on a project, not sure what's next | `next-step` |
+| "Where were we?" / "catch me up" | `session-bookend` |
+| A consequential assumption is unresolved | `assumption-grill` |
+| One assumption to test, or many to order | `derisk-sequencer` |
 | Ready to build | `agent-orchestration` |
 | Built it, is any of it made up? | `reality-check` |
 | Built it, do the docs still match? | `drift-check` |
@@ -214,7 +227,9 @@ up without you re-explaining anything.
 | Making a breaking change | `grandfather` |
 | Handling untrusted input | `tinfoil` |
 | About to merge something you didn't write | `popquiz` |
-| Wrapping up | `conductor-memory`, then `session-bookend` |
+| Wrapping up | `session-bookend` (add `conductor-memory` for a durable pack) |
+| Is the loop harness healthy? | `conductor-doctor` |
+| Cleaning up or auditing the skills themselves | `skill-librarian` |
 | Project's over | `project-postmortem` |
 | Too big, don't know where to start | `overwhelm-breakdown` |
 
@@ -250,7 +265,7 @@ Everything above is the fast path. If you want the full picture:
 - **[README.md](README.md)** — the three usage modes, in prose
 - **[CONVENTIONS.md](CONVENTIONS.md)** — the contract every skill follows;
   §4 defines the shared-state files
-- **[skill-graph.md](skill-graph.md)** — auto-generated map of all 26 skills,
+- **[skill-graph.md](skill-graph.md)** — auto-generated map of all 25 skills,
   their phases, and every handoff edge
 - **[CONDUCTOR-LOOP-GUIDE.md](CONDUCTOR-LOOP-GUIDE.md)** — the maker/checker loop
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — adding your own skill

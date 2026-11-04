@@ -5,7 +5,7 @@ description: Design and generate portable autonomous/semi-autonomous AI work loo
 compatibility: Portable core; optional headless harness requires Claude Code.
 response_contract: universal
 phase: execute
-hands_off_to: [reality-check, drift-check, goal-builder]
+hands_off_to: [reality-check, drift-check, goal-builder, popquiz]
 reads: []
 writes: []
 ---
@@ -100,7 +100,8 @@ Fill the templates in `assets/templates/` with the captured specifics. A full pa
 | `builder-prompt.md` | The maker prompt — does work, shows evidence, writes checkpoint summary |
 | `verifier-prompt.md` | The checker prompt — fresh context, "close is FAIL", correctness-only |
 | `LOOP_QUEUE.md` | The work queue (for queue-driven / triage shapes) |
-| `run_loop.sh` | The harness that drives builder→verifier→commit with limits & escalation |
+| `run_loop.sh` | The harness that drives builder→verifier→commit with limits & escalation — copy `scripts/run_loop.sh` as-is; don't rewrite it |
+| `loop.config.sh` | Limits and commands the harness reads, from `assets/templates/loop.config.sh.template` |
 | `loop-triage.yml` | (triage only) GitHub Actions that scans and appends to the queue |
 
 Apply Conductor defaults from `references/conductor-conventions.md`, and clearly mark each as
@@ -158,5 +159,6 @@ to the default branch. Full detail and rationale in `references/conductor-conven
 pressure-test the acceptance criteria and harness for fabricated commands or unverifiable claims
 before anyone runs it, and `drift-check` if this loop joins several specs/prompts that could
 contradict each other. If the user actually just needed a single Claude Code `/goal` line rather
-than a whole package, point them to `goal-builder` instead. Skip the suggestion if they only
+than a whole package, point them to `goal-builder` instead. When the loop's output is about to
+merge, suggest `popquiz` so a human can explain what shipped. Skip the suggestion if they only
 wanted a quick scaffold and are done.

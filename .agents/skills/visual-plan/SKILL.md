@@ -1,21 +1,17 @@
 ---
 name: visual-plan
 description: >-
-  Plan visually instead of dumping markdown: structure a plan as typed,
-  lint-able blocks (.harness/plan/blocks.json — diagrams, wireframes,
-  decisions, annotated real code, questions), render it to a plan.html derived
-  entirely from ground truth (FEATURES.json, telemetry.jsonl, git), and serve
-  it locally so the human reviews IN the page — pinned comments land in
-  tracked comments.jsonl and BLOCK the features they cite until resolved with
-  an answer. Use whenever someone says "visual plan", "/vplan", "plan this
-  feature", "show me the plan", "make the plan reviewable", wants to review or
-  comment on a plan, says "address my comments" / "/address-comments", or asks
-  to see plan status rendered. Also use to structure a captured plan-mode plan
-  (blocks tagged needs-structuring from the ExitPlanMode hook). The defining
-  rule: the plan is a RENDERING of ground truth plus authored blocks — never a
-  second source of truth; plan.html is generated and never hand-edited. Do NOT
-  use for seeding a fresh repo's harness (that is conductor-init) or for
-  designing loops (loop-creator).
+  Structures a plan as typed, lint-able blocks (.harness/plan/blocks.json:
+  diagrams, wireframes, decisions, annotated real code, questions) and renders
+  them into a plan.html built from ground truth (FEATURES.json, telemetry.jsonl,
+  git), served locally so the human reviews in the page. Pinned comments land in
+  comments.jsonl and block the features they cite until answered. Use when
+  someone says "visual plan", "/vplan", "plan this feature", "show me the plan",
+  "make the plan reviewable", wants to comment on a plan, says "address my
+  comments" or "/address-comments", asks for rendered plan status, or a plan-
+  mode plan was captured as needs-structuring blocks. plan.html is generated
+  output and never hand-edited. Not for seeding a fresh repo's harness
+  (conductor-init) or designing loops (loop-creator).
 response_contract: universal
 phase: plan
 hands_off_to: [agent-orchestration, loop-creator]
@@ -25,11 +21,10 @@ writes: [FEATURES.json]
 
 # Visual Plan
 
-Planning as a reviewable surface, not a wall of markdown. Inspired by
-agent-native's `/visual-plan`, inverted to fit the Conductor Method: their plan
-is a hosted document that can drift from the code; ours is a **lens over the
-repo's existing ground truth** plus one small authored file, all tracked, all
-lint-able, all blockable. Full analysis and rationale: [reference.md](./reference.md).
+Planning as a reviewable surface, not a wall of markdown. The plan is a **lens
+over the repo's existing ground truth** plus one small authored file — all
+tracked, all lint-able, all blockable — so it can't drift from the code.
+Design rationale and the ExitPlanMode capture hook: [reference.md](reference.md).
 
 ## The artifacts (all under the target repo)
 

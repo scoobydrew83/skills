@@ -1,7 +1,17 @@
 ---
 name: project-postmortem
 context: fork
-description: Generate an evidence-grounded project retrospective — pulled from git history and decision docs, not memory — that grades the project on separate dimensions, splits what went right from wrong, reduces the failure to its root ordering error, extracts transferable lessons for the next project, and names what survives. Use whenever a project ships, stalls, or gets sunset and someone wants the writeup — "post-mortem", "retrospective", "what went wrong with X", "we're sunsetting X, write it up", or mid-project "why did this go sideways". The method cites commit hashes or sources for every claim, builds a timeline of when validation happened vs building, separates pros from cons including uncomfortable symmetries, and ends with a per-dimension scorecard plus a what-survives list — then runs a check that fails any vanity scorecard or uncited narrative. Distinct from drift-check (audits live docs) and conductor-memory/session-bookend (capture session state for continuity); this extracts backward-looking lessons.
+description: >-
+  Writes an evidence-grounded project retrospective from git history and
+  decision docs rather than memory: grades separate dimensions, splits what went
+  right from wrong, reduces the failure to its root ordering error, extracts
+  transferable lessons, and names what survives. Use when a project ships,
+  stalls, or is sunset and someone wants the write-up — "post-mortem",
+  "retrospective", "what went wrong with X", "we're sunsetting X, write it up",
+  or mid-project "why did this go sideways". Every claim cites a commit hash or
+  source, and a bundled check fails vanity scorecards and uncited narrative. Not
+  for auditing live docs (drift-check) or capturing session state (conductor-
+  memory, session-bookend).
 response_contract: universal
 phase: bookend
 hands_off_to: [conductor-memory]
@@ -79,9 +89,9 @@ Grade the project on independent dimensions so a strength can't hide a weakness.
 | Intellectual honesty | Did it follow its own evidence, even to a kill? |
 | Recovery / scope discipline | Did it cut decisively when evidence landed? |
 
-### Step 8 — Lint it
+### Step 8 — Lint it, fix, re-run until it passes
 ```bash
-python scripts/postmortem_linter.py <postmortem.md>
+python3 scripts/postmortem_linter.py <postmortem.md>
 ```
 The check fails a post-mortem that has no evidence citations, a single blended grade instead of separate dimensions, or missing root-cause / transferable-lessons / what-survives sections — the markers of a vanity retro.
 
