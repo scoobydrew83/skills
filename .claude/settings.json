@@ -10,6 +10,17 @@
           }
         ]
       }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "conductor-verifier|coordinated-skills:conductor-verifier",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/tools/hooks/record-evidence.sh\""
+          }
+        ]
+      }
     ]
   }
 }

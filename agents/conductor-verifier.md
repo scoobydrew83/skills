@@ -75,6 +75,7 @@ structured verdict. You NEVER edit, write, or fix anything.
 ```
 VERDICT: PASS | FAIL | BLOCKED
 PHASE: <phase name/number from CONTEXT.md>
+ITEM: <LOOP_QUEUE.md item id being graded, or "none">
 CRITERIA:
   - [PASS|FAIL] <criterion> — <evidence: file:line, test name, or command output summary>
 TESTS: <command run> → <result summary>

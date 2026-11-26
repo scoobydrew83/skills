@@ -119,7 +119,7 @@ if [[ "${1:-}" == "--check" ]]; then
   for command in conductor-loop.md conductor-route.md conductor-doctor.md; do
     cmp -s "$SOURCE_COMMANDS_DIR/$command" "$PLUGIN_COMMANDS_DIR/$command" || { echo "FAIL generated command differs: $command"; fail=1; }
   done
-  for agent in conductor-builder.md conductor-verifier.md; do
+  for agent in conductor-builder.md conductor-verifier.md harness-improver.md doc-gardener.md slop-gc.md; do
     cmp -s "$SOURCE_AGENTS_DIR/$agent" "$PLUGIN_AGENTS_DIR/$agent" || { echo "FAIL generated agent differs: $agent"; fail=1; }
   done
   [[ "$(cat "$MARKETPLACE" 2>/dev/null || true)" == "$expected_marketplace" ]] || { echo "FAIL marketplace manifest is stale"; fail=1; }
@@ -136,7 +136,7 @@ tar -C "$SOURCE_SKILLS_DIR" --exclude='__pycache__' --exclude='.DS_Store' -cf - 
 for command in conductor-loop.md conductor-route.md conductor-doctor.md; do
   cp "$SOURCE_COMMANDS_DIR/$command" "$PLUGIN_COMMANDS_DIR/$command"
 done
-for agent in conductor-builder.md conductor-verifier.md; do
+for agent in conductor-builder.md conductor-verifier.md harness-improver.md doc-gardener.md slop-gc.md; do
   cp "$SOURCE_AGENTS_DIR/$agent" "$PLUGIN_AGENTS_DIR/$agent"
 done
 printf '%s\n' "$expected_marketplace" > "$MARKETPLACE"

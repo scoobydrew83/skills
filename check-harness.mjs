@@ -51,7 +51,7 @@ if (Object.values(REPO).every((p) => !p)) {
 /** Which repo each feature needs; features whose repo is missing are SKIPped. */
 const NEEDS = (id) => {
   const n = Number(id.slice(2));
-  if ([1, 2, 3, 4, 11, 15, 30, 32, 34].includes(n)) return SKILLS;
+  if ([1, 2, 3, 4, 11, 15, 30, 32, 34, 35, 36].includes(n)) return SKILLS;
   if ([5, 6, 7, 8, 9, 10, 12, 13, 31, 33].includes(n)) return SFDT;
   if (n === 14) return MIRROR && SFDT;
   if (n >= 16 && n <= 20) return AGENTS;
@@ -278,6 +278,23 @@ const checks = {
   'H-034': () => {
     const pass = (read(findFile(SKILLS, 'harness-improver.md')[0]) || '').includes('comments.jsonl');
     return { pass, evidence: pass ? 'improver mines plan comments' : 'harness-improver.md does not name comments.jsonl' };
+  },
+  'H-035': () => {
+    const hook = join(SKILLS, 'tools', 'hooks', 'record-evidence.sh');
+    const settings = read(join(SKILLS, '.claude', 'settings.json')) || '';
+    const wired = settings.includes('SubagentStop') && settings.includes('record-evidence.sh');
+    const tested = existsSync(join(SKILLS, 'tests', 'test_record_evidence.sh'));
+    const pass = existsSync(hook) && wired && tested;
+    return { pass, evidence: pass ? 'SubagentStop hook wired and tested' : `hook: ${existsSync(hook)}, wired: ${wired}, test: ${tested}` };
+  },
+  'H-036': () => {
+    const names = ['harness-improver.md', 'doc-gardener.md', 'slop-gc.md'];
+    const srcs = names.map((n) => read(join(SKILLS, 'agents', n)) || '');
+    const mines = srcs[0].includes('EVIDENCE.jsonl') && srcs[0].includes('git log');
+    // Every line naming the sfdt CLI must make it conditional on sfdt being on PATH.
+    const hard = names.filter((n, i) => srcs[i].split('\n').some((l) => /`sfdt (history|notify)/.test(l) && !/sfdt` (CLI )?is on PATH/.test(l)));
+    const pass = srcs.every(Boolean) && mines && hard.length === 0;
+    return { pass, evidence: pass ? 'flywheel agents mine local evidence; sfdt optional' : `improver mines local evidence: ${mines}, hard sfdt deps: ${hard.join(', ') || 'none'}` };
   },
 };
 
