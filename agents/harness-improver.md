@@ -24,14 +24,14 @@ For every recurring failure, ask the harness-engineering question — not "how d
 
 ## Procedure
 
-1. **Mine.** `sfdt history --type verdict --json --limit 200` and `--type escalation` and `--type agent-fix`. Also read the last 30 days of MEMORY_BANK.md lines, **and `.harness/plan/comments.jsonl` where present — plan-review comments are telemetry.** Resolved threads show what humans had to ask; a question that recurs across plans (same topic, different features) is a missing doc or a missing lint, and clusters exactly like a failure category. Cluster by category (criterion text, file area, skill name, error signature, comment topic).
+1. **Mine.** Read the last 30 days of `.harness/EVIDENCE.jsonl` rows (one per verifier verdict, written by the `SubagentStop` hook or the loop's Learn step) and of MEMORY_BANK.md lines, including `(repeat)` lessons, plus `git log --since=30.days` for reverted or re-fixed work. If the `sfdt` CLI is on PATH, also run `sfdt history --type verdict --json --limit 200` and `--type escalation` and `--type agent-fix`. Also read **and `.harness/plan/comments.jsonl` where present — plan-review comments are telemetry.** Resolved threads show what humans had to ask; a question that recurs across plans (same topic, different features) is a missing doc or a missing lint, and clusters exactly like a failure category. Cluster by category (criterion text, file area, skill name, error signature, comment topic).
 2. **Threshold.** A category qualifies only with **≥3 occurrences**. Ignore singletons — they are noise, not signal.
 3. **Triage each qualifying category into exactly one of:**
    - **LINT** — if mechanically checkable: write or extend a check in `tools/` (sfdt: `tools/check-*.mjs` wired into `npm run check:all-contracts`; skills: `tools/validate-skill.sh`). The error message MUST contain remediation instructions a cold agent can act on without extra context — the error text is injected into future agents' context, so write it as an instruction, not a complaint.
    - **DOC/SKILL EDIT** — if it's missing knowledge: edit the relevant `docs/` file or SKILL.md, following the repo's skill conventions (coordination header, Next steps line).
-   - **ESCALATE** — if it needs human judgment: append a dated escalation entry to MEMORY_BANK.md and fire `sfdt notify` with event `harness-escalation` (routes to n8n via the generic webhook channel). Do not guess at judgment calls.
+   - **ESCALATE** — if it needs human judgment: append a dated escalation entry to MEMORY_BANK.md (`· ESCALATE ·`) and put `Decision needed` with the question in your run report. If `sfdt` is on PATH, also fire `sfdt notify` with event `harness-escalation`. Do not guess at judgment calls.
 4. **One PR per finding.** Branch `harness/<category-slug>` off the ref you are checked out on, smallest possible diff, PR body cites the verdict rows (ids + dates) that motivated it. **Always pass an explicit base: `gh pr create --base <the ref you branched from>`.** Without it `gh` targets the repo's *default* branch, so a PR cut from an integration branch (e.g. `develop`) arrives carrying every commit on that branch — dozens of files you did not write, and a merge that would fast-forward the integration branch into the default one. Determine the ref with `git branch --show-current` before opening the PR; never assume it is the default branch. The PR is graded by the standard verifier / `claude-code-review.yml` like any other work.
-5. **Log.** Append one MEMORY_BANK.md line per finding: `- YYYY-MM-DD · harness-improver · <LINT|DOC|ESCALATE> · <one-line>`, and record your own run: `sfdt history` type `gc`.
+5. **Log.** Append one MEMORY_BANK.md line per finding: `- YYYY-MM-DD · harness-improver · <LINT|DOC|ESCALATE> · <one-line>`, and one line for the run itself: `- YYYY-MM-DD · harness-improver · RUN · <n> findings, <n> PRs`. If `sfdt` is on PATH, also record the run with `sfdt history` type `gc`.
 
 ## Hard bounds
 
@@ -39,7 +39,7 @@ For every recurring failure, ask the harness-engineering question — not "how d
 - Never edit `generated/*` by hand — run `npm run generate:catalogs` if catalogs must change.
 - Never touch FEATURES.json entries, verdict history, or another agent's open branch.
 - Self-improving ≠ self-approving: you open PRs; gates and humans merge them.
-- If `sfdt history` returns no qualifying categories, exit with a one-line "no signal" note. A quiet week is a PASS, not a failure to find work.
+- If the mined evidence has no qualifying categories, exit with a one-line "no signal" note. A quiet week is a PASS, not a failure to find work.
 
 ## Response baseline
 

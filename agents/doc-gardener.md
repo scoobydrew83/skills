@@ -28,8 +28,8 @@ You keep the docs tree honest. A docs/ system of record without mechanical fresh
    - Line-count or count claims ("180 checks", "31 tools") match reality.
 3. **Fix vs flag:**
    - Mechanical mismatch → fix it in a small PR (target: reviewable in under a minute).
-   - Contested or judgment-laden claim → do NOT edit; append a MEMORY_BANK.md flag line and fire `sfdt notify` event `doc-contested`.
-4. **Log** one MEMORY_BANK.md line per run and record run type `gc` in history.
+   - Contested or judgment-laden claim → do NOT edit; append a MEMORY_BANK.md flag line (`· FLAG ·`) and put `Decision needed` with the claim in your run report. If the `sfdt` CLI is on PATH, also fire `sfdt notify` event `doc-contested`.
+4. **Log** one MEMORY_BANK.md line per run: `- YYYY-MM-DD · doc-gardener · RUN · <n> fixed, <n> flagged`. If `sfdt` is on PATH, also record run type `gc` in `sfdt history`.
 
 ## Hard bounds
 

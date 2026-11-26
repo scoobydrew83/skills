@@ -150,7 +150,12 @@ through the existing intake/plan/execute/verify/bookend phases, with
 Conductor projects also carry `.harness/loop-policy.json` (human gates and
 limits) and `.harness/EVIDENCE.jsonl` (redacted reproducible evidence). The
 router never advances an item past a human gate, and the third verifier failure
-blocks for human review.
+blocks for human review. In this repository a `SubagentStop` hook
+(`tools/hooks/record-evidence.sh`) writes one evidence row per
+`conductor-verifier` verdict, and `/conductor-loop` ends with a Learn step that
+appends a MEMORY_BANK.md lesson, so `harness-improver` has real data to mine.
+To trim the library to the skills you use, follow
+[`docs/SKILL-TRIM.md`](docs/SKILL-TRIM.md).
 
 Example chain: `overwhelm-breakdown → agent-orchestration → reality-check →
 conductor-memory`. The full map is in [`skill-graph.md`](skill-graph.md).
