@@ -350,6 +350,29 @@
       ],
       "passes": true,
       "evidence": "2026-07-29: improver mines plan comments"
+    },
+    {
+      "id": "H-035",
+      "category": "learn",
+      "description": "skills: conductor-verifier verdicts persist to .harness/EVIDENCE.jsonl via a SubagentStop hook",
+      "steps": [
+        "test -x <skills>/tools/hooks/record-evidence.sh",
+        "grep SubagentStop + record-evidence.sh <skills>/.claude/settings.json",
+        "test -f <skills>/tests/test_record_evidence.sh"
+      ],
+      "passes": false,
+      "evidence": null
+    },
+    {
+      "id": "H-036",
+      "category": "learn",
+      "description": "skills: flywheel agents run without the sfdt CLI, mining EVIDENCE.jsonl, MEMORY_BANK.md and git log",
+      "steps": [
+        "grep EVIDENCE.jsonl + git log <skills>/agents/harness-improver.md",
+        "every sfdt mention in harness-improver.md, doc-gardener.md, slop-gc.md is conditional on sfdt being on PATH"
+      ],
+      "passes": false,
+      "evidence": null
     }
   ]
 }
