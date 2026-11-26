@@ -54,7 +54,14 @@ if report is None:
                     entry = json.loads(line)
                 except json.JSONDecodeError:
                     continue
-                content = (entry.get("message") or {}).get("content") if isinstance(entry, dict) else None
+                if not isinstance(entry, dict):
+                    continue
+                message = entry.get("message") or {}
+                # Only the verifier's own words count: a verdict quoted in its
+                # prompt or a tool result must never become evidence.
+                if entry.get("type") != "assistant" and message.get("role") != "assistant":
+                    continue
+                content = message.get("content")
                 if isinstance(content, str):
                     texts.append(content)
                 elif isinstance(content, list):
@@ -78,7 +85,9 @@ if tests:
 
 row = {
     "run_id": "%s:%s" % (event.get("session_id", "unknown"), event.get("agent_id", "unknown")),
-    "item_id": field("PHASE") or "unknown",
+    # item_id must match the LOOP_QUEUE.md id that conductor-doctor checks, so
+    # prefer the verifier's ITEM line and fall back to PHASE only without one.
+    "item_id": (field("ITEM") if field("ITEM").lower() not in ("", "none") else "") or field("PHASE") or "unknown",
     "phase": "verify",
     "actor": agent,
     "checks": checks,

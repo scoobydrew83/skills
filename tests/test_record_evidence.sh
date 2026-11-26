@@ -16,6 +16,7 @@ ledger="$tmp/.harness/EVIDENCE.jsonl"
 
 report='VERDICT: PASS
 PHASE: phase-2-auth
+ITEM: auth-login
 CRITERIA:
   - [PASS] login returns 200 — tests/auth.test.js:14
   - [PASS] bad password returns 401 — tests/auth.test.js:22
@@ -36,7 +37,7 @@ python3 - "$ledger" <<'PY' && pass "row has the required keys and parsed fields"
 import json, sys
 row = json.loads(open(sys.argv[1]).readline())
 assert {"run_id", "item_id", "phase", "actor", "checks", "verdict", "next"} <= row.keys(), row
-assert row["verdict"] == "PASS" and row["item_id"] == "phase-2-auth", row
+assert row["verdict"] == "PASS" and row["item_id"] == "auth-login", row
 assert row["run_id"] == "s1:a1" and row["phase"] == "verify", row
 assert sum(1 for c in row["checks"] if c.get("result") == "PASS") == 2, row
 assert row["next"] == "close phase-2-auth", row
@@ -55,7 +56,12 @@ python3 -c 'import json,sys; print(json.dumps({"hook_event_name":"SubagentStop",
   | CLAUDE_PROJECT_DIR="$tmp" bash "$HOOK"
 tail -1 "$ledger" | grep -q '"verdict": "FAIL"' && pass "falls back to the transcript when the closing text has no verdict" || bad "falls back to the transcript when the closing text has no verdict"
 
+python3 -c 'import json,sys; [print(json.dumps(e)) for e in ({"type":"user","message":{"role":"user","content":sys.argv[1]}},{"type":"assistant","message":{"content":[{"type":"text","text":"Could not finish verification."}]}})]' "$report" > "$transcript"
 before=$(wc -l < "$ledger")
+python3 -c 'import json,sys; print(json.dumps({"hook_event_name":"SubagentStop","session_id":"s1","agent_id":"a3","agent_type":"conductor-verifier","agent_transcript_path":sys.argv[1],"last_assistant_message":"Stopping."}))' "$transcript" \
+  | CLAUDE_PROJECT_DIR="$tmp" bash "$HOOK"
+[[ $(wc -l < "$ledger") -eq $before ]] && pass "a verdict in the verifier's input is not recorded" || bad "a verdict in the verifier's input is not recorded"
+
 printf 'not json' | CLAUDE_PROJECT_DIR="$tmp" bash "$HOOK"
 rc=$?
 [[ $rc -eq 0 && $(wc -l < "$ledger") -eq $before ]] && pass "bad input exits 0 and writes nothing" || bad "bad input exits 0 and writes nothing"
